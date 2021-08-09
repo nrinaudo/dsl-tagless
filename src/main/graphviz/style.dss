@@ -1,0 +1,120 @@
+graph {
+    bgcolor: transparent;
+    color: transparent;
+    splines: false;
+}
+
+node {
+    fontcolor: "#586E75";
+    fontname: "Inter,Arial";
+    color: "#586E75";
+    fillcolor: "#ffffff";
+    style: "rounded,filled";
+    shape: "rectangle"
+}
+
+node.rm, node.value.rm {
+    fontcolor: "#923A41";
+    color: "#923A41";
+    fillcolor: "#fdb8c0";
+}
+
+node.add, node.value.add {
+    fontcolor: "#24a808";
+    color: "#24a808";
+    fillcolor: "#acf2bd";
+}
+
+node.disabled {
+    color: "#D0DCE3";
+    fontcolor: "#D0DCE3";
+}
+
+node.operator {
+    fontcolor: "#ffffff";
+    fillcolor: "#586E75";
+}
+
+node.choice.rm, node.operator.rm {
+    fillcolor: "#923A41";
+    color: "#923A41";
+    fontcolor: "#fdb8c0";
+}
+
+node.choice.add, node.operator.add {
+    color: "#24a808";
+    fillcolor: "#24a808";
+    fontcolor: "#acf2bd";
+}
+
+
+node.operator.disabled {
+    fillcolor: "#D0DCE3";
+    color: "#D0DCE3";
+    fontcolor: "#ffffff";
+}
+
+node.value {
+    fillcolor: "#ffffff";
+    color: "#586E75";
+    fontcolor: "#586E75";
+}
+
+node.value.disabled {
+    fillcolor: "#ffffff";
+    color: "#D0DCE3";
+    fontcolor: "#D0DCE3";
+}
+
+edge {
+    color: "#586E75";
+    fontcolor: "#586E75";
+    fontname: "Inter,Arial";
+    fontsize: 11;
+}
+
+edge.disabled {
+    fillcolor: "#D0DCE3";
+    color: "#D0DCE3";
+    fontcolor: "#D0DCE3";
+}
+
+edge.rm {
+    color: "#923A41";
+}
+
+
+edge.add {
+    color: "#24a808";
+}
+
+node.choice {
+    style: "filled";
+    shape: "diamond";
+    fontcolor: "#ffffff";
+    fillcolor: "#586E75";
+}
+
+node.choice.disabled {
+    style: "filled";
+    shape: "diamond";
+    fillcolor: "#D0DCE3";
+    color: "#D0DCE3";
+    fontcolor: "#ffffff";
+}
+
+edge.choice {
+    style: "dashed";
+}
+
+edge.relies {
+    style: "dashed";
+    arrowhead: "vee"
+}
+
+edge.corelies {
+    style: "dashed";
+    arrowhead: "vee";
+    arrowtail: "vee";
+    dir: "both";
+}

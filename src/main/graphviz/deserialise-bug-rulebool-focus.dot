@@ -1,0 +1,19 @@
+digraph {
+    ExtRuleBool[label="ExtRule[Boolean]" class="operator,disabled"]
+
+    RuleInt[label="Rule[Int]" class="operator,disabled"]
+    RuleBool[label="Rule[Boolean]" class="operator"]
+
+    subgraph cluster_foo {
+        And[class="disabled"]
+        Equals[class="disabled"]
+        Bool[class="disabled"]
+    }
+
+    ExtRuleBool -> RuleBool[class="relies,disabled"]
+    ExtRuleBool -> Bool[class="disabled"]
+    Equals -> RuleInt[class="relies,disabled"]
+    RuleBool -> And[class="disabled"]
+    RuleBool -> Equals[class="disabled"]
+    And -> RuleBool[class="relies,disabled"]
+}

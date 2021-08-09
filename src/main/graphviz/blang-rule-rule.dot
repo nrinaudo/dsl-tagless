@@ -1,0 +1,12 @@
+digraph {
+    rankdir=LR
+
+    document[shape="record" label="$categoryId: 10|$price: 3|..."]
+    rule[label="Rule" class="choice"]
+    true[style="invis"]
+    false[style="invis"]
+
+    document -> rule
+    rule -> true[class="choice" style="invis"]
+    rule -> false[class="choice" style="invis"]
+}

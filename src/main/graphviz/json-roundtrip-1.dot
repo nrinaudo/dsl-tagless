@@ -1,0 +1,10 @@
+digraph {
+    rankdir=LR
+    splines=true
+
+    rule[label="$categoryId EQUALS 10\nAND\n$price EQUALS 3"]
+    json[label="{ \"AND\": [\l  { \"EQUALS\": [\"categoryId\", 10] },\l  { \"EQUALS\": [\"price\", 3] }\l]}\l" class="disabled"]
+
+    rule:ne -> json:nw[label="serialise" class="disabled"]
+    json:sw -> rule:se[label="deserialise" class="disabled"]
+}

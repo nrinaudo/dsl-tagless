@@ -1,0 +1,18 @@
+digraph {
+    splines=true
+
+    ExtRuleBool[label="ExtRule[Boolean]" class="operator,disabled"]
+    RuleBool[label="Rule[Boolean]" class="operator"]
+    RuleInt[label="Rule[Int]" class="operator"]
+    And
+    Equals
+    Bool[class="disabled"]
+
+    ExtRuleBool -> RuleBool[class="relies,disabled"]
+    ExtRuleBool -> Bool[class="disabled"]
+    Equals -> RuleInt[class="relies"]
+    RuleBool -> And
+    RuleBool -> Equals
+    And -> RuleBool[class="relies"]
+    And -> ExtRuleBool[class="relies" style="invis"]
+}

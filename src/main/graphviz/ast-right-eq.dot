@@ -1,0 +1,18 @@
+digraph {
+    and[label="Rule.And" class="operator,disabled"]
+    eq1[label="Rule.Eq" class="operator,disabled"]
+    eq2[label="Rule.Eq" class="operator"]
+    categoryId[label="Rule.Var(\"categoryId\")" class="value,disabled"]
+    price[label="Rule.Var(\"price\")" class="value,disabled"]
+    categoryValue[label="Rule.Num(10)" class="value,disabled"]
+    priceValue[label="Rule.Num(3)" class="value,disabled"]
+
+    and -> eq1[class="disabled"]
+    and -> eq2[class="disabled"]
+
+    eq1 -> categoryId[class="disabled"]
+    eq1 -> categoryValue[class="disabled"]
+
+    eq2 -> price[class="disabled"]
+    eq2 -> priceValue[class="disabled"]
+}

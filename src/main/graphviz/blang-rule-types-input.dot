@@ -1,0 +1,12 @@
+digraph {
+    rankdir=LR
+
+    document[shape="record" label="$categoryId: 10|$price: 3|..."]
+    rule[label="Rule" class="choice,disabled"]
+    Boolean[class="disabled"]
+    Int[class="disabled"]
+
+    document -> rule[class="disabled"]
+    rule -> Boolean[class="choice,disabled"]
+    rule -> Int[class="choice,disabled"]
+}
