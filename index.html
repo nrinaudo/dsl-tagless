@@ -1,0 +1,9799 @@
+<!Doctype html>
+<html>
+    <head>
+        <title>Building DSLs</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    </head>
+    <body>
+        <textarea id="source">
+class: center, middle
+
+# Building DSLs
+
+Nicolas Rinaudo • [@NicolasRinaudo] • [Besedo]
+
+---
+
+class: center, middle
+
+# Content Moderation
+
+---
+
+## Moderation Process
+
+.center[![Ye Old Moderation Process](img/moderation-old-input.svg)]
+
+---
+
+## Moderation Process
+
+.center[![Ye Old Moderation Process](img/moderation-old-enrich.svg)]
+
+---
+
+## Moderation Process
+
+.center[![Ye Old Moderation Process](img/moderation-old-document.svg)]
+
+---
+
+## Moderation Process
+
+.center[![Ye Old Moderation Process](img/moderation-old-enqueue.svg)]
+
+---
+
+## Moderation Process
+
+.center[![Ye Old Moderation Process](img/moderation-old-agent.svg)]
+
+---
+
+## Moderation Process
+
+.center[![Ye Old Moderation Process](img/moderation-old-accept.svg)]
+
+---
+
+## Moderation Process
+
+.center[![Ye Old Moderation Process](img/moderation-old.svg)]
+
+---
+
+## Moderation Process
+
+.center[![Ye Slightly Less Old Moderation Process](img/moderation-less-old-before-rules.svg)]
+
+---
+
+## Moderation Process
+
+.center[![Moderation Process](img/moderation-after-rules.svg)]
+
+---
+
+## Moderation Process
+
+.center[![Moderation Process](img/moderation-after-orchestration-accept.svg)]
+
+---
+
+## Moderation Process
+
+.center[![Moderation Process](img/moderation-after-orchestration-reject.svg)]
+
+---
+
+## Moderation Process
+
+.center[![Moderation Process](img/moderation-after-orchestration.svg)]
+
+---
+
+## Moderation Process
+
+.center[![Moderation Process](img/moderation.svg)]
+
+---
+
+## Moderation Process
+
+.center[![Moderation Process](img/moderation-rules.svg)]
+
+---
+
+## Rule Evaluation
+
+.center[![Rule](img/blang-rule-doc.svg)]
+
+---
+
+## Rule Evaluation
+
+.center[![Rule](img/blang-rule-rule.svg)]
+
+```scala
+($categoryId EQUALS 10) AND ($price EQUALS 3)
+```
+
+---
+
+## Rule Evaluation
+
+.center[![Rule](img/blang-rule-true.svg)]
+
+```scala
+($categoryId EQUALS 10) AND ($price EQUALS 3)
+```
+
+---
+
+## Rule Evaluation
+
+.center[![Rule](img/blang-rule.svg)]
+
+```scala
+($categoryId EQUALS 10) AND ($price EQUALS 3)
+```
+
+---
+
+## Rule
+
+.center[![Rule](img/rule-building-empty.svg)]
+
+```scala
+($categoryId EQUALS 10) AND ($price EQUALS 3)
+```
+
+---
+
+## Rule
+
+.center[![Rule](img/rule-building-and.svg)]
+
+```scala
+($categoryId EQUALS 10) `AND` ($price EQUALS 3)
+```
+
+---
+
+## Rule
+
+.center[![Rule](img/rule-building-and-lhs.svg)]
+
+```scala
+&#x200B;`($categoryId EQUALS 10)` AND ($price EQUALS 3)
+```
+
+---
+
+## Rule
+
+.center[![Rule](img/rule-building-and-rhs.svg)]
+
+```scala
+($categoryId EQUALS 10) AND `($price EQUALS 3)`
+```
+
+---
+
+## Rule
+
+.center[![Rule](img/rule-building-variable.svg)]
+
+```scala
+(`$categoryId` EQUALS 10) AND (`$price` EQUALS 3)
+```
+
+---
+
+## Rule
+
+.center[![Rule](img/rule-building-value.svg)]
+
+```scala
+($categoryId EQUALS `10`) AND ($price EQUALS `3`)
+```
+
+---
+
+## Rule
+
+.center[![Rule](img/rule.svg)]
+
+```scala
+($categoryId EQUALS 10) AND ($price EQUALS 3)
+```
+
+---
+
+class: center, middle
+
+# Naive encoding
+
+---
+
+## Naive encoding
+
+```scala
+enum Rule:
+```
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/rule-value.svg)]
+
+---
+
+## Naive encoding
+
+.diff-add[
+```scala
+enum Rule:
+* `case Num(value: Int)`
+```
+]
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/rule-value.svg)]
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/ast-creation-value.svg)]
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/ast-creation-variable-1.svg)]
+
+---
+
+## Naive encoding
+
+.diff-add[
+```scala
+enum Rule:
+  case Num(value: Int)
+* `case Var(name: String)`
+```
+]
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/ast-creation-variable-1.svg)]
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/ast-creation-variable-2.svg)]
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/ast-creation-equals-1.svg)]
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/ast-creation-equals-1-lhs.svg)]
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/ast-creation-equals-1-rhs.svg)]
+
+---
+
+## Naive encoding
+
+.diff-add[
+```scala
+enum Rule:
+  case Num(value: Int)
+  case Var(name: String)
+*
+* `case Eq(lhs: Rule, rhs: Rule)`
+```
+]
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/ast-creation-equals-1.svg)]
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/ast-creation-equals-2.svg)]
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/ast-creation-and-1.svg)]
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/ast-creation-and-1-lhs.svg)]
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/ast-creation-and-1-rhs.svg)]
+
+---
+
+## Naive encoding
+
+.diff-add[
+```scala
+enum Rule:
+  case Num(value: Int)
+  case Var(name: String)
+
+  case Eq(lhs: Rule, rhs: Rule)
+* `case And(lhs: Rule, rhs: Rule)`
+```
+]
+
+---
+
+## Naive encoding
+
+```scala
+enum Rule:
+  case Num(value: Int)
+  case Var(name: String)
+
+  case Eq(lhs: Rule, rhs: Rule)
+  case And(lhs: Rule, rhs: Rule)
+
+```
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/ast-creation-and-1.svg)]
+
+---
+
+## Naive encoding
+
+.center[![Rule](img/ast-creation-and-2.svg)]
+
+---
+
+## ADT
+
+.center[![Rule ADT](img/ast.svg)]
+
+---
+
+## ADT
+
+.center[![Rule ADT](img/ast-and.svg)]
+
+---
+
+## ADT
+
+.center[![Rule ADT](img/ast-left-eq.svg)]
+
+---
+
+## ADT
+
+.center[![Rule ADT](img/ast-categoryId.svg)]
+
+---
+
+## ADT
+
+.center[![Rule ADT](img/ast-10.svg)]
+
+---
+
+## ADT
+
+.center[![Rule ADT](img/ast-and-values.svg)]
+
+---
+
+## ADT
+
+.center[![Rule ADT](img/ast-categoryId.svg)]
+
+---
+
+## ADT
+
+```scala
+enum `Rule`:
+  case Num(value: Int)
+  case Var(name: String)
+
+  case Eq(lhs: Rule, rhs: Rule)
+  case And(lhs: Rule, rhs: Rule)
+```
+
+---
+
+## ADT
+
+```scala
+enum Rule:
+  case Num(value: Int)
+  case Var(name: String)
+
+  case `Eq`(lhs: Rule, rhs: Rule)
+  case And(lhs: Rule, rhs: Rule)
+```
+
+---
+
+## ADT
+
+```scala
+enum Rule:
+  case Num(value: Int)
+  case Var(name: String)
+
+  case Eq(`lhs: Rule`, `rhs: Rule`)
+  case And(lhs: Rule, rhs: Rule)
+```
+
+---
+
+## ADT encoding
+
+.center[![Rule ADT](img/ast.svg)]
+
+--
+
+```scala
+val rule = Rule.And(
+  Rule.Eq(Rule.Var("categoryId"), Rule.Num(10)),
+  Rule.Eq(Rule.Var("price"),      Rule.Num(3))
+)
+
+```
+
+---
+
+## ADT encoding
+
+.center[![Rule ADT](img/ast-and.svg)]
+
+```scala
+val rule = `Rule.And`(
+  Rule.Eq(Rule.Var("categoryId"), Rule.Num(10)),
+  Rule.Eq(Rule.Var("price"),      Rule.Num(3))
+)
+```
+
+---
+
+## ADT encoding
+
+.center[![Rule ADT](img/ast-eqs.svg)]
+
+```scala
+val rule = Rule.And(
+  `Rule.Eq`(Rule.Var("categoryId"), Rule.Num(10)),
+  `Rule.Eq`(Rule.Var("price"),      Rule.Num(3))
+)
+```
+
+---
+
+## ADT encoding
+
+.center[![Rule ADT](img/ast-leaves.svg)]
+
+```scala
+val rule = Rule.And(
+  Rule.Eq(`Rule.Var("categoryId")`, `Rule.Num(10)`),
+  Rule.Eq(`Rule.Var("price")`,      `Rule.Num(3)`)
+)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+extension (lhs: Rule)
+  infix def `EQUALS`(rhs: Rule) = Rule.Eq(lhs, rhs)
+  infix def AND(rhs: Rule)    = Rule.And(lhs, rhs)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+extension (`lhs: Rule`)
+  infix def EQUALS(`rhs: Rule`) = Rule.Eq(lhs, rhs)
+  infix def AND(rhs: Rule)    = Rule.And(lhs, rhs)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+extension (lhs: Rule)
+  infix def EQUALS(rhs: Rule) = `Rule.Eq(lhs, rhs)`
+  infix def AND(rhs: Rule)    = Rule.And(lhs, rhs)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+extension (lhs: Rule)
+  infix def EQUALS(rhs: Rule) = Rule.Eq(lhs, rhs)
+  infix def `AND`(rhs: Rule)    = Rule.And(lhs, rhs)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+extension (`lhs: Rule`)
+  infix def EQUALS(rhs: Rule) = Rule.Eq(lhs, rhs)
+  infix def AND(`rhs: Rule`)    = Rule.And(lhs, rhs)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+extension (lhs: Rule)
+  infix def EQUALS(rhs: Rule) = Rule.Eq(lhs, rhs)
+  infix def AND(rhs: Rule)    = `Rule.And(lhs, rhs)`
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+extension (lhs: Rule)
+  infix def EQUALS(rhs: Rule) = Rule.Eq(lhs, rhs)
+  infix def AND(rhs: Rule)    = Rule.And(lhs, rhs)
+
+```
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+val rule = Rule.And(
+* `Rule.Eq(`Rule.Var("categoryId")`,` Rule.Num(10)`)`,
+* `Rule.Eq(`Rule.Var("price")`,`      Rule.Num(3)`)`
+)
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+val rule = Rule.And(
+* Rule.Var("categoryId") `EQUALS` Rule.Num(10),
+* Rule.Var("price")      `EQUALS` Rule.Num(3)
+)
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+*val rule = `Rule.And(`
+* Rule.Var("categoryId") EQUALS Rule.Num(10)`,`
+  Rule.Var("price")      EQUALS Rule.Num(3)
+*&#x200B;`)`
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+val rule =
+* `(`Rule.Var("categoryId") EQUALS Rule.Num(10)`) AND`
+  `(`Rule.Var("price")      EQUALS Rule.Num(3)`)`
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+val rule =
+  (`Rule.Var`("categoryId") EQUALS `Rule.Num`(10)) AND
+  (`Rule.Var`("price")      EQUALS `Rule.Num`(3))
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+def `NUM`(i: Int) = Rule.Num(i)
+
+def VAR(name: String) = Rule.Var(name)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+def NUM(`i: Int`) = Rule.Num(i)
+
+def VAR(name: String) = Rule.Var(name)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+def NUM(i: Int) = `Rule.Num(i)`
+
+def VAR(name: String) = Rule.Var(name)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+def NUM(i: Int) = Rule.Num(i)
+
+def `VAR`(name: String) = Rule.Var(name)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+def NUM(i: Int) = Rule.Num(i)
+
+def VAR(`name: String`) = Rule.Var(name)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+def NUM(i: Int) = Rule.Num(i)
+
+def VAR(name: String) = `Rule.Var(name)`
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+def NUM(i: Int) = Rule.Num(i)
+
+def VAR(name: String) = Rule.Var(name)
+
+```
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+val rule =
+* (`Rule.Var`("categoryId") EQUALS `Rule.Num(10)`) AND
+* (`Rule.Var`("price")      EQUALS `Rule.Num(3)`)
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+val rule =
+* (`VAR`("categoryId") EQUALS `NUM(10)`) AND
+* (`VAR`("price")      EQUALS `NUM(3)`)
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+val rule =
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  (VAR("price")      EQUALS NUM(3))
+
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+rule
+// val res0: Rule = And(Eq(Var(categoryId),Num(10)),Eq(Var(price),Num(3)))
+```
+
+---
+
+## Pretty printer
+
+```scala
+def `pretty`(r: Rule): String = ???
+```
+
+---
+
+## Pretty printer
+
+```scala
+def pretty(`r: Rule`): String = ???
+```
+
+---
+
+## Pretty printer
+
+```scala
+def pretty(r: Rule): `String` = ???
+```
+
+---
+
+## Pretty printer
+
+.center[![Rule ADT](img/ast.svg)]
+
+```scala
+($categoryId EQUALS 10) AND ($price EQUALS 3)
+```
+
+---
+
+## Pretty printer
+
+.center[![Rule ADT](img/ast-10.svg)]
+
+```scala
+($categoryId EQUALS `10`) AND ($price EQUALS 3)
+```
+
+---
+
+## Pretty printer
+
+.diff-rm[
+```scala
+*def pretty(r: Rule): String = `???`
+```
+]
+
+---
+
+## Pretty printer
+
+.diff-add[
+```scala
+*def pretty(r: Rule): String = `r match`
+* `case Rule.Num(value) => value.toString`
+```
+]
+
+---
+
+## Pretty printer
+
+```scala
+def pretty(r: Rule): String = r match
+  case Rule.Num(value) => `value.toString`
+```
+
+---
+
+## Pretty printer
+
+.center[![Rule ADT](img/ast-categoryId.svg)]
+
+```scala
+(`$categoryId` EQUALS 10) AND ($price EQUALS 3)
+```
+
+---
+
+## Pretty printer
+
+.diff-add[
+```scala
+def pretty(r: Rule): String = r match
+  case Rule.Num(value) => value.toString
+* `case Rule.Var(name)  => s"$$$name"`
+```
+]
+
+---
+
+## Pretty printer
+
+```scala
+def pretty(r: Rule): String = r match
+  case Rule.Num(value) => value.toString
+  case Rule.Var(name)  => s"`$$`$name"
+```
+
+---
+
+## Pretty printer
+
+```scala
+def pretty(r: Rule): String = r match
+  case Rule.Num(value) => value.toString
+  case Rule.Var(name)  => s"$$`$name`"
+```
+
+---
+
+## Pretty printer
+
+.center[![Rule ADT](img/ast-and-lhs.svg)]
+
+```scala
+(`$categoryId EQUALS 10`) AND ($price EQUALS 3)
+```
+
+---
+
+## Pretty printer
+
+.center[![Rule ADT](img/ast-categoryId.svg)]
+
+```scala
+(`$categoryId` EQUALS 10) AND ($price EQUALS 3)
+```
+
+---
+
+## Pretty printer
+
+.center[![Rule ADT](img/ast-left-eq.svg)]
+
+```scala
+($categoryId `EQUALS` 10) AND ($price EQUALS 3)
+```
+
+---
+
+## Pretty printer
+
+.center[![Rule ADT](img/ast-10.svg)]
+
+```scala
+($categoryId EQUALS `10`) AND ($price EQUALS 3)
+```
+
+---
+
+## Pretty printer
+
+.diff-add[
+```scala
+def pretty(r: Rule): String = r match
+  case Rule.Num(value) => value.toString
+  case Rule.Var(name)  => s"$$$name"
+*
+* `case Rule.Eq(lhs, rhs) =>`
+*   `s"(${pretty(lhs)} EQUALS ${pretty(rhs)})"`
+```
+]
+
+---
+
+## Pretty printer
+
+```scala
+def pretty(r: Rule): String = r match
+  case Rule.Num(value) => value.toString
+  case Rule.Var(name)  => s"$$$name"
+
+  case Rule.Eq(lhs, rhs) =>
+    s"(`${pretty(lhs)}` EQUALS ${pretty(rhs)})"
+```
+
+---
+
+## Pretty printer
+
+```scala
+def pretty(r: Rule): String = r match
+  case Rule.Num(value) => value.toString
+  case Rule.Var(name)  => s"$$$name"
+
+  case Rule.Eq(lhs, rhs) =>
+    s"(${pretty(lhs)} `EQUALS` ${pretty(rhs)})"
+```
+
+---
+
+## Pretty printer
+
+```scala
+def pretty(r: Rule): String = r match
+  case Rule.Num(value) => value.toString
+  case Rule.Var(name)  => s"$$$name"
+
+  case Rule.Eq(lhs, rhs) =>
+    s"(${pretty(lhs)} EQUALS `${pretty(rhs)}`)"
+```
+
+---
+
+## Pretty printer
+
+.center[![Rule ADT](img/ast-and-with-operands.svg)]
+
+```scala
+&#x200B;`($categoryId EQUALS 10) AND ($price EQUALS 3)`
+```
+
+---
+
+## Pretty printer
+
+.center[![Rule ADT](img/ast-and-lhs.svg)]
+
+```scala
+&#x200B;`($categoryId EQUALS 10)` AND ($price EQUALS 3)
+```
+
+---
+
+## Pretty printer
+
+.center[![Rule ADT](img/ast-and.svg)]
+
+```scala
+($categoryId EQUALS 10) `AND` ($price EQUALS 3)
+```
+
+---
+
+## Pretty printer
+
+.center[![Rule ADT](img/ast-and-rhs.svg)]
+
+```scala
+($categoryId EQUALS 10) AND `($price EQUALS 3)`
+```
+
+---
+
+## Pretty printer
+
+.diff-add[
+```scala
+def pretty(r: Rule): String = r match
+  case Rule.Num(value) => value.toString
+  case Rule.Var(name)  => s"$$$name"
+
+  case Rule.Eq(lhs, rhs) =>
+    s"(${pretty(lhs)} EQUALS ${pretty(rhs)})"
+* `case Rule.And(lhs, rhs) =>`
+*   `s"${pretty(lhs)} AND ${pretty(rhs)}"`
+```
+]
+
+---
+
+## Pretty printer
+
+```scala
+def pretty(r: Rule): String = r match
+  case Rule.Num(value) => value.toString
+  case Rule.Var(name)  => s"$$$name"
+
+  case Rule.Eq(lhs, rhs) =>
+    s"(${pretty(lhs)} EQUALS ${pretty(rhs)})"
+  case Rule.And(lhs, rhs) =>
+    s"${pretty(lhs)} AND ${pretty(rhs)}"
+
+```
+
+---
+
+## Pretty printer
+
+```scala
+pretty(rule)
+// val res1: String = ($categoryId EQUALS 10) AND ($price EQUALS 3)
+```
+
+---
+
+## Key takeaways
+
+--
+
+* ADTs are potentially recursive sum types of product types.
+
+--
+
+* DSLs are easily encoded as ADTs.
+
+--
+
+* Interpretation is natural recursion.
+
+---
+
+class: center, middle
+
+# Compilation and Evaluation
+
+---
+
+## Rule
+
+.center[![Rule ADT](img/blang-rule.svg)]
+
+---
+
+## Rule
+
+.center[![Rule ADT](img/blang-rule-input.svg)]
+
+---
+
+## Rule
+
+.center[![Rule ADT](img/blang-rule-bool.svg)]
+
+---
+
+## Rule
+
+.center[![Rule ADT](img/blang-rule-input.svg)]
+
+--
+
+```scala
+type Doc = Map[String, Int]
+
+```
+
+---
+
+## Rule
+
+.center[![Rule ADT](img/blang-rule-input.svg)]
+
+```scala
+type Doc = `Map[String, Int]`
+```
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/ast.svg)]
+
+```scala
+&#x200B;`doc` => (doc("categoryId") == 10) && (doc("price") == 3)
+```
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/ast.svg)]
+
+```scala
+doc => `(doc("categoryId") == 10) && (doc("price") == 3)`
+```
+
+---
+
+## Compilation
+
+```scala
+def `compile`(r: Rule): Doc => Boolean = ???
+```
+
+---
+
+## Compilation
+
+```scala
+def compile(r: `Rule`): Doc => Boolean = ???
+```
+
+---
+
+## Compilation
+
+```scala
+def compile(r: Rule): `Doc => Boolean` = ???
+```
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/ast-10.svg)]
+
+```scala
+doc => (doc("categoryId") == `10`) && (doc("price") == 3)
+```
+
+---
+
+## Compilation
+
+.diff-rm[
+```scala
+*def compile(r: Rule): Doc => Boolean = `???`
+```
+]
+
+---
+
+## Compilation
+
+.diff-add[
+```scala
+*def compile(r: Rule): Doc => Boolean = `r match`
+* `case Rule.Num(value) => _ => value`
+```
+]
+
+---
+
+## Compilation
+
+```scala
+def compile(r: Rule): Doc => Boolean = r match
+  case Rule.Num(value) => `_ => value`
+```
+
+---
+
+## Compilation
+
+```scala
+def compile(r: Rule): Doc => Boolean = r match
+  case Rule.Num(value) => _ => value
+//   case Rule.Num(value) => _ => value
+//                                ^
+// ⛔ Found:    (value : Int)
+//   Required: Boolean
+```
+
+---
+
+## Compilation
+
+.diff-rm[
+```scala
+*def compile(r: Rule): Doc => `Boolean` = r match
+  case Rule.Num(value) => _ => value
+```
+]
+
+---
+
+## Compilation
+
+.diff-add[
+```scala
+*def compile(r: Rule): Doc => `Int | Boolean` = r match
+  case Rule.Num(value) => _ => value
+```
+]
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/ast-categoryId.svg)]
+
+```scala
+doc => (`doc("categoryId")` == 10) && (doc("price") == 3)
+```
+
+---
+
+## Compilation
+
+.diff-add[
+```scala
+def compile(r: Rule): Doc => Int | Boolean = r match
+  case Rule.Num(value) => _ => value
+* `case Rule.Var(name)  => doc => doc(name)`
+```
+]
+
+---
+
+## Compilation
+
+```scala
+def compile(r: Rule): Doc => Int | Boolean = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => `doc => doc(name)`
+```
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/ast-and-lhs.svg)]
+
+```scala
+doc => (`doc("categoryId") == 10`) && (doc("price") == 3)
+```
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/ast-categoryId.svg)]
+
+```scala
+doc => (`doc("categoryId")` == 10) && (doc("price") == 3)
+```
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/ast-10.svg)]
+
+```scala
+doc => (doc("categoryId") == `10`) && (doc("price") == 3)
+```
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/ast-left-eq.svg)]
+
+```scala
+doc => (doc("categoryId") `==` 10) && (doc("price") == 3)
+```
+
+---
+
+## Compilation
+
+.diff-add[
+```scala
+def compile(r: Rule): Doc => Int | Boolean = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+* `case Rule.Eq(lhs, rhs) =>`
+*   `val left  = compile(lhs)`
+*   `val right = compile(rhs)`
+*
+*   `doc => left(doc) == right(doc)`
+```
+]
+
+---
+
+## Compilation
+
+```scala
+def compile(r: Rule): Doc => Int | Boolean = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val `left  = compile(lhs)`
+    val right = compile(rhs)
+
+    doc => left(doc) == right(doc)
+```
+
+---
+
+## Compilation
+
+```scala
+def compile(r: Rule): Doc => Int | Boolean = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val `right = compile(rhs)`
+
+    doc => left(doc) == right(doc)
+```
+
+---
+
+## Compilation
+
+```scala
+def compile(r: Rule): Doc => Int | Boolean = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    `doc` => left(doc) == right(doc)
+```
+
+---
+
+## Compilation
+
+```scala
+def compile(r: Rule): Doc => Int | Boolean = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => `left(doc)` == right(doc)
+```
+
+---
+
+## Compilation
+
+```scala
+def compile(r: Rule): Doc => Int | Boolean = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) == `right(doc)`
+```
+
+---
+
+## Compilation
+
+```scala
+def compile(r: Rule): Doc => Int | Boolean = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) `==` right(doc)
+```
+
+---
+
+## Compilation
+
+```scala
+def compile(r: Rule): Doc => Int | Boolean = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) == right(doc)
+//     doc => left(doc) == right(doc)
+//            ^
+// ⛔ Values of types Int | Boolean and Int | Boolean cannot be compared with == or !=
+```
+
+---
+
+## Improved encoding
+
+.diff-add[
+```scala
+*enum Rule`[A]`:
+  case Num(value: Int)
+  case Var(name: String)
+
+  case Eq(lhs: Rule, rhs: Rule)
+  case And(lhs: Rule, rhs: Rule)
+```
+]
+
+---
+
+## Improved encoding
+
+.diff-add[
+```scala
+enum Rule[A]:
+* case Num(value: Int)`   extends Rule[Int]`
+  case Var(name: String)
+
+  case Eq(lhs: Rule, rhs: Rule)
+  case And(lhs: Rule, rhs: Rule)
+```
+]
+
+---
+
+## Improved encoding
+
+.diff-add[
+```scala
+enum Rule[A]:
+  case Num(value: Int)   extends Rule[Int]
+* case Var(name: String)` extends Rule[Int]`
+
+  case Eq(lhs: Rule, rhs: Rule)
+  case And(lhs: Rule, rhs: Rule)
+```
+]
+
+---
+
+## Improved encoding
+
+.diff-add[
+```scala
+enum Rule[A]:
+  case Num(value: Int)   extends Rule[Int]
+  case Var(name: String) extends Rule[Int]
+
+  case Eq(lhs: Rule, rhs: Rule)
+*   `extends Rule[Boolean]`
+  case And(lhs: Rule, rhs: Rule)
+```
+]
+
+---
+
+## Improved encoding
+
+```scala
+enum Rule[A]:
+  case Num(value: Int)   extends Rule[Int]
+  case Var(name: String) extends Rule[Int]
+
+  case Eq(lhs: `Rule`, rhs: `Rule`)
+    extends Rule[Boolean]
+  case And(lhs: Rule, rhs: Rule)
+```
+
+---
+
+## Improved encoding
+
+.diff-add[
+```scala
+enum Rule[A]:
+  case Num(value: Int)   extends Rule[Int]
+  case Var(name: String) extends Rule[Int]
+
+* case Eq(lhs: Rule`[Int]`, rhs: Rule`[Int]`)
+    extends Rule[Boolean]
+  case And(lhs: Rule, rhs: Rule)
+```
+]
+
+---
+
+## Improved encoding
+
+.diff-add[
+```scala
+enum Rule[A]:
+  case Num(value: Int)   extends Rule[Int]
+  case Var(name: String) extends Rule[Int]
+
+  case Eq(lhs: Rule[Int], rhs: Rule[Int])
+    extends Rule[Boolean]
+  case And(lhs: Rule, rhs: Rule)
+*   `extends Rule[Boolean]`
+```
+]
+
+---
+
+## Improved encoding
+
+```scala
+enum Rule[A]:
+  case Num(value: Int)   extends Rule[Int]
+  case Var(name: String) extends Rule[Int]
+
+  case Eq(lhs: Rule[Int], rhs: Rule[Int])
+    extends Rule[Boolean]
+  case And(lhs: `Rule`, rhs: `Rule`)
+    extends Rule[Boolean]
+```
+
+---
+
+## Improved encoding
+
+.diff-add[
+```scala
+enum Rule[A]:
+  case Num(value: Int)   extends Rule[Int]
+  case Var(name: String) extends Rule[Int]
+
+  case Eq(lhs: Rule[Int], rhs: Rule[Int])
+    extends Rule[Boolean]
+* case And(lhs: Rule`[Boolean]`, rhs: Rule`[Boolean]`)
+    extends Rule[Boolean]
+```
+]
+
+---
+
+## Improved encoding
+
+```scala
+enum Rule[A]:
+  case Num(value: Int)   extends Rule[Int]
+  case Var(name: String) extends Rule[Int]
+
+  case Eq(lhs: Rule[Int], rhs: Rule[Int])
+    extends Rule[Boolean]
+  case And(lhs: Rule[Boolean], rhs: Rule[Boolean])
+    extends Rule[Boolean]
+
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+def NUM(i: Int) = Rule.Num(i)
+
+def VAR(name: String) = Rule.Var(name)
+
+extension (lhs: Rule)
+  infix def `EQUALS`(rhs: Rule) = Rule.Eq(lhs, rhs)
+
+extension (lhs: Rule)
+  infix def AND(rhs: Rule) = Rule.And(lhs, rhs)
+```
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+def NUM(i: Int) = Rule.Num(i)
+
+def VAR(name: String) = Rule.Var(name)
+
+*extension (lhs: Rule`[Int]`)
+* infix def EQUALS(rhs: Rule`[Int]`) = Rule.Eq(lhs, rhs)
+
+extension (lhs: Rule)
+  infix def AND(rhs: Rule) = Rule.And(lhs, rhs)
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+def NUM(i: Int) = Rule.Num(i)
+
+def VAR(name: String) = Rule.Var(name)
+
+extension (lhs: Rule[Int])
+  infix def EQUALS(rhs: Rule[Int]) = Rule.Eq(lhs, rhs)
+
+extension (lhs: Rule)
+  infix def `AND`(rhs: Rule) = Rule.And(lhs, rhs)
+```
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+def NUM(i: Int) = Rule.Num(i)
+
+def VAR(name: String) = Rule.Var(name)
+
+extension (lhs: Rule[Int])
+  infix def EQUALS(rhs: Rule[Int]) = Rule.Eq(lhs, rhs)
+
+*extension (lhs: Rule`[Boolean]`)
+* infix def AND(rhs: Rule`[Boolean]`) = Rule.And(lhs, rhs)
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+def NUM(i: Int) = Rule.Num(i)
+
+def VAR(name: String) = Rule.Var(name)
+
+extension (lhs: Rule[Int])
+  infix def EQUALS(rhs: Rule[Int]) = Rule.Eq(lhs, rhs)
+
+extension (lhs: Rule[Boolean])
+  infix def AND(rhs: Rule[Boolean]) = Rule.And(lhs, rhs)
+
+```
+
+---
+
+## GADT
+
+```scala
+enum Rule`[A]`:
+  case Num(value: Int)   extends Rule[Int]
+  case Var(name: String) extends Rule[Int]
+
+  case Eq(lhs: Rule[Int], rhs: Rule[Int])
+    extends Rule[Boolean]
+  case And(lhs: Rule[Boolean], rhs: Rule[Boolean])
+    extends Rule[Boolean]
+```
+
+---
+
+## GADT
+
+```scala
+enum Rule[A]:
+  case Num(value: Int)   extends Rule`[Int]`
+  case Var(name: String) extends Rule`[Int]`
+
+  case Eq(lhs: Rule[Int], rhs: Rule[Int])
+    extends Rule`[Boolean]`
+  case And(lhs: Rule[Boolean], rhs: Rule[Boolean])
+    extends Rule`[Boolean]`
+```
+
+---
+
+## Compilation
+
+.diff-add[
+```scala
+*def compile(r: Rule`[A]`): Doc => Int | Boolean = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) == right(doc)
+```
+]
+
+---
+
+## Compilation
+
+.diff-add[
+```scala
+*def compile[`A`](r: Rule[A]): Doc => Int | Boolean = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) == right(doc)
+```
+]
+
+---
+
+## Compilation
+
+.diff-rm[
+```scala
+*def compile[A](r: Rule[A]): Doc => `Int | Boolean` = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) == right(doc)
+```
+]
+
+---
+
+## Compilation
+
+.diff-add[
+```scala
+*def compile[A](r: Rule[A]): Doc => `A` = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) == right(doc)
+```
+]
+
+---
+
+## Compilation
+
+```scala
+def compile[A](r: Rule[A]): Doc => A = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => `left(doc) == right(doc)`
+```
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/ast-and-with-operands.svg)]
+
+```scala
+doc => `(doc("categoryId") == 10) && (doc("price") == 3)`
+```
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/ast-left-eq.svg)]
+
+```scala
+doc => `(doc("categoryId") == 10)` && (doc("price") == 3)
+```
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/ast-right-eq.svg)]
+
+```scala
+doc => (doc("categoryId") == 10) && `(doc("price") == 3)`
+```
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/ast-and.svg)]
+
+```scala
+doc => (doc("categoryId") == 10) `&&` (doc("price") == 3)
+```
+
+---
+
+## Compilation
+
+.diff-add[
+```scala
+def compile[A](r: Rule[A]): Doc => A = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) == right(doc)
+
+* `case Rule.And(lhs, rhs) =>`
+*   `val left  = compile(lhs)`
+*   `val right = compile(rhs)`
+
+*   `doc => left(doc) && right(doc)`
+```
+]
+
+---
+
+## Compilation
+
+```scala
+def compile[A](r: Rule[A]): Doc => A = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) == right(doc)
+
+  case Rule.And(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) `&&` right(doc)
+```
+
+
+---
+
+## Compilation
+
+```scala
+def compile[A](r: Rule[A]): Doc => A = r match
+  case Rule.Num(value) => _ => value
+  case Rule.Var(name)  => doc => doc(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) == right(doc)
+
+  case Rule.And(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) && right(doc)
+
+```
+
+---
+
+## Evaluation
+
+```scala
+val compiled = `compile(rule)`
+```
+
+---
+
+## Evaluation
+
+```scala
+val compiled = compile(rule)
+
+```
+
+```scala
+compiled(Map(
+  `"categoryId" -> 10`,
+  "price"      -> 3
+))
+```
+
+---
+
+## Evaluation
+
+```scala
+val compiled = compile(rule)
+```
+
+```scala
+compiled(Map(
+  "categoryId" -> 10,
+  `"price"      -> 3`
+))
+```
+
+
+---
+
+## Evaluation
+
+```scala
+val compiled = compile(rule)
+```
+
+```scala
+compiled(Map(
+  "categoryId" -> 10,
+  "price"      -> 3
+))
+// val res2: Boolean = true
+```
+
+---
+
+## Evaluation
+
+```scala
+val compiled = compile(rule)
+```
+
+.diff-rm[
+```scala
+compiled(Map(
+* "categoryId" -> `10`,
+  "price"      -> 3
+))
+```
+]
+
+---
+
+## Evaluation
+
+```scala
+val compiled = compile(rule)
+```
+
+.diff-add[
+```scala
+compiled(Map(
+* "categoryId" -> `11`,
+  "price"      -> 3
+))
+```
+]
+
+---
+
+## Evaluation
+
+```scala
+val compiled = compile(rule)
+```
+
+```scala
+compiled(Map(
+  "categoryId" -> 11,
+  "price"      -> 3
+))
+// val res3: Boolean = false
+```
+
+---
+
+## Key takeaways
+
+--
+
+* ADTs aren't sufficient.
+
+--
+
+* GADTs allow us to encode type constraints.
+
+--
+
+* They do not  make interpretation any harder.
+
+---
+
+class: center, middle
+
+# Serialisation / Deserialisation
+
+---
+
+## Serialisation
+
+.center[![JSON](img/json-rule.svg)]
+
+---
+
+## Serialisation
+
+.center[![JSON](img/json-rule-serialise.svg)]
+
+---
+
+## Serialisation
+
+.center[![JSON](img/json-serialise-full.svg)]
+
+---
+
+## Serialisation
+
+.center[![JSON](img/json-serialise-full.svg)]
+
+```scala
+given [A]: `Encoder[Rule[A]]` = ???
+```
+
+---
+
+## Serialisation
+
+.center[![JSON](img/json-serialise-full.svg)]
+
+```scala
+given [A]: Encoder[Rule[A]] = ???
+```
+
+```scala
+rule`.asJson`
+```
+
+---
+
+## Deserialisation
+
+.center[![JSON](img/json-deserialise.svg)]
+
+---
+
+## Deserialisation
+
+.center[![JSON](img/json-deserialise.svg)]
+
+```scala
+given [A]: `Decoder[Rule[A]]` = ???
+```
+
+---
+
+## Deserialisation
+
+.center[![JSON](img/json-deserialise.svg)]
+
+```scala
+given [A]: Decoder[Rule[A]] = ???
+```
+
+```scala
+json.`as[Rule[A]]`
+```
+
+---
+
+## Deserialisation
+
+.center[![JSON](img/json-deserialise.svg)]
+
+```scala
+given [A]: Decoder[Rule[A]] = ???
+```
+
+```scala
+json.as[`Rule[A]`]
+```
+
+---
+
+## Deserialisation
+
+.center[![JSON](img/json-deserialise.svg)]
+
+.diff-rm[
+```scala
+*&#x200B;`given [A]: Decoder[Rule[A]] = ???`
+```
+]
+
+---
+
+## Deserialisation
+
+.center[![JSON](img/json-deserialise.svg)]
+
+.diff-add[
+```scala
+*&#x200B;`given intDecoder: Decoder[Rule[Int]] = ???`
+*
+*&#x200B;`given boolDecoder: Decoder[Rule[Boolean]] = ???`
+```
+]
+
+---
+
+## Numbers
+
+.center[![Rule ADT](img/ast-10.svg)]
+
+```json
+{ "AND": [
+  { "EQUALS": ["categoryId", `10`] },
+  { "EQUALS": ["price", 3] }
+]}
+```
+
+---
+
+## Number serialisation
+
+.diff-rm[
+```scala
+*given [A]: Encoder[Rule[A]] = `???`
+```
+]
+
+---
+
+## Number serialisation
+
+.diff-add[
+```scala
+given [A]: Encoder[Rule[A]] =
+* `case Rule.Num(value) => Json.Num(value)`
+```
+]
+
+---
+
+## Number serialisation
+
+```scala
+given [A]: Encoder[Rule[A]] =
+  case Rule.Num(value) => `Json.Num(value)`
+```
+
+---
+
+## Number deserialisation
+
+.diff-rm[
+```scala
+*given intDecoder: Decoder[Rule[Int]] = `???`
+```
+]
+
+---
+
+## Number deserialisation
+
+.diff-add[
+```scala
+*given intDecoder: Decoder[Rule[Int]] =
+* `case Json.Num(i)    => Right(Rule.Num(i))`
+```
+]
+
+---
+
+## Number deserialisation
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(i)    => Right(`Rule.Num(i)`)
+```
+
+---
+
+## Variables
+
+.center[![Rule ADT](img/ast-categoryId.svg)]
+
+```json
+{ "AND": [
+  { "EQUALS": [`"categoryId"`, 10] },
+  { "EQUALS": ["price", 3] }
+]}
+```
+
+---
+
+## Variable serialisation
+
+.diff-add[
+```scala
+given [A]: Encoder[Rule[A]] =
+  case Rule.Num(value) => Json.Num(value)
+* `case Rule.Var(name)  => Json.Str(name)`
+```
+]
+
+---
+
+## Variable serialisation
+
+```scala
+given [A]: Encoder[Rule[A]] =
+  case Rule.Num(value) => Json.Num(value)
+  case Rule.Var(name)  => `Json.Str(name)`
+```
+
+---
+
+## Variable deserialisation
+
+.diff-add[
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(i)    => Right(Rule.Num(i))
+* `case Json.Str(name) => Right(Rule.Var(name))`
+```
+]
+
+---
+
+## Variable deserialisation
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(i)    => Right(Rule.Num(i))
+  case Json.Str(name) => Right(`Rule.Var(name)`)
+```
+
+---
+
+## Rule[Int] deserialisation
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(i)    => Right(`Rule.Num(i)`)
+  case Json.Str(name) => Right(`Rule.Var(name)`)
+```
+
+---
+
+## Rule[Int] deserialisation
+
+.diff-add[
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(i)    => Right(Rule.Num(i))
+  case Json.Str(name) => Right(Rule.Var(name))
+* `case other          => Left(s"Invalid number: $other")`
+```
+]
+
+---
+
+## Rule[Int] deserialisation
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(i)    => Right(Rule.Num(i))
+  case Json.Str(name) => Right(Rule.Var(name))
+  case other          => Left(`s"Invalid number: $other"`)
+```
+
+---
+
+## Rule[Int] deserialisation
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(i)    => Right(Rule.Num(i))
+  case Json.Str(name) => Right(Rule.Var(name))
+  case other          => Left(s"Invalid number: $other")
+
+```
+
+---
+
+## Numeric equality
+
+.center[![Rule ADT](img/ast-and-lhs.svg)]
+
+```json
+{ "AND": [
+  `{ "EQUALS": ["categoryId", 10] }`,
+  { "EQUALS": ["price", 3] }
+]}
+```
+
+---
+
+## Numeric equality
+
+.center[![Rule ADT](img/ast-left-eq.svg)]
+
+```json
+{ "AND": [
+  { `"EQUALS"`: ["categoryId", 10] },
+  { "EQUALS": ["price", 3] }
+]}
+```
+
+---
+
+## Numeric equality
+
+.center[![Rule ADT](img/ast-categoryId-10.svg)]
+
+```json
+{ "AND": [
+  { "EQUALS": `["categoryId", 10]` },
+  { "EQUALS": ["price", 3] }
+]}
+```
+
+---
+
+## Numeric equality
+
+.center[![Rule ADT](img/ast-categoryId.svg)]
+
+```json
+{ "AND": [
+  { "EQUALS": [`"categoryId"`, 10] },
+  { "EQUALS": ["price", 3] }
+]}
+```
+
+---
+
+## Numeric equality
+
+.center[![Rule ADT](img/ast-10.svg)]
+
+```json
+{ "AND": [
+  { "EQUALS": ["categoryId", `10`] },
+  { "EQUALS": ["price", 3] }
+]}
+```
+
+---
+
+## Numeric equality serialisation
+
+.diff-add[
+```scala
+given [A]: Encoder[Rule[A]] =
+  case Rule.Num(value) => Json.Num(value)
+  case Rule.Var(name)  => Json.Str(name)
+
+* `case Rule.Eq(lhs, rhs) =>`
+*   `Json.Obj("EQUALS" -> Json.Arr(lhs, rhs))`
+```
+]
+
+---
+
+## Numeric equality serialisation
+
+```scala
+given [A]: Encoder[Rule[A]] =
+  case Rule.Num(value) => Json.Num(value)
+  case Rule.Var(name)  => Json.Str(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    `Json.Obj`("EQUALS" -> Json.Arr(lhs, rhs))
+```
+
+---
+
+## Numeric equality serialisation
+
+```scala
+given [A]: Encoder[Rule[A]] =
+  case Rule.Num(value) => Json.Num(value)
+  case Rule.Var(name)  => Json.Str(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    Json.Obj(`"EQUALS"` -> Json.Arr(lhs, rhs))
+```
+
+---
+
+## Numeric equality serialisation
+
+```scala
+given [A]: Encoder[Rule[A]] =
+  case Rule.Num(value) => Json.Num(value)
+  case Rule.Var(name)  => Json.Str(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    Json.Obj("EQUALS" -> `Json.Arr`(lhs, rhs))
+```
+
+---
+
+## Numeric equality serialisation
+
+```scala
+given [A]: Encoder[Rule[A]] =
+  case Rule.Num(value) => Json.Num(value)
+  case Rule.Var(name)  => Json.Str(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    Json.Obj("EQUALS" -> Json.Arr(`lhs`, `rhs`))
+```
+
+
+
+---
+
+## Numeric equality deserialisation
+
+.diff-rm[
+```scala
+*given boolDecoder: Decoder[Rule[Boolean]] = `???`
+```
+]
+
+---
+
+## Numeric equality deserialisation
+
+.diff-add[
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+* `case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>`
+*   `for`
+*     `left  <- lhs.as[Rule[Int]]`
+*     `right <- rhs.as[Rule[Int]]`
+*   `yield Rule.Eq(left, right)`
+```
+]
+
+---
+
+## Numeric equality deserialisation
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      `left  <- lhs.as[Rule[Int]]`
+      right <- rhs.as[Rule[Int]]
+    yield Rule.Eq(left, right)
+```
+
+---
+
+## Numeric equality deserialisation
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      `right <- rhs.as[Rule[Int]]`
+    yield Rule.Eq(left, right)
+```
+
+---
+
+## Numeric equality deserialisation
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield `Rule.Eq(left, right)`
+```
+
+---
+
+## Logical And
+
+.center[![Rule ADT](img/ast-and-with-operands.svg)]
+
+```json
+*{ "AND": [
+* { "EQUALS": ["categoryId", 10] },
+* { "EQUALS": ["price", 3] }
+*]}
+```
+
+---
+
+## Logical And
+
+.center[![Rule ADT](img/ast-and.svg)]
+
+```json
+{ `"AND"`: [
+  { "EQUALS": ["categoryId", 10] },
+  { "EQUALS": ["price", 3] }
+]}
+```
+
+---
+
+## Logical And
+
+.center[![Rule ADT](img/ast-eqs.svg)]
+
+```json
+{ "AND": `[`
+  `{ "EQUALS": ["categoryId", 10] },`
+  `{ "EQUALS": ["price", 3] }`
+&#x200B;`]`}
+```
+
+---
+
+## Logical And
+
+.center[![Rule ADT](img/ast-left-eq.svg)]
+
+```json
+{ "AND": [
+  `{ "EQUALS": ["categoryId", 10] }`,
+  { "EQUALS": ["price", 3] }
+]}
+```
+
+---
+
+## Logical And
+
+.center[![Rule ADT](img/ast-right-eq.svg)]
+
+```json
+{ "AND": [
+  { "EQUALS": ["categoryId", 10] },
+  `{ "EQUALS": ["price", 3] }`
+]}
+```
+
+---
+
+## Logical And serialisation
+
+.diff-add[
+```scala
+given [A]: Encoder[Rule[A]] =
+  case Rule.Num(value) => Json.Num(value)
+  case Rule.Var(name)  => Json.Str(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    Json.Obj("EQUALS" -> Json.Arr(lhs, rhs))
+* `case Rule.And(lhs, rhs) =>`
+*   `Json.Obj("AND" -> Json.Arr(lhs, rhs))`
+```
+]
+
+
+---
+
+## Logical And serialisation
+
+```scala
+given [A]: Encoder[Rule[A]] =
+  case Rule.Num(value) => Json.Num(value)
+  case Rule.Var(name)  => Json.Str(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    Json.Obj("EQUALS" -> Json.Arr(lhs, rhs))
+  case Rule.And(lhs, rhs) =>
+    Json.Obj(`"AND"` -> Json.Arr(lhs, rhs))
+```
+
+---
+
+## Logical And serialisation
+
+```scala
+given [A]: Encoder[Rule[A]] =
+  case Rule.Num(value) => Json.Num(value)
+  case Rule.Var(name)  => Json.Str(name)
+
+  case Rule.Eq(lhs, rhs) =>
+    Json.Obj("EQUALS" -> Json.Arr(lhs, rhs))
+  case Rule.And(lhs, rhs) =>
+    Json.Obj("AND" -> Json.Arr(lhs, rhs))
+
+```
+
+---
+
+## Logical And deserialisation
+
+.diff-add[
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield Rule.Eq(left, right)
+*
+* `case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>`
+*   `for`
+*     `left  <- lhs.as[Rule[Boolean]]`
+*     `right <- rhs.as[Rule[Boolean]]`
+*   `yield Rule.And(left, right)`
+```
+]
+
+---
+
+## Logical And deserialisation
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield Rule.Eq(left, right)
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- `lhs.as[Rule[Boolean]]`
+      right <- `rhs.as[Rule[Boolean]]`
+    yield Rule.And(left, right)
+```
+
+
+---
+
+## Logical And deserialisation
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield Rule.Eq(left, right)
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield `Rule.And(left, right)`
+```
+
+---
+
+## Deserialisation
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield `Rule.Eq`(left, right)
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield `Rule.And`(left, right)
+```
+
+---
+
+## Deserialisation
+
+.diff-add[
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield Rule.Eq(left, right)
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield Rule.And(left, right)
+*
+* `case other => Left(s"Invalid boolean: $other")`
+```
+]
+
+---
+
+## Deserialisation
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield Rule.Eq(left, right)
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield Rule.And(left, right)
+
+  case other => Left(`s"Invalid boolean: $other"`)
+```
+
+---
+
+## Deserialisation
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield Rule.Eq(left, right)
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield Rule.And(left, right)
+
+  case other => Left(s"Invalid boolean: $other")
+
+```
+
+---
+
+## Serialisation
+
+```scala
+rule.asJson
+```
+
+---
+
+## Serialisation
+
+```scala
+rule.asJson
+// val res5: json.Json = {
+//   "AND": [{
+//       "EQUALS": ["categoryId", 10]
+//     }, {
+//       "EQUALS": ["price", 3]
+//     }]
+// }
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json-roundtrip-1.svg)]
+
+```scala
+&#x200B;`rule`
+  .asJson
+  .as[Rule[Boolean]]
+  .map(pretty)
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json-roundtrip-2.svg)]
+
+```scala
+rule
+  `.asJson`
+  .as[Rule[Boolean]]
+  .map(pretty)
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json-roundtrip-3.svg)]
+
+```scala
+rule
+  .asJson
+  `.as[Rule[Boolean]]`
+  .map(pretty)
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json-roundtrip-3.svg)]
+
+```scala
+rule
+  .asJson
+  .as[Rule[Boolean]]
+  .map(pretty)
+// val res6: Either[String, String] = Right(($categoryId EQUALS 10) AND ($price EQUALS 3))
+```
+
+---
+
+## Key takeaways
+
+--
+
+* Serialisation / deserialisation are relatively straightforward.
+
+--
+
+* Serialisation is a regular interpreter.
+
+--
+
+* Deserialisation requires a little bit of manual work.
+
+---
+
+class: center, middle
+
+# Rule transformation
+
+---
+
+## Complex rule
+
+.center[![Rule ADT](img/complex-ast.svg)]
+
+```scala
+($categoryId EQUALS 10) AND (1 EQUALS 1)
+```
+
+---
+
+## Complex rule
+
+.center[![Rule ADT](img/complex-ast-focus.svg)]
+
+```scala
+($categoryId EQUALS 10) AND `(1 EQUALS 1)`
+```
+
+---
+
+## Complex rule
+
+.center[![Rule ADT](img/complex-ast-focus.svg)]
+
+.diff-rm[
+```scala
+*($categoryId EQUALS 10) AND `(1 EQUALS 1)`
+```
+]
+
+---
+
+## Complex rule
+
+.center[![Rule ADT](img/complex-ast-true.svg)]
+
+.diff-add[
+```scala
+*($categoryId EQUALS 10) AND `true`
+```
+]
+
+---
+
+## Complex rule
+
+.center[![Rule ADT](img/complex-ast-true-ok.svg)]
+
+.diff-add[
+```scala
+*($categoryId EQUALS 10) AND `true`
+```
+]
+
+
+---
+
+## Extending the language
+
+.diff-add[
+```scala
+enum Rule[A]:
+  case Num(value: Int)      extends Rule[Int]
+  case Var(name: String)    extends Rule[Int]
+* `case Bool(value: Boolean) extends Rule[Boolean]`
+
+  case Eq(lhs: Rule[Int], rhs: Rule[Int])
+    extends Rule[Boolean]
+  case And(lhs: Rule[Boolean], rhs: Rule[Boolean])
+    extends Rule[Boolean]
+```
+]
+
+---
+
+## Extending the language
+
+```scala
+enum Rule[A]:
+  case Num(value: Int)      extends Rule[Int]
+  case Var(name: String)    extends Rule[Int]
+  case Bool(value: Boolean) extends Rule[Boolean]
+
+  case Eq(lhs: Rule[Int], rhs: Rule[Int])
+    extends Rule[Boolean]
+  case And(lhs: Rule[Boolean], rhs: Rule[Boolean])
+    extends Rule[Boolean]
+
+```
+
+---
+
+## Extending the language
+
+.diff-add[
+```scala
+def NUM(i: Int) = Rule.Num(i)
+
+def VAR(name: String) = Rule.Var(name)
+
+*&#x200B;`def BOOL(b: Boolean) = Rule.Bool(b)`
+
+extension (lhs: Rule[Int])
+  infix def EQUALS(rhs: Rule[Int]) = Rule.Eq(lhs, rhs)
+
+extension (lhs: Rule[Boolean])
+  infix def AND(rhs: Rule[Boolean]) = Rule.And(lhs, rhs)
+```
+]
+
+---
+
+## Extending the language
+
+```scala
+def NUM(i: Int) = Rule.Num(i)
+
+def VAR(name: String) = Rule.Var(name)
+
+def BOOL(b: Boolean) = Rule.Bool(b)
+
+extension (lhs: Rule[Int])
+  infix def EQUALS(rhs: Rule[Int]) = Rule.Eq(lhs, rhs)
+
+extension (lhs: Rule[Boolean])
+  infix def AND(rhs: Rule[Boolean]) = Rule.And(lhs, rhs)
+
+```
+
+---
+
+## Extending the language
+
+.diff-add[
+```scala
+def pretty[A](r: Rule[A]): String = r match
+  case Rule.Num(value)  => value.toString
+  case Rule.Var(name)   => s"$$$name"
+* `case Rule.Bool(value) => value.toString`
+
+  case Rule.Eq(lhs, rhs) =>
+    s"(${pretty(lhs)} EQUALS ${pretty(rhs)})"
+  case Rule.And(lhs, rhs) =>
+    s"(${pretty(lhs)} AND ${pretty(rhs)})"
+```
+]
+
+---
+
+## Extending the language
+
+```scala
+def pretty[A](r: Rule[A]): String = r match
+  case Rule.Num(value)  => value.toString
+  case Rule.Var(name)   => s"$$$name"
+  case Rule.Bool(value) => value.toString
+
+  case Rule.Eq(lhs, rhs) =>
+    s"(${pretty(lhs)} EQUALS ${pretty(rhs)})"
+  case Rule.And(lhs, rhs) =>
+    s"(${pretty(lhs)} AND ${pretty(rhs)})"
+
+```
+
+---
+
+## Extending the language
+
+.diff-add[
+```scala
+def compile[A](r: Rule[A]): Doc => A = r match
+  case Rule.Num(value)  => _ => value
+  case Rule.Var(name)   => doc => doc(name)
+* `case Rule.Bool(value) => _ => value`
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) == right(doc)
+
+  case Rule.And(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) && right(doc)
+```
+]
+
+---
+
+## Extending the language
+
+```scala
+def compile[A](r: Rule[A]): Doc => A = r match
+  case Rule.Num(value)  => _ => value
+  case Rule.Var(name)   => doc => doc(name)
+  case Rule.Bool(value) => _ => value
+
+  case Rule.Eq(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) == right(doc)
+
+  case Rule.And(lhs, rhs) =>
+    val left  = compile(lhs)
+    val right = compile(rhs)
+
+    doc => left(doc) && right(doc)
+
+```
+
+---
+
+## JSON Encoding
+
+.diff-add[
+```scala
+given [A]: Encoder[Rule[A]] =
+  case Rule.Num(value)  => Json.Num(value)
+  case Rule.Var(name)   => Json.Str(name)
+* `case Rule.Bool(value) => Json.Bool(value)`
+
+  case Rule.Eq(lhs, rhs) =>
+    Json.Obj("EQUALS" -> Json.Arr(lhs, rhs))
+  case Rule.And(lhs, rhs) =>
+    Json.Obj("AND" -> Json.Arr(lhs, rhs))
+```
+]
+
+---
+
+## JSON Encoding
+
+```scala
+given [A]: Encoder[Rule[A]] =
+  case Rule.Num(value)  => Json.Num(value)
+  case Rule.Var(name)   => Json.Str(name)
+  case Rule.Bool(value) => Json.Bool(value)
+
+  case Rule.Eq(lhs, rhs) =>
+    Json.Obj("EQUALS" -> Json.Arr(lhs, rhs))
+  case Rule.And(lhs, rhs) =>
+    Json.Obj("AND" -> Json.Arr(lhs, rhs))
+
+```
+
+---
+
+## JSON Decoding
+
+.diff-add[
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+* `case Json.Bool(b) => Right(Rule.Bool(b))`
+*
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield Rule.Eq(left, right)
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield Rule.And(left, right)
+
+  case other => Left(s"Invalid boolean: $other")
+```
+]
+
+---
+
+## JSON Decoding
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Bool(b) => Right(Rule.Bool(b))
+
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield Rule.Eq(left, right)
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield Rule.And(left, right)
+
+  case other => Left(s"Invalid boolean: $other")
+
+```
+
+---
+
+## Simplification
+
+```scala
+def `simplify`[A](rule: Rule[A]): Rule[A] = ???
+```
+
+---
+
+## Simplification
+
+```scala
+def simplify[A](rule: `Rule[A]`): Rule[A] = ???
+```
+
+---
+
+## Simplification
+
+```scala
+def simplify[A](rule: Rule[A]): `Rule[A]` = ???
+```
+
+---
+
+## Simplification
+
+.center[![Rule ADT](img/complex-ast-focus.svg)]
+
+---
+
+## Simplification
+
+.center[![Rule ADT](img/complex-ast-ones.svg)]
+
+---
+
+## Simplification
+
+.center[![Rule ADT](img/complex-ast-true-ok.svg)]
+
+
+---
+
+## Simplification
+
+.diff-rm[
+```scala
+*def simplify[A](rule: Rule[A]): Rule[A] = `???`
+```
+]
+
+---
+
+## Simplification
+
+.diff-add[
+```scala
+*def simplify[A](rule: Rule[A]): Rule[A] = `rule match`
+* `case Rule.Eq(Rule.Num(lhs), Rule.Num(rhs)) =>`
+*   `Rule.Bool(lhs == rhs)`
+```
+]
+
+---
+
+## Simplification
+
+```scala
+def simplify[A](rule: Rule[A]): Rule[A] = rule match
+  case Rule.Eq(Rule.Num(lhs), Rule.Num(rhs)) =>
+    `Rule.Bool(lhs == rhs)`
+```
+
+---
+
+## Simplification
+
+.center[![Rule ADT](img/complex-ast-and.svg)]
+
+
+---
+
+## Simplification
+
+.center[![Rule ADT](img/complex-ast-focus.svg)]
+
+---
+
+## Simplification
+
+.diff-add[
+```scala
+def simplify[A](rule: Rule[A]): Rule[A] = rule match
+  case Rule.Eq(Rule.Num(lhs), Rule.Num(rhs)) =>
+    Rule.Bool(lhs == rhs)
+*
+* `case Rule.And(lhs, rhs) =>`
+*   `Rule.And(simplify(lhs), simplify(rhs))`
+```
+]
+
+---
+
+## Simplification
+
+```scala
+def simplify[A](rule: Rule[A]): Rule[A] = rule match
+  case Rule.Eq(Rule.Num(lhs), Rule.Num(rhs)) =>
+    Rule.Bool(lhs == rhs)
+
+  case Rule.And(lhs, rhs) =>
+    Rule.And(`simplify(lhs)`, `simplify(rhs)`)
+```
+
+---
+
+## Simplification
+
+.center[![Rule ADT](img/complex-ast-left-eq.svg)]
+
+---
+
+## Simplification
+
+.diff-add[
+```scala
+def simplify[A](rule: Rule[A]): Rule[A] = rule match
+  case Rule.Eq(Rule.Num(lhs), Rule.Num(rhs)) =>
+    Rule.Bool(lhs == rhs)
+*
+* `case Rule.Eq(lhs, rhs)` =>
+*   `Rule.Eq(simplify(lhs), simplify(rhs))`
+
+  case Rule.And(lhs, rhs) =>
+    Rule.And(simplify(lhs), simplify(rhs))
+```
+]
+
+---
+
+## Simplification
+
+.center[![Rule ADT](img/complex-ast-leaves.svg)]
+
+---
+
+## Simplification
+
+.diff-add[
+```scala
+def simplify[A](rule: Rule[A]): Rule[A] = rule match
+  case Rule.Eq(Rule.Num(lhs), Rule.Num(rhs)) =>
+    Rule.Bool(lhs == rhs)
+
+  case Rule.Eq(lhs, rhs) =>
+    Rule.Eq(simplify(lhs), simplify(rhs))
+
+  case Rule.And(lhs, rhs) =>
+    Rule.And(simplify(lhs), simplify(rhs))
+*
+* `case other => other`
+```
+]
+
+---
+
+## Simplification
+
+```scala
+def simplify[A](rule: Rule[A]): Rule[A] = rule match
+  case Rule.Eq(Rule.Num(lhs), Rule.Num(rhs)) =>
+    Rule.Bool(lhs == rhs)
+
+  case Rule.Eq(lhs, rhs) =>
+    Rule.Eq(simplify(lhs), simplify(rhs))
+
+  case Rule.And(lhs, rhs) =>
+    Rule.And(simplify(lhs), simplify(rhs))
+
+  case other => other
+
+```
+
+---
+
+## Simplification
+
+.center[![Rule ADT](img/complex-ast.svg)]
+
+```scala
+val `complexRule` =
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  (NUM(1) EQUALS NUM(1))
+```
+
+---
+
+## Simplification
+
+.center[![Rule ADT](img/complex-ast-focus.svg)]
+
+```scala
+val complexRule =
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  (`NUM(1) EQUALS NUM(1)`)
+```
+
+---
+
+## Simplification
+
+.center[![Rule ADT](img/complex-ast-focus.svg)]
+
+```scala
+val complexRule =
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  (NUM(1) EQUALS NUM(1))
+
+```
+
+---
+
+## Simplification
+
+```scala
+pretty(simplify(complexRule))
+```
+
+---
+
+## Simplification
+
+```scala
+pretty(simplify(complexRule))
+// val res7: String = (($categoryId EQUALS 10) AND true)
+```
+
+---
+
+## Key takeaways
+
+--
+
+* Statement transformation is a regular interpreter...
+
+--
+
+* ... if your language is rich enough to support it.
+
+--
+
+* Language modification is unpleasant.
+
+---
+
+## GADT recap
+
+* Adding interpreters to our language is easy.
+
+--
+
+* Adding statements to our language is hard.
+
+--
+
+* This is known as _The Expression Problem_.
+
+---
+
+class: center, middle
+
+# Composable encoding
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/rule.svg)]
+
+```scala
+($categoryId EQUALS 10) AND ($price EQUALS 3)
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/rule-value.svg)]
+
+```scala
+($categoryId EQUALS `10`) AND ($price EQUALS `3`)
+```
+
+---
+
+## Rules as functions
+
+```scala
+def `num`(value: Int): String = value.toString
+```
+
+---
+
+## Rules as functions
+
+```scala
+def num(`value: Int`): String = value.toString
+```
+
+---
+
+## Rules as functions
+
+```scala
+def num(value: Int): String = `value.toString`
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/rule-value.svg)]
+
+```scala
+($categoryId EQUALS `10`) AND ($price EQUALS `3`)
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf-creation-value.svg)]
+
+```scala
+($categoryId EQUALS `10`) AND ($price EQUALS `3`)
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf-creation-variable-1.svg)]
+
+```scala
+(`$categoryId` EQUALS 10) AND (`$price` EQUALS 3)
+```
+
+---
+
+## Rules as functions
+
+.diff-add[
+```scala
+def num(value: Int): String        = value.toString
+*&#x200B;`def variable(name: String): String = s"$$$name"`
+```
+]
+
+---
+
+## Rules as functions
+
+```scala
+def num(value: Int): String        = value.toString
+def `variable`(name: String): String = s"$$$name"
+```
+
+---
+
+## Rules as functions
+
+```scala
+def num(value: Int): String        = value.toString
+def variable(`name: String`): String = s"$$$name"
+```
+
+---
+
+## Rules as functions
+
+```scala
+def num(value: Int): String        = value.toString
+def variable(name: String): String = `s"$$$name"`
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf-creation-variable-1.svg)]
+
+```scala
+(`$categoryId` EQUALS 10) AND (`$price` EQUALS 3)
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf-creation-variable-2.svg)]
+
+```scala
+(`$categoryId` EQUALS 10) AND (`$price` EQUALS 3)
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf-creation-equals-1.svg)]
+
+```scala
+($categoryId `EQUALS` 10) AND ($price `EQUALS` 3)
+```
+
+---
+
+## Rules as functions
+
+.diff-add[
+```scala
+def num(value: Int): String        = value.toString
+def variable(name: String): String = s"$$$name"
+*
+*&#x200B;`def equal(lhs: String, rhs: String): String =`
+* `s"($lhs EQUALS $rhs)"`
+```
+]
+
+---
+
+## Rules as functions
+
+```scala
+def num(value: Int): String        = value.toString
+def variable(name: String): String = s"$$$name"
+
+def `equal`(lhs: String, rhs: String): String =
+  s"($lhs EQUALS $rhs)"
+```
+
+---
+
+## Rules as functions
+
+```scala
+def num(value: Int): String        = value.toString
+def variable(name: String): String = s"$$$name"
+
+def equal(`lhs: String`, `rhs: String`): String =
+  s"($lhs EQUALS $rhs)"
+```
+
+---
+
+## Rules as functions
+
+```scala
+def num(value: Int): String        = value.toString
+def variable(name: String): String = s"$$$name"
+
+def equal(lhs: String, rhs: String): String =
+  `s"($lhs EQUALS $rhs)"`
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf-creation-equals-1.svg)]
+
+```scala
+($categoryId `EQUALS` 10) AND ($price `EQUALS` 3)
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf-creation-equals-2.svg)]
+
+```scala
+($categoryId `EQUALS` 10) AND ($price `EQUALS` 3)
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf-creation-and-1.svg)]
+
+```scala
+($categoryId EQUALS 10) `AND` ($price EQUALS 3)
+```
+
+---
+
+## Rules as functions
+
+.diff-add[
+```scala
+def num(value: Int): String        = value.toString
+def variable(name: String): String = s"$$$name"
+
+def equal(lhs: String, rhs: String): String =
+  s"($lhs EQUALS $rhs)"
+*&#x200B;`def and(lhs: String, rhs: String): String =`
+* `s"$lhs AND $rhs"`
+```
+]
+
+---
+
+## Rules as functions
+
+```scala
+def num(value: Int): String        = value.toString
+def variable(name: String): String = s"$$$name"
+
+def equal(lhs: String, rhs: String): String =
+  s"($lhs EQUALS $rhs)"
+def `and`(lhs: String, rhs: String): String =
+  s"$lhs AND $rhs"
+```
+
+---
+
+## Rules as functions
+
+```scala
+def num(value: Int): String        = value.toString
+def variable(name: String): String = s"$$$name"
+
+def equal(lhs: String, rhs: String): String =
+  s"($lhs EQUALS $rhs)"
+def and(`lhs: String`, `rhs: String`): String =
+  s"$lhs AND $rhs"
+```
+
+---
+
+## Rules as functions
+
+```scala
+def num(value: Int): String        = value.toString
+def variable(name: String): String = s"$$$name"
+
+def equal(lhs: String, rhs: String): String =
+  s"($lhs EQUALS $rhs)"
+def and(lhs: String, rhs: String): String =
+  `s"$lhs AND $rhs"`
+```
+
+---
+
+## Rules as functions
+
+```scala
+def num(value: Int): String        = value.toString
+def variable(name: String): String = s"$$$name"
+
+def equal(lhs: String, rhs: String): String =
+  s"($lhs EQUALS $rhs)"
+def and(lhs: String, rhs: String): String =
+  s"$lhs AND $rhs"
+
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf.svg)]
+
+```scala
+val rule = and(
+  equal(variable("categoryId"), num(10)),
+  equal(variable("price"),      num(3))
+)
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf-and.svg)]
+
+```scala
+val rule = `and`(
+  equal(variable("categoryId"), num(10)),
+  equal(variable("price"),      num(3))
+)
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf-eqs.svg)]
+
+```scala
+val rule = and(
+  `equal`(variable("categoryId"), num(10)),
+  `equal`(variable("price"),      num(3))
+)
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf-leaves.svg)]
+
+```scala
+val rule = and(
+  equal(`variable("categoryId")`, `num(10)`),
+  equal(`variable("price")`,      `num(3)`)
+)
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf-leaves.svg)]
+
+```scala
+val rule = `and`(
+  `equal`(variable("categoryId"), num(10)),
+  equal(`variable`("price"),      `num`(3))
+)
+```
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+*&#x200B;`object Rule:`
+*&#x200B;`  `def num(value: Int): String        = value.toString
+*&#x200B;`  `def variable(name: String): String = s"$$$name"
+*
+*&#x200B;`  `def equal(lhs: String, rhs: String): String =
+*&#x200B;`    `s"($lhs EQUALS $rhs)"
+*&#x200B;`  `def and(lhs: String, rhs: String): String =
+*&#x200B;`    `s"$lhs AND $rhs"
+```
+]
+
+---
+
+## Adding structure
+
+```scala
+object Rule:
+  def num(value: Int): String        = value.toString
+  def variable(name: String): String = s"$$$name"
+
+  def equal(lhs: String, rhs: String): String =
+    s"($lhs EQUALS $rhs)"
+  def and(lhs: String, rhs: String): String =
+    s"$lhs AND $rhs"
+
+```
+
+---
+
+## Adding structure
+
+.diff-rm[
+```scala
+*val rule = `and(`
+  equal(variable("categoryId"), num(10)),
+  equal(variable("price"),      num(3))
+)
+```
+]
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+val rule =
+* `and(`
+* `  `equal(variable("categoryId"), num(10)),
+* `  `equal(variable("price"),      num(3))
+*&#x200B;`  `)
+```
+]
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+val rule =
+* `import Rule.*`
+*
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+]
+
+---
+
+## Adding structure
+
+```scala
+val rule =
+  import Rule.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+
+```
+
+--
+
+```scala
+rule
+```
+
+---
+
+## Adding structure
+
+```scala
+val rule =
+  import Rule.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+
+```scala
+rule
+// val res1: String = ($categoryId EQUALS 10) AND ($price EQUALS 3)
+```
+
+---
+
+## Adding structure
+
+```scala
+object Rule:
+  def num(value: Int): `String`        = value.toString
+  def variable(name: String): `String` = s"$$$name"
+
+  def equal(lhs: `String`, rhs: `String`): `String` =
+    s"($lhs EQUALS $rhs)"
+  def and(lhs: `String`, rhs: `String`): `String` =
+    s"$lhs AND $rhs"
+```
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+*object Rule`[A]`:
+  def num(value: Int): String        = value.toString
+  def variable(name: String): String = s"$$$name"
+
+  def equal(lhs: String, rhs: String): String =
+    s"($lhs EQUALS $rhs)"
+  def and(lhs: String, rhs: String): String =
+    s"$lhs AND $rhs"
+```
+]
+
+---
+
+## Adding structure
+
+.diff-rm[
+```scala
+object Rule[A]:
+* def num(value: Int): `String`        = value.toString
+* def variable(name: String): `String` = s"$$$name"
+
+* def equal(lhs: `String`, rhs: `String`): `String` =
+    s"($lhs EQUALS $rhs)"
+* def and(lhs: `String`, rhs: `String`): `String` =
+    s"$lhs AND $rhs"
+```
+]
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+object Rule[A]:
+* def num(value: Int): `A`        = value.toString
+* def variable(name: String): `A` = s"$$$name"
+
+* def equal(lhs: `A`, rhs: `A`): `A` =
+    s"($lhs EQUALS $rhs)"
+* def and(lhs: `A`, rhs: `A`): `A` =
+    s"$lhs AND $rhs"
+```
+]
+
+---
+
+## Adding structure
+
+.diff-rm[
+```scala
+*&#x200B;`object` Rule[A]:
+  def num(value: Int): A        = value.toString
+  def variable(name: String): A = s"$$$name"
+
+  def equal(lhs: A, rhs: A): A =
+    s"($lhs EQUALS $rhs)"
+  def and(lhs: A, rhs: A): A =
+    s"$lhs AND $rhs"
+```
+]
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+*&#x200B;`trait` Rule[A]:
+  def num(value: Int): A        = value.toString
+  def variable(name: String): A = s"$$$name"
+
+  def equal(lhs: A, rhs: A): A =
+    s"($lhs EQUALS $rhs)"
+  def and(lhs: A, rhs: A): A =
+    s"$lhs AND $rhs"
+```
+]
+
+---
+
+## Adding structure
+
+.diff-rm[
+```scala
+trait Rule[A]:
+* def num(value: Int): A        `= value.toString`
+* def variable(name: String): A `= s"$$$name"`
+
+* def equal(lhs: A, rhs: A): A `=`
+*   `s"($lhs EQUALS $rhs)"`
+* def and(lhs: A, rhs: A): A `=`
+*   `s"$lhs AND $rhs"`
+```
+]
+
+---
+
+## Adding structure
+
+```scala
+trait Rule[A]:
+  def num(value: Int): A
+  def variable(name: String): A
+
+  def equal(lhs: A, rhs: A): A
+  def and(lhs: A, rhs: A): A
+
+```
+
+---
+
+## Adding structure
+
+```scala
+val rule =
+  `import Rule.*`
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+*val rule = `[A] => (r: Rule[A]) =>`
+  import Rule.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+]
+
+???
+
+what fresh hell is this.
+
+---
+
+## Adding structure
+
+```scala
+val rule = `[A]` => (r: Rule[A]) =>
+  import Rule.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+
+---
+
+## Adding structure
+
+```scala
+val rule = [A] => `(r: Rule[A])` =>
+  import Rule.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+
+---
+
+## Adding structure
+
+```scala
+val rule = [A] => (r: Rule[A]) =>
+* import Rule.*
+*
+* and(
+*   equal(variable("categoryId"), num(10)),
+*   equal(variable("price"),      num(3))
+* )
+```
+
+---
+
+## Adding structure
+
+.diff-rm[
+```scala
+val rule = [A] => (r: Rule[A]) =>
+* import `Rule`.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+]
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+val rule = [A] => (r: Rule[A]) =>
+* import `r`.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+]
+
+---
+
+## Adding structure
+
+```scala
+val rule = [A] => (r: Rule[A]) =>
+  import r.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+
+---
+
+## Adding structure
+
+```scala
+val badRule = [A] => (r: Rule[A]) =>
+  import r.*
+
+  and(num(1), num(2))
+```
+
+---
+
+## Adding structure
+
+```scala
+val badRule = [A] => (r: Rule[A]) =>
+  import r.*
+
+  `and(num(1), num(2))`
+```
+
+---
+
+## Adding structure
+
+```scala
+trait Rule[A]:
+  def num(value: Int): A
+  def variable(name: String): A
+
+  def equal(lhs: A, rhs: A): A
+  def and(lhs: `A`, rhs: `A`): A
+```
+
+---
+
+## Adding structure
+
+.diff-rm[
+```scala
+*trait Rule[`A`]:
+  def num(value: Int): A
+  def variable(name: String): A
+
+  def equal(lhs: A, rhs: A): A
+  def and(lhs: A, rhs: A): A
+```
+]
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+*trait Rule[`F[_]`]:
+  def num(value: Int): A
+  def variable(name: String): A
+
+  def equal(lhs: A, rhs: A): A
+  def and(lhs: A, rhs: A): A
+```
+]
+
+---
+
+## Adding structure
+
+.diff-rm[
+```scala
+trait Rule[F[_]]:
+* def num(value: Int): `A`
+* def variable(name: String): `A`
+
+  def equal(lhs: A, rhs: A): A
+  def and(lhs: A, rhs: A): A
+```
+]
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+trait Rule[F[_]]:
+* def num(value: Int): `F[Int]`
+* def variable(name: String): `F[Int]`
+
+  def equal(lhs: A, rhs: A): A
+  def and(lhs: A, rhs: A): A
+```
+]
+
+---
+
+## Adding structure
+
+.diff-rm[
+```scala
+trait Rule[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+* def equal(lhs: A, rhs: A): `A`
+* def and(lhs: A, rhs: A): `A`
+```
+]
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+trait Rule[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+* def equal(lhs: A, rhs: A): `F[Boolean]`
+* def and(lhs: A, rhs: A): `F[Boolean]`
+```
+]
+
+---
+
+## Adding structure
+
+.diff-rm[
+```scala
+trait Rule[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+* def equal(lhs: `A`, rhs: `A`): F[Boolean]
+  def and(lhs: A, rhs: A): F[Boolean]
+```
+]
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+trait Rule[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+* def equal(lhs: `F[Int]`, rhs: `F[Int]`): F[Boolean]
+  def and(lhs: A, rhs: A): F[Boolean]
+```
+]
+
+---
+
+## Adding structure
+
+.diff-rm[
+```scala
+trait Rule[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+* def and(lhs: `A`, rhs: `A`): F[Boolean]
+```
+]
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+trait Rule[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+* def and(lhs: `F[Boolean]`, rhs: `F[Boolean]`): F[Boolean]
+```
+]
+
+---
+
+## Adding structure
+
+```scala
+trait Rule[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+```
+
+---
+
+## Adding structure
+
+.diff-rm[
+```scala
+*val badRule = [`A`] => (r: Rule[`A`]) =>
+  import r.*
+
+  and(num(1), num(2))
+```
+]
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+*val badRule = [`F[_]`] => (r: Rule[`F`]) =>
+  import r.*
+
+  and(num(1), num(2))
+```
+]
+
+---
+
+## Adding structure
+
+```scala
+val badRule = [F[_]] => (r: Rule[F]) =>
+  import r.*
+
+  and(num(1), num(2))
+//   and(num(1), num(2))
+//       ^
+// ⛔ Found:    F[Int]
+//   Required: F[Boolean]
+//   
+//   where:    F is a type in method apply with bounds <: [_] =>> Any
+//   and(num(1), num(2))
+//               ^
+// ⛔ Found:    F[Int]
+//   Required: F[Boolean]
+//   
+//   where:    F is a type in method apply with bounds <: [_] =>> Any
+```
+
+---
+
+## Adding structure
+
+.diff-rm[
+```scala
+*val rule = [`A`] => (r: Rule[`A`]) =>
+  import r.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+]
+
+---
+
+## Adding structure
+
+.diff-add[
+```scala
+*val rule = [`F[_]`] => (r: Rule[`F`]) =>
+  import r.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+]
+
+---
+
+## Adding structure
+
+```scala
+val rule = [F[_]] => (r: Rule[F]) =>
+  import r.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+
+---
+
+## Naming things
+
+.diff-rm[
+```scala
+*trait `Rule`[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+```
+]
+
+---
+
+## Naming things
+
+.diff-add[
+```scala
+*trait `RuleSym`[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+```
+]
+---
+
+## Naming things
+
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+```
+
+---
+
+## Naming things
+
+.diff-rm[
+```scala
+*val rule = [F[_]] => (r: `Rule[F]`) =>
+  import r.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+]
+
+---
+
+## Naming things
+
+.diff-add[
+```scala
+*val rule = [F[_]] => (r: `RuleSym[F]`) =>
+  import r.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+]
+
+---
+
+## Naming things
+
+```scala
+val rule = [F[_]] => (r: RuleSym[F]) =>
+  import r.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+val rule = [F[_]] => (r: RuleSym[F]) =>
+  import r.*
+
+* and(
+*   equal(variable("categoryId"), num(10)),
+*   equal(variable("price"),      num(3))
+* )
+```
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+*
+* `extension (lhs: F[Int])`
+*   `infix def EQUALS(rhs: F[Int]) = equal(lhs, rhs)`
+* `extension (lhs: F[Boolean])`
+*   `infix def AND(rhs: F[Boolean]) = and(lhs, rhs)`
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+  extension (lhs: F[Int])
+    infix def `EQUALS`(rhs: F[Int]) = equal(lhs, rhs)
+  extension (lhs: F[Boolean])
+    infix def AND(rhs: F[Boolean]) = and(lhs, rhs)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+  extension (`lhs: F[Int]`)
+    infix def EQUALS(`rhs: F[Int]`) = equal(lhs, rhs)
+  extension (lhs: F[Boolean])
+    infix def AND(rhs: F[Boolean]) = and(lhs, rhs)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+  extension (lhs: F[Int])
+    infix def EQUALS(rhs: F[Int]) = `equal(lhs, rhs)`
+  extension (lhs: F[Boolean])
+    infix def AND(rhs: F[Boolean]) = and(lhs, rhs)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+  extension (lhs: F[Int])
+    infix def EQUALS(rhs: F[Int]) = equal(lhs, rhs)
+  extension (lhs: F[Boolean])
+    infix def `AND`(rhs: F[Boolean]) = and(lhs, rhs)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+  extension (lhs: F[Int])
+    infix def EQUALS(rhs: F[Int]) = equal(lhs, rhs)
+  extension (`lhs: F[Boolean]`)
+    infix def AND(`rhs: F[Boolean]`) = and(lhs, rhs)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+  extension (lhs: F[Int])
+    infix def EQUALS(rhs: F[Int]) = equal(lhs, rhs)
+  extension (lhs: F[Boolean])
+    infix def AND(rhs: F[Boolean]) = `and(lhs, rhs)`
+```
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+  extension (lhs: F[Int])
+    infix def EQUALS(rhs: F[Int]) = equal(lhs, rhs)
+  extension (lhs: F[Boolean])
+    infix def AND(rhs: F[Boolean]) = and(lhs, rhs)
+*
+*&#x200B;`def NUM[F[_]](value: Int)(using rs: RuleSym[F]) =`
+* `rs.num(value)`
+*
+*&#x200B;`def VAR[F[_]](name: String)(using rs: RuleSym[F]) =`
+* `rs.variable(name)`
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+  extension (lhs: F[Int])
+    infix def EQUALS(rhs: F[Int]) = equal(lhs, rhs)
+  extension (lhs: F[Boolean])
+    infix def AND(rhs: F[Boolean]) = and(lhs, rhs)
+
+def `NUM`[F[_]](value: Int)(using rs: RuleSym[F]) =
+  rs.num(value)
+
+def VAR[F[_]](name: String)(using rs: RuleSym[F]) =
+  rs.variable(name)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+  extension (lhs: F[Int])
+    infix def EQUALS(rhs: F[Int]) = equal(lhs, rhs)
+  extension (lhs: F[Boolean])
+    infix def AND(rhs: F[Boolean]) = and(lhs, rhs)
+
+def NUM[F[_]](`value: Int`)(using `rs: RuleSym[F]`) =
+  rs.num(value)
+
+def VAR[F[_]](name: String)(using rs: RuleSym[F]) =
+  rs.variable(name)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+  extension (lhs: F[Int])
+    infix def EQUALS(rhs: F[Int]) = equal(lhs, rhs)
+  extension (lhs: F[Boolean])
+    infix def AND(rhs: F[Boolean]) = and(lhs, rhs)
+
+def NUM[F[_]](value: Int)(using rs: RuleSym[F]) =
+  `rs.num(value)`
+
+def VAR[F[_]](name: String)(using rs: RuleSym[F]) =
+  rs.variable(name)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+  extension (lhs: F[Int])
+    infix def EQUALS(rhs: F[Int]) = equal(lhs, rhs)
+  extension (lhs: F[Boolean])
+    infix def AND(rhs: F[Boolean]) = and(lhs, rhs)
+
+def NUM[F[_]](value: Int)(using rs: RuleSym[F]) =
+  rs.num(value)
+
+def `VAR`[F[_]](name: String)(using rs: RuleSym[F]) =
+  rs.variable(name)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+  extension (lhs: F[Int])
+    infix def EQUALS(rhs: F[Int]) = equal(lhs, rhs)
+  extension (lhs: F[Boolean])
+    infix def AND(rhs: F[Boolean]) = and(lhs, rhs)
+
+def NUM[F[_]](value: Int)(using rs: RuleSym[F]) =
+  rs.num(value)
+
+def VAR[F[_]](`name: String`)(using `rs: RuleSym[F]`) =
+  rs.variable(name)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+  extension (lhs: F[Int])
+    infix def EQUALS(rhs: F[Int]) = equal(lhs, rhs)
+  extension (lhs: F[Boolean])
+    infix def AND(rhs: F[Boolean]) = and(lhs, rhs)
+
+def NUM[F[_]](value: Int)(using rs: RuleSym[F]) =
+  rs.num(value)
+
+def VAR[F[_]](name: String)(using rs: RuleSym[F]) =
+  `rs.variable(name)`
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+trait RuleSym[F[_]]:
+  def num(value: Int): F[Int]
+  def variable(name: String): F[Int]
+
+  def equal(lhs: F[Int], rhs: F[Int]): F[Boolean]
+  def and(lhs: F[Boolean], rhs: F[Boolean]): F[Boolean]
+
+  extension (lhs: F[Int])
+    infix def EQUALS(rhs: F[Int]) = equal(lhs, rhs)
+  extension (lhs: F[Boolean])
+    infix def AND(rhs: F[Boolean]) = and(lhs, rhs)
+
+def NUM[F[_]](value: Int)(using rs: RuleSym[F]) =
+  rs.num(value)
+
+def VAR[F[_]](name: String)(using rs: RuleSym[F]) =
+  rs.variable(name)
+
+```
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+*val rule = [F[_]] => (r: RuleSym[F]) `=>`
+  import r.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+*val rule = [F[_]] => (r: RuleSym[F]) `?=>`
+  import r.*
+
+  and(
+    equal(variable("categoryId"), num(10)),
+    equal(variable("price"),      num(3))
+  )
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+val rule = [F[_]] => (r: RuleSym[F]) ?=>
+  import r.*
+
+  and(
+*   equal(`variable`("categoryId"), `num`(10)),
+*   equal(`variable`("price"),      `num`(3))
+  )
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+val rule = [F[_]] => (r: RuleSym[F]) ?=>
+  import r.*
+
+  and(
+*   equal(`VAR`("categoryId"), `NUM`(10)),
+*   equal(`VAR`("price"),      `NUM`(3))
+  )
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+val rule = [F[_]] => (r: RuleSym[F]) ?=>
+  import r.*
+
+  and(
+*   `equal`(VAR("categoryId")`,` NUM(10)),
+*   `equal`(VAR("price")`,`      NUM(3))
+  )
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+val rule = [F[_]] => (r: RuleSym[F]) ?=>
+  import r.*
+
+  and(
+*   (VAR("categoryId") `EQUALS` NUM(10)),
+*   (VAR("price")      `EQUALS` NUM(3))
+  )
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+val rule = [F[_]] => (r: RuleSym[F]) ?=>
+  import r.*
+
+* `and(`
+* `  `(VAR("categoryId") EQUALS NUM(10))`,`
+  `  `(VAR("price")      EQUALS NUM(3))
+* `)`
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+val rule = [F[_]] => (r: RuleSym[F]) ?=>
+  import r.*
+
+* (VAR("categoryId") EQUALS NUM(10)) `AND`
+  (VAR("price")      EQUALS NUM(3))
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+val rule = [F[_]] => (r: RuleSym[F]) ?=>
+* `import r.*`
+*
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  (VAR("price")      EQUALS NUM(3))
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+val rule = [F[_]] => (r: RuleSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  (VAR("price")      EQUALS NUM(3))
+```
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+*val rule = [F[_]] => (`r`: RuleSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  (VAR("price")      EQUALS NUM(3))
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+*val rule = [F[_]] => (`_`: RuleSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  (VAR("price")      EQUALS NUM(3))
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+val rule = [F[_]] => (_: RuleSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  (VAR("price")      EQUALS NUM(3))
+
+```
+
+--
+
+```scala
+rule
+// val res2: PolyFunction{apply: [F[_$1]](using _$2: RuleSym[F]): F[Boolean]} = <function1>
+```
+
+---
+
+## Adding structure
+
+```scala
+type `Rule[A]` = [F[_]] => RuleSym[F] ?=> F[A]
+```
+
+---
+
+## Adding structure
+
+```scala
+type Rule[A] = `[F[_]]` => RuleSym[F] ?=> F[A]
+```
+
+---
+
+## Adding structure
+
+```scala
+type Rule[A] = [F[_]] => `RuleSym[F]` ?=> F[A]
+```
+
+---
+
+## Adding structure
+
+```scala
+type Rule[A] = [F[_]] => RuleSym[F] ?=> `F[A]`
+```
+
+---
+
+## Adding structure
+
+```scala
+type Rule[A] = [F[_]] => RuleSym[F] ?=> F[A]
+
+```
+
+---
+
+## Pretty printer
+
+```scala
+given `RuleSym[String]` with
+  def num(value: Int)        = value.toString
+  def variable(name: String) = s"$$$name"
+
+  def equal(lhs: String, rhs: String) =
+    s"($lhs EQUALS $rhs)"
+  def and(lhs: String, rhs: String) =
+    s"$lhs AND $rhs"
+```
+
+---
+
+## Pretty printer
+
+```scala
+given RuleSym[String] with
+  def num(value: Int)        = `value.toString`
+  def variable(name: String) = `s"$$$name"`
+
+  def equal(lhs: String, rhs: String) =
+    `s"($lhs EQUALS $rhs)"`
+  def and(lhs: String, rhs: String) =
+    `s"$lhs AND $rhs"`
+```
+
+---
+
+## Pretty printer
+
+```scala
+given RuleSym[String] with
+  def num(value: Int)        = value.toString
+  def variable(name: String) = s"$$$name"
+
+  def equal(lhs: String, rhs: String) =
+    s"($lhs EQUALS $rhs)"
+  def and(lhs: String, rhs: String) =
+    s"$lhs AND $rhs"
+// given RuleSym[String] with
+//               ^
+// ⛔ Type argument String does not have the same kind as its bound [_$1]
+```
+
+---
+
+## Pretty printer
+
+```scala
+given RuleSym[`String`] with
+  def num(value: Int)        = value.toString
+  def variable(name: String) = s"$$$name"
+
+  def equal(lhs: String, rhs: String) =
+    s"($lhs EQUALS $rhs)"
+  def and(lhs: String, rhs: String) =
+    s"$lhs AND $rhs"
+```
+
+---
+
+## Pretty printer
+
+```scala
+type Pretty[A] = String
+
+```
+
+---
+
+## Pretty printer
+
+.diff-rm[
+```scala
+*given RuleSym[`String`] with
+  def num(value: Int)        = value.toString
+  def variable(name: String) = s"$$$name"
+
+  def equal(lhs: String, rhs: String) =
+    s"($lhs EQUALS $rhs)"
+  def and(lhs: String, rhs: String) =
+    s"$lhs AND $rhs"
+```
+]
+
+---
+
+## Pretty printer
+
+.diff-add[
+```scala
+*given RuleSym[`Pretty`] with
+  def num(value: Int)        = value.toString
+  def variable(name: String) = s"$$$name"
+
+  def equal(lhs: String, rhs: String) =
+    s"($lhs EQUALS $rhs)"
+  def and(lhs: String, rhs: String) =
+    s"$lhs AND $rhs"
+```
+]
+
+---
+
+## Pretty printer
+
+.diff-rm[
+```scala
+given RuleSym[Pretty] with
+  def num(value: Int)        = value.toString
+  def variable(name: String) = s"$$$name"
+
+* def equal(lhs: `String`, rhs: `String`) =
+    s"($lhs EQUALS $rhs)"
+  def and(lhs: String, rhs: String) =
+    s"$lhs AND $rhs"
+```
+]
+
+---
+
+## Pretty printer
+
+.diff-add[
+```scala
+given RuleSym[Pretty] with
+  def num(value: Int)        = value.toString
+  def variable(name: String) = s"$$$name"
+
+* def equal(lhs: `Pretty[Int]`, rhs: `Pretty[Int]`) =
+    s"($lhs EQUALS $rhs)"
+  def and(lhs: String, rhs: String) =
+    s"$lhs AND $rhs"
+```
+]
+
+---
+
+## Pretty printer
+
+.diff-rm[
+```scala
+given RuleSym[Pretty] with
+  def num(value: Int)        = value.toString
+  def variable(name: String) = s"$$$name"
+
+  def equal(lhs: Pretty[Int], rhs: Pretty[Int]) =
+    s"($lhs EQUALS $rhs)"
+* def and(lhs: `String`, rhs: `String`) =
+    s"$lhs AND $rhs"
+```
+]
+
+---
+
+## Pretty printer
+
+.diff-add[
+```scala
+given RuleSym[Pretty] with
+  def num(value: Int)        = value.toString
+  def variable(name: String) = s"$$$name"
+
+  def equal(lhs: Pretty[Int], rhs: Pretty[Int]) =
+    s"($lhs EQUALS $rhs)"
+* def and(lhs: `Pretty[Boolean]`, rhs: `Pretty[Boolean]`) =
+    s"$lhs AND $rhs"
+```
+]
+---
+
+## Pretty printer
+
+```scala
+given RuleSym[Pretty] with
+  def num(value: Int)        = value.toString
+  def variable(name: String) = s"$$$name"
+
+  def equal(lhs: Pretty[Int], rhs: Pretty[Int]) =
+    s"($lhs EQUALS $rhs)"
+  def and(lhs: Pretty[Boolean], rhs: Pretty[Boolean]) =
+    s"$lhs AND $rhs"
+
+```
+
+---
+
+## Pretty printing
+
+```scala
+rule`[Pretty]`
+```
+
+
+---
+
+## Pretty printing
+
+```scala
+rule[Pretty]
+// val res3: Pretty[Boolean] = ($categoryId EQUALS 10) AND ($price EQUALS 3)
+```
+
+---
+
+## Key takeaways
+
+When encoding a DSL as function composition, we:
+
+--
+
+* use a type class to describe its syntax and semantics.
+
+--
+
+* encode expressions as polymorphic functions.
+
+--
+
+This is known as the *Tagless Final* encoding.
+
+---
+
+class: center, middle
+
+# Compilation and Evaluation
+
+---
+
+## Compilation
+
+.center[![Blang rule](img/blang-rule-types.svg)]
+
+---
+
+## Compilation
+
+.center[![Blang rule](img/blang-rule-types-input.svg)]
+
+---
+
+## Compilation
+
+.center[![Blang rule](img/blang-rule-types-output.svg)]
+
+---
+
+## Compilation
+
+```scala
+given `RuleSym[Doc => _]` with
+  def num(value: Int)        = ???
+  def variable(name: String) = ???
+
+  def equal(lhs: `Doc => Int`, rhs: `Doc => Int`) =
+    ???
+  def and(lhs: `Doc => Boolean`, rhs: `Doc => Boolean`) =
+    ???
+```
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/tf-10.svg)]
+
+```scala
+doc => (doc("categoryId") == `10`) && (doc("price") == 3)
+```
+
+---
+
+## Compilation
+
+.diff-rm[
+```scala
+given RuleSym[Doc => _] with
+* def num(value: Int)        = `???`
+  def variable(name: String) = ???
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+    ???
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+    ???
+```
+]
+
+---
+
+## Compilation
+
+.diff-add[
+```scala
+given RuleSym[Doc => _] with
+* def num(value: Int)        = `_ => value`
+  def variable(name: String) = ???
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+    ???
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+    ???
+```
+]
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/tf-categoryId.svg)]
+
+```scala
+doc => (`doc("categoryId")` == 10) && (doc("price") == 3)
+```
+
+---
+
+## Compilation
+
+.diff-rm[
+```scala
+given RuleSym[Doc => _] with
+  def num(value: Int)        = _ => value
+* def variable(name: String) = `???`
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+    ???
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+    ???
+```
+]
+
+---
+
+## Compilation
+
+.diff-add[
+```scala
+given RuleSym[Doc => _] with
+  def num(value: Int)        = _ => value
+* def variable(name: String) = `doc => doc(name)`
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+    ???
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+    ???
+```
+]
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/tf-and-lhs.svg)]
+
+```scala
+doc => (`doc("categoryId") == 10`) && (doc("price") == 3)
+```
+
+---
+
+## Compilation
+
+.diff-rm[
+```scala
+given RuleSym[Doc => _] with
+  def num(value: Int)        = _ => value
+  def variable(name: String) = doc => doc(name)
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+*   `???`
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+    ???
+```
+]
+
+---
+
+## Compilation
+
+.diff-add[
+```scala
+given RuleSym[Doc => _] with
+  def num(value: Int)        = _ => value
+  def variable(name: String) = doc => doc(name)
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+*   `doc => lhs(doc) == rhs(doc)`
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+    ???
+```
+]
+
+---
+
+## Compilation
+
+```scala
+given RuleSym[Doc => _] with
+  def num(value: Int)        = _ => value
+  def variable(name: String) = doc => doc(name)
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+    `doc` => lhs(doc) == rhs(doc)
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+    ???
+```
+
+---
+
+## Compilation
+
+```scala
+given RuleSym[Doc => _] with
+  def num(value: Int)        = _ => value
+  def variable(name: String) = doc => doc(name)
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+    doc => `lhs(doc)` == rhs(doc)
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+    ???
+```
+
+---
+
+## Compilation
+
+```scala
+given RuleSym[Doc => _] with
+  def num(value: Int)        = _ => value
+  def variable(name: String) = doc => doc(name)
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+    doc => lhs(doc) == `rhs(doc)`
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+    ???
+```
+
+---
+
+## Compilation
+
+```scala
+given RuleSym[Doc => _] with
+  def num(value: Int)        = _ => value
+  def variable(name: String) = doc => doc(name)
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+    doc => lhs(doc) `==` rhs(doc)
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+    ???
+```
+
+
+---
+
+## Compilation
+
+.center[![Rule ADT](img/tf-and-with-operands.svg)]
+
+```scala
+doc => `(doc("categoryId") == 10) && (doc("price") == 3)`
+```
+
+---
+
+## Compilation
+
+.diff-rm[
+```scala
+given RuleSym[Doc => _] with
+  def num(value: Int)        = _ => value
+  def variable(name: String) = doc => doc(name)
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+    doc => lhs(doc) == rhs(doc)
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+*   `???`
+```
+]
+
+---
+
+## Compilation
+
+.diff-add[
+```scala
+given RuleSym[Doc => _] with
+  def num(value: Int)        = _ => value
+  def variable(name: String) = doc => doc(name)
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+    doc => lhs(doc) == rhs(doc)
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+*   `doc => lhs(doc) && rhs(doc)`
+```
+]
+
+---
+
+## Compilation
+
+```scala
+given RuleSym[Doc => _] with
+  def num(value: Int)        = _ => value
+  def variable(name: String) = doc => doc(name)
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+    doc => lhs(doc) == rhs(doc)
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+    doc => lhs(doc) `&&` rhs(doc)
+```
+
+---
+
+## Compilation
+
+```scala
+given RuleSym[Doc => _] with
+  def num(value: Int)        = _ => value
+  def variable(name: String) = doc => doc(name)
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+    doc => lhs(doc) == rhs(doc)
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+    doc => lhs(doc) && rhs(doc)
+
+```
+
+---
+
+## Evaluation
+
+```scala
+val compiled = `rule[Doc => _]`
+```
+
+---
+
+## Evaluation
+
+```scala
+val compiled = rule[Doc => _]
+
+```
+
+```scala
+compiled(Map(
+  "categoryId" -> 10,
+  "price"      -> 3
+))
+```
+
+---
+
+## Evaluation
+
+```scala
+val compiled = rule[Doc => _]
+```
+
+```scala
+compiled(Map(
+  "categoryId" -> 10,
+  "price"      -> 3
+))
+// val res4: Boolean = true
+```
+
+---
+
+## Evaluation
+
+```scala
+val compiled = rule[Doc => _]
+```
+
+.diff-rm[
+```scala
+compiled(Map(
+* "categoryId" -> `10`,
+  "price"      -> 3
+))
+```
+]
+
+---
+
+## Evaluation
+
+```scala
+val compiled = rule[Doc => _]
+```
+
+.diff-add[
+```scala
+compiled(Map(
+* "categoryId" -> `11`,
+  "price"      -> 3
+))
+```
+]
+
+---
+
+## Evaluation
+
+```scala
+val compiled = rule[Doc => _]
+```
+
+```scala
+compiled(Map(
+  "categoryId" -> 11,
+  "price"      -> 3
+))
+// val res5: Boolean = false
+```
+
+---
+
+class: center, middle
+
+# Serialisation / Deserialisation
+
+---
+
+## JSON
+
+.center[![JSON](img/json.svg)]
+
+---
+
+## Serialisation
+
+.center[![JSON](img/json-serialise.svg)]
+
+---
+
+## Serialisation
+
+```scala
+given RuleSym[`???`] with
+  def num(value: Int)        = ???
+  def variable(name: String) = ???
+
+  def equal(lhs: `???`, rhs: `???`) =
+    ???
+  def and(lhs: `???`, rhs: `???`) =
+    ???
+```
+
+---
+
+## Serialisation
+
+```scala
+type JsonRule[A] = Json
+
+```
+
+---
+
+## Serialisation
+
+.diff-rm[
+```scala
+*given RuleSym[`???`] with
+  def num(value: Int)        = ???
+  def variable(name: String) = ???
+
+* def equal(lhs: `???`, rhs: `???`) =
+    ???
+* def and(lhs: `???`, rhs: `???`) =
+    ???
+```
+]
+
+---
+
+## Serialisation
+
+.diff-add[
+```scala
+*given RuleSym[`JsonRule`] with
+  def num(value: Int)        = ???
+  def variable(name: String) = ???
+
+* def equal(lhs: `JsonRule[Int]`, rhs: `JsonRule[Int]`) =
+    ???
+* def and(lhs: `JsonRule[Boolean]`, rhs: `JsonRule[Boolean]`) =
+    ???
+```
+]
+
+---
+
+## Serialisation
+
+```scala
+given RuleSym[JsonRule] with
+  def num(value: Int)        = `???`
+  def variable(name: String) = `???`
+
+  def equal(lhs: JsonRule[Int], rhs: JsonRule[Int]) =
+    `???`
+  def and(lhs: JsonRule[Boolean], rhs: JsonRule[Boolean]) =
+    `???`
+```
+
+---
+
+## Deserialisation
+
+.center[![JSON](img/json-deserialise.svg)]
+
+---
+
+## Deserialisation
+
+```scala
+given intDecoder: `Decoder[Rule[Int]]` =
+  case other =>
+    Left(s"Invalid number: $other")
+```
+
+```scala
+given boolDecoder: `Decoder[Rule[Boolean]]` =
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+
+---
+
+## Deserialisation
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case `other` =>
+    Left(`s"Invalid number: $other"`)
+```
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case `other` =>
+    Left(`s"Invalid boolean: $other"`)
+```
+
+---
+
+## Numbers
+
+.center[![Rule ADT](img/tf-10.svg)]
+
+```json
+{ "AND": [
+  { "EQUALS": ["categoryId", `10`] },
+  { "EQUALS": ["price", 3] }
+]}
+```
+
+---
+
+## Number serialisation
+
+.diff-rm[
+```scala
+given RuleSym[JsonRule] with
+* def num(value: Int)        = `???`
+  def variable(name: String) = ???
+
+  def equal(lhs: JsonRule[Int], rhs: JsonRule[Int]) =
+    ???
+  def and(lhs: JsonRule[Boolean], rhs: JsonRule[Boolean]) =
+    ???
+```
+]
+
+---
+
+## Number serialisation
+
+.diff-add[
+```scala
+given RuleSym[JsonRule] with
+* def num(value: Int)        = `Json.Num(value)`
+  def variable(name: String) = ???
+
+  def equal(lhs: JsonRule[Int], rhs: JsonRule[Int]) =
+    ???
+  def and(lhs: JsonRule[Boolean], rhs: JsonRule[Boolean]) =
+    ???
+```
+]
+
+---
+
+## Number deserialisation
+
+.diff-add[
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+* `case Json.Num(value) =>`
+*   `Right([F[_]] => (rs: RuleSym[F]) ?=> rs.num(value))`
+*
+  case other =>
+    Left(s"Invalid number: $other")
+```
+]
+
+---
+
+## Number deserialisation
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+    Right(`[F[_]] => (rs: RuleSym[F]) ?=>` rs.num(value))
+
+  case other =>
+    Left(s"Invalid number: $other")
+```
+
+
+---
+
+## Number deserialisation
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+    Right([F[_]] => (rs: RuleSym[F]) ?=> `rs.num(value)`)
+
+  case other =>
+    Left(s"Invalid number: $other")
+```
+
+---
+
+## Variables
+
+.center[![Rule ADT](img/tf-categoryId.svg)]
+
+```json
+{ "AND": [
+  { "EQUALS": [`"categoryId"`, 10] },
+  { "EQUALS": ["price", 3] }
+]}
+```
+
+---
+
+## Variable serialisation
+
+.diff-rm[
+```scala
+given RuleSym[JsonRule] with
+  def num(value: Int)        = Json.Num(value)
+* def variable(name: String) = `???`
+
+  def equal(lhs: JsonRule[Int], rhs: JsonRule[Int]) =
+    ???
+  def and(lhs: JsonRule[Boolean], rhs: JsonRule[Boolean]) =
+    ???
+```
+]
+
+---
+
+## Variable serialisation
+
+.diff-add[
+```scala
+given RuleSym[JsonRule] with
+  def num(value: Int)        = Json.Num(value)
+* def variable(name: String) = `Json.Str(name)`
+
+  def equal(lhs: JsonRule[Int], rhs: JsonRule[Int]) =
+    ???
+  def and(lhs: JsonRule[Boolean], rhs: JsonRule[Boolean]) =
+    ???
+```
+]
+
+---
+
+## Variable deserialisation
+
+.diff-add[
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+    Right([F[_]] => (rs: RuleSym[F]) ?=> rs.num(value))
+*
+* `case Json.Str(name) =>`
+*   `Right([F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name))`
+
+  case other =>
+    Left(s"Invalid number: $other")
+```
+]
+
+
+---
+
+## Variable deserialisation
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+    Right([F[_]] => (rs: RuleSym[F]) ?=> rs.num(value))
+
+  case Json.Str(name) =>
+    Right([F[_]] => (rs: RuleSym[F]) ?=> `rs.variable(name)`)
+
+  case other =>
+    Left(s"Invalid number: $other")
+```
+
+---
+
+## Variable deserialisation
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+    Right([F[_]] => (rs: RuleSym[F]) ?=> rs.num(value))
+
+  case Json.Str(name) =>
+    Right([F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name))
+
+  case other =>
+    Left(s"Invalid number: $other")
+
+```
+
+---
+
+## Numeric equality
+
+.center[![Rule ADT](img/tf-and-lhs.svg)]
+
+```json
+{ "AND": [
+  `{ "EQUALS": ["categoryId", 10] }`,
+  { "EQUALS": ["price", 3] }
+]}
+```
+
+---
+
+## Numeric equality serialisation
+
+.diff-rm[
+```scala
+given RuleSym[JsonRule] with
+  def num(value: Int)        = Json.Num(value)
+  def variable(name: String) = Json.Str(name)
+
+  def equal(lhs: JsonRule[Int], rhs: JsonRule[Int]) =
+*   `???`
+  def and(lhs: JsonRule[Boolean], rhs: JsonRule[Boolean]) =
+    ???
+```
+]
+
+---
+
+## Numeric equality serialisation
+
+.diff-add[
+```scala
+given RuleSym[JsonRule] with
+  def num(value: Int)        = Json.Num(value)
+  def variable(name: String) = Json.Str(name)
+
+  def equal(lhs: JsonRule[Int], rhs: JsonRule[Int]) =
+*   `Json.Obj("EQUALS" -> Json.Arr(lhs, rhs))`
+  def and(lhs: JsonRule[Boolean], rhs: JsonRule[Boolean]) =
+    ???
+```
+]
+
+---
+
+## Numeric equality deserialisation
+
+.diff-add[
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+* `case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>`
+*   `for`
+*     `left  <- lhs.as[Rule[Int]]`
+*     `right <- rhs.as[Rule[Int]]`
+*   `yield [F[_]] => (rs: RuleSym[F]) ?=>`
+*     `rs.equal(left[F], right[F])`
+*
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+]
+
+---
+
+## Numeric equality deserialisation
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- `lhs.as[Rule[Int]]`
+      right <- rhs.as[Rule[Int]]
+    yield [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.equal(left[F], right[F])
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+
+---
+
+## Numeric equality deserialisation
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- `rhs.as[Rule[Int]]`
+    yield [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.equal(left[F], right[F])
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+
+---
+
+## Numeric equality deserialisation
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield [F[_]] => (rs: RuleSym[F]) ?=>
+      `rs.equal(left[F], right[F])`
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+
+
+---
+
+## Logical And
+
+.center[![Rule ADT](img/tf-and-with-operands.svg)]
+
+```json
+*{ "AND": [
+* { "EQUALS": ["categoryId", 10] },
+* { "EQUALS": ["price", 3] }
+*]}
+```
+
+---
+
+## Logical And serialisation
+
+.diff-rm[
+```scala
+given RuleSym[JsonRule] with
+  def num(value: Int)        = Json.Num(value)
+  def variable(name: String) = Json.Str(name)
+
+  def equal(lhs: JsonRule[Int], rhs: JsonRule[Int]) =
+    Json.Obj("EQUALS" -> Json.Arr(lhs, rhs))
+  def and(lhs: JsonRule[Boolean], rhs: JsonRule[Boolean]) =
+*   `???`
+```
+]
+
+---
+
+## Logical And serialisation
+
+.diff-add[
+```scala
+given RuleSym[JsonRule] with
+  def num(value: Int)        = Json.Num(value)
+  def variable(name: String) = Json.Str(name)
+
+  def equal(lhs: JsonRule[Int], rhs: JsonRule[Int]) =
+    Json.Obj("EQUALS" -> Json.Arr(lhs, rhs))
+  def and(lhs: JsonRule[Boolean], rhs: JsonRule[Boolean]) =
+*   `Json.Obj("AND" -> Json.Arr(lhs, rhs))`
+```
+]
+
+---
+
+## Logical And serialisation
+
+```scala
+given RuleSym[JsonRule] with
+  def num(value: Int)        = Json.Num(value)
+  def variable(name: String) = Json.Str(name)
+
+  def equal(lhs: JsonRule[Int], rhs: JsonRule[Int]) =
+    Json.Obj("EQUALS" -> Json.Arr(lhs, rhs))
+  def and(lhs: JsonRule[Boolean], rhs: JsonRule[Boolean]) =
+    Json.Obj("AND" -> Json.Arr(lhs, rhs))
+
+```
+
+---
+
+## Logical And deserialisation
+
+.diff-add[
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.equal(left[F], right[F])
+*
+* `case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>`
+*   `for`
+*     `left  <- lhs.as[Rule[Boolean]]`
+*     `right <- rhs.as[Rule[Boolean]]`
+*   `yield [F[_]] => (rs: RuleSym[F]) ?=>`
+*     `rs.and(left[F], right[F])`
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+]
+
+---
+
+## Logical And deserialisation
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.equal(left[F], right[F])
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- `lhs.as[Rule[Boolean]]`
+      right <- `rhs.as[Rule[Boolean]]`
+    yield [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.and(left[F], right[F])
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+
+---
+
+## Logical And deserialisation
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.equal(left[F], right[F])
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield [F[_]] => (rs: RuleSym[F]) ?=>
+      `rs.and`(left[F], right[F])
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+
+---
+
+## Logical And deserialisation
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.equal(left[F], right[F])
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.and(left[F], right[F])
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+
+```
+
+---
+
+## Serialisation
+
+```scala
+given [A]: `Encoder[Rule[A]]` =
+  rule => rule[JsonRule]
+```
+
+---
+
+## Serialisation
+
+```scala
+given [A]: Encoder[Rule[A]] =
+  `rule => rule[JsonRule]`
+```
+
+---
+
+## Serialisation
+
+```scala
+given [A]: Encoder[Rule[A]] =
+  rule => rule[JsonRule]
+
+```
+
+---
+
+## Serialisation
+
+```scala
+rule.asJson
+```
+
+---
+
+## Serialisation
+
+```scala
+rule.asJson
+// val res6: json.Json = {
+//   "AND": [{
+//       "EQUALS": ["categoryId", 10]
+//     }, {
+//       "EQUALS": ["price", 3]
+//     }]
+// }
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json.svg)]
+
+```scala
+rule
+  .asJson
+  .as[Rule[Boolean]]
+  .map(rule => rule[Pretty])
+```
+
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json-roundtrip-1.svg)]
+
+```scala
+&#x200B;`rule`
+  .asJson
+  .as[Rule[Boolean]]
+  .map(rule => rule[Pretty])
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json-roundtrip-2.svg)]
+
+```scala
+rule
+  `.asJson`
+  .as[Rule[Boolean]]
+  .map(rule => rule[Pretty])
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json-roundtrip-3.svg)]
+
+```scala
+rule
+  .asJson
+  `.as[Rule[Boolean]]`
+  .map(rule => rule[Pretty])
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json-roundtrip-3.svg)]
+
+```scala
+rule
+  .asJson
+  .as[Rule[Boolean]]
+  .map(rule => rule[Pretty])
+// val res7: Either[String, Pretty[Boolean]] = Right(($categoryId EQUALS 10) AND ($price EQUALS 3))
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+    Right(`[F[_]] => (rs: RuleSym[F]) ?=>` rs.num(value))
+
+  case Json.Str(name) =>
+    Right([F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name))
+
+  case other =>
+    Left(s"Invalid number: $other")
+```
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+*   Right(`[F[_]] => (rs: RuleSym[F]) ?=> rs.num(value)`)
+
+  case Json.Str(name) =>
+    Right([F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name))
+
+  case other =>
+    Left(s"Invalid number: $other")
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+*   Right(`NUM(value)`)
+
+  case Json.Str(name) =>
+    Right([F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name))
+
+  case other =>
+    Left(s"Invalid number: $other")
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+    Right(NUM(value))
+
+  case Json.Str(name) =>
+    Right([F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name))
+
+  case other =>
+    Left(s"Invalid number: $other")
+//     Right(NUM(value))
+//                     ^
+// ⛔ no implicit argument of type RuleSym[F] was found for parameter rs of method NUM
+//   
+//   where:    F is a type variable with constraint <: [A] =>> PolyFunction{apply: [F[_$1]](using x$1: RuleSym[F]): F[A]}
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+    Right(`NUM`(value))
+
+  case Json.Str(name) =>
+    Right([F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name))
+
+  case other =>
+    Left(s"Invalid number: $other")
+```
+
+
+```scala
+def `NUM`[F[_]](value: Int)(using rs: RuleSym[F]) =
+  rs.num(value)
+```
+
+
+---
+
+## Syntactic sugar
+
+```scala
+given intDecoder: Decoder[`Rule`[Int]] =
+  case Json.Num(value) =>
+    Right(NUM(value))
+
+  case Json.Str(name) =>
+    Right([F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name))
+
+  case other =>
+    Left(s"Invalid number: $other")
+```
+
+
+```scala
+def NUM[`F[_]`](value: Int)(using rs: RuleSym[F]) =
+  rs.num(value)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+    Right(NUM(`value`))
+
+  case Json.Str(name) =>
+    Right([F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name))
+
+  case other =>
+    Left(s"Invalid number: $other")
+```
+
+
+```scala
+def NUM[F[_]](`value: Int`)(using rs: RuleSym[F]) =
+  rs.num(value)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+    Right(NUM(value))
+
+  case Json.Str(name) =>
+    Right([F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name))
+
+  case other =>
+    Left(s"Invalid number: $other")
+```
+
+
+```scala
+def NUM[F[_]](value: Int)(using rs: `RuleSym[F]`) =
+  rs.num(value)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+given `RuleSym[Rule]` with
+  def num(value: Int) =
+    ???
+  def variable(name: String) =
+    ???
+
+  def equal(lhs: `Rule`[Int], rhs: `Rule`[Int]) =
+    ???
+  def and(lhs: `Rule`[Boolean], rhs: `Rule`[Boolean]) =
+    ???
+```
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+given RuleSym[Rule] with
+  def num(value: Int) =
+*   `???`
+  def variable(name: String) =
+    ???
+
+  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
+    ???
+  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
+    ???
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+given RuleSym[Rule] with
+  def num(value: Int) =
+*   `[F[_]] => (rs: RuleSym[F]) ?=> rs.num(value)`
+  def variable(name: String) =
+    ???
+
+  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
+    ???
+  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
+    ???
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+given RuleSym[Rule] with
+  def num(value: Int) =
+    `[F[_]]` => (rs: RuleSym[F]) ?=> rs.num(value)
+  def variable(name: String) =
+    ???
+
+  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
+    ???
+  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
+    ???
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+given RuleSym[Rule] with
+  def num(value: Int) =
+    [F[_]] => (`rs: RuleSym[F]`) ?=> rs.num(value)
+  def variable(name: String) =
+    ???
+
+  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
+    ???
+  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
+    ???
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+given RuleSym[Rule] with
+  def num(value: Int) =
+    [F[_]] => (rs: RuleSym[F]) ?=> `rs.num(value)`
+  def variable(name: String) =
+    ???
+
+  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
+    ???
+  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
+    ???
+```
+
+
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+given RuleSym[Rule] with
+  def num(value: Int) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.num(value)
+  def variable(name: String) =
+*   `???`
+
+  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
+    ???
+  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
+    ???
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+given RuleSym[Rule] with
+  def num(value: Int) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.num(value)
+  def variable(name: String) =
+*   `[F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name)`
+
+  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
+    ???
+  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
+    ???
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+given RuleSym[Rule] with
+  def num(value: Int) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.num(value)
+  def variable(name: String) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name)
+
+  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
+*   `???`
+  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
+    ???
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+given RuleSym[Rule] with
+  def num(value: Int) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.num(value)
+  def variable(name: String) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name)
+
+  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
+*   `[F[_]] => (rs: RuleSym[F]) ?=> rs.equal(lhs[F], rhs[F])`
+  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
+    ???
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+given RuleSym[Rule] with
+  def num(value: Int) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.num(value)
+  def variable(name: String) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name)
+
+  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.equal(lhs[F], rhs[F])
+  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
+*   `???`
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+given RuleSym[Rule] with
+  def num(value: Int) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.num(value)
+  def variable(name: String) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name)
+
+  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.equal(lhs[F], rhs[F])
+  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
+*   `[F[_]] => (rs: RuleSym[F]) ?=> rs.and(lhs[F], rhs[F])`
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+given RuleSym[Rule] with
+  def num(value: Int) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.num(value)
+  def variable(name: String) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name)
+
+  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.equal(lhs[F], rhs[F])
+  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
+    [F[_]] => (rs: RuleSym[F]) ?=> rs.and(lhs[F], rhs[F])
+
+```
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+*   Right(`[F[_]] => (rs: RuleSym[F]) ?=> rs.num(value)`)
+
+  case Json.Str(name) =>
+*   Right(`[F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name)`)
+
+  case other =>
+    Left(s"Invalid number: $other")
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+*   Right(`NUM(value)`)
+
+  case Json.Str(name) =>
+*   Right(`VAR(name)`)
+
+  case other =>
+    Left(s"Invalid number: $other")
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+given intDecoder: Decoder[Rule[Int]] =
+  case Json.Num(value) =>
+    Right(NUM(value))
+
+  case Json.Str(name) =>
+    Right(VAR(name))
+
+  case other =>
+    Left(s"Invalid number: $other")
+
+```
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+*   yield `[F[_]] => (rs: RuleSym[F]) ?=>`
+*     `rs.equal(left[F], right[F])`
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+*   yield `[F[_]] => (rs: RuleSym[F]) ?=>`
+*     `rs.and(left[F], right[F])`
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+*   yield `left EQUALS right`
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+*   yield `left AND right`
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+
+```
+
+---
+
+## Key takeaways
+
+--
+
+* Compilation, serialisation and deserialisation are essentially the same thing as with GADTs.
+
+--
+
+* The syntax can be a little bit painful.
+
+--
+
+* Providing "self interpreters" takes some of the pain away.
+
+---
+
+class: center, middle
+
+# Extending the language
+
+---
+
+## Complex query
+
+.center[![JSON](img/complex-tf.svg)]
+
+```scala
+val complexRule = [F[_]] => (_: RuleSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  (NUM(1) EQUALS NUM(1))
+
+```
+
+---
+
+## Complex query
+
+.center[![JSON](img/complex-tf-focus.svg)]
+
+.diff-rm[
+```scala
+val complexRule = [F[_]] => (_: RuleSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+* `(NUM(1) EQUALS NUM(1))`
+```
+]
+
+---
+
+## Complex query
+
+.center[![JSON](img/complex-tf-true-ok.svg)]
+
+.diff-add[
+```scala
+val complexRule = [F[_]] => (_: RuleSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+* `BOOL(true)`
+```
+]
+
+---
+
+## Boolean literals
+
+.center[![JSON](img/complex-tf-true-ok.svg)]
+
+```scala
+val complexRule = [F[_]] => (_: RuleSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  `BOOL(true)`
+```
+
+---
+
+## Boolean literals
+
+.center[![JSON](img/complex-tf-true-ok.svg)]
+
+```scala
+val complexRule = [F[_]] => (_: RuleSym[F]) ?=>
+  (`VAR`("categoryId") `EQUALS` `NUM`(10)) `AND`
+  BOOL(true)
+```
+
+---
+
+## Boolean literals
+
+.center[![JSON](img/complex-tf-true-ok.svg)]
+
+```scala
+val complexRule = [F[_]] => (`_: RuleSym[F]`) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  BOOL(true)
+```
+
+---
+
+## Boolean literals
+
+.center[![JSON](img/complex-tf-true-ok.svg)]
+
+.diff-add[
+```scala
+*val complexRule = [F[_]] => (_: RuleSym[F]`, ???`) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  BOOL(true)
+```
+]
+
+---
+
+## Boolean symantics
+
+```scala
+trait `BoolSym[F[_]]`:
+  def bool(value: Boolean): F[Boolean]
+```
+
+---
+
+## Boolean symantics
+
+```scala
+trait BoolSym[F[_]]:
+  def `bool`(value: Boolean): F[Boolean]
+```
+
+---
+
+## Boolean symantics
+
+```scala
+trait BoolSym[F[_]]:
+  def bool(`value: Boolean`): F[Boolean]
+```
+
+---
+
+## Boolean symantics
+
+```scala
+trait BoolSym[F[_]]:
+  def bool(value: Boolean): `F[Boolean]`
+```
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+trait BoolSym[F[_]]:
+  def bool(value: Boolean): F[Boolean]
+*
+*&#x200B;`def BOOL[F[_]](value: Boolean)(using bs: BoolSym[F[_]]) =`
+* `bs.bool(value)`
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+trait BoolSym[F[_]]:
+  def bool(value: Boolean): F[Boolean]
+
+def `BOOL`[F[_]](value: Boolean)(using bs: BoolSym[F[_]]) =
+  bs.bool(value)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+trait BoolSym[F[_]]:
+  def bool(value: Boolean): F[Boolean]
+
+def BOOL[F[_]](`value: Boolean`)(using `bs: BoolSym[F[_]]`) =
+  bs.bool(value)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+trait BoolSym[F[_]]:
+  def bool(value: Boolean): F[Boolean]
+
+def BOOL[F[_]](value: Boolean)(using bs: BoolSym[F[_]]) =
+  `bs.bool(value)`
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+trait BoolSym[F[_]]:
+  def bool(value: Boolean): F[Boolean]
+
+def BOOL[F[_]](value: Boolean)(using bs: BoolSym[F[_]]) =
+  bs.bool(value)
+
+```
+
+---
+
+## Boolean literals
+
+.diff-rm[
+```scala
+*val complexRule = [F[_]] => (_: RuleSym[F], `???`) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  BOOL(true)
+```
+]
+
+---
+
+## Boolean literals
+
+.diff-add[
+```scala
+*val complexRule = [F[_]] => (_: RuleSym[F], `_: BoolSym[F]`) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  BOOL(true)
+```
+]
+
+---
+
+## Boolean literals
+
+```scala
+val complexRule = [F[_]] => (_: RuleSym[F], _: BoolSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  BOOL(true)
+
+```
+
+---
+
+## Boolean literals
+
+```scala
+val complexRule = [F[_]] => (_: RuleSym[F], _: BoolSym[F]) ?=>
+  (`VAR`("categoryId") `EQUALS` `NUM`(10)) `AND`
+  BOOL(true)
+```
+
+---
+
+## Boolean literals
+
+```scala
+val complexRule = [F[_]] => (`_: RuleSym[F]`, _: BoolSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  BOOL(true)
+```
+
+---
+
+## Boolean literals
+
+```scala
+val complexRule = [F[_]] => (_: RuleSym[F], _: BoolSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  `BOOL`(true)
+```
+
+---
+
+## Boolean literals
+
+```scala
+val complexRule = [F[_]] => (_: RuleSym[F], `_: BoolSym[F]`) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  BOOL(true)
+```
+
+---
+
+## Boolean literals
+
+```scala
+val complexRule = [F[_]] => (_: RuleSym[F], _: BoolSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) `AND`
+  BOOL(true)
+```
+
+---
+
+## Boolean literals
+
+```scala
+val complexRule = [F[_]] => (_: RuleSym[F], _: BoolSym[F]) ?=>
+  `(VAR("categoryId") EQUALS NUM(10))` AND
+  BOOL(true)
+```
+
+---
+
+## Boolean literals
+
+```scala
+val complexRule = [F[_]] => (_: RuleSym[F], _: BoolSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  `BOOL(true)`
+```
+
+
+
+---
+
+## Boolean literals
+
+```scala
+type `ExtRule[A]` = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+```
+
+---
+
+## Boolean literals
+
+```scala
+type ExtRule[A] = `[F[_]]` => (RuleSym[F], BoolSym[F]) ?=> F[A]
+```
+
+---
+
+## Boolean literals
+
+```scala
+type ExtRule[A] = [F[_]] => (`RuleSym[F]`, `BoolSym[F]`) ?=> F[A]
+```
+
+---
+
+## Boolean literals
+
+```scala
+type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> `F[A]`
+```
+
+---
+
+## Boolean literals
+
+```scala
+type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+given `RuleSym[ExtRule]` with
+  def num(i: Int) = ???
+  def variable(name: String) = ???
+
+  def equal(lhs: `ExtRule[Int]`, rhs: `ExtRule[Int]`) =
+    ???
+  def and(lhs: `ExtRule[Boolean]`, rhs: `ExtRule[Boolean]`) =
+    ???
+```
+
+---
+
+## Syntactic sugar
+
+.center[![JSON](img/rulesym-rule-rule.svg)]
+
+```scala
+type `Rule[A]`    = [F[_]] =>  RuleSym[F]              ?=> F[A]
+type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+```
+
+---
+
+## Syntactic sugar
+
+.center[![JSON](img/rulesym-rule-f.svg)]
+
+```scala
+type Rule[A]    = `[F[_]]` =>  RuleSym[F]              ?=> F[A]
+type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+```
+
+---
+
+## Syntactic sugar
+
+.center[![JSON](img/rulesym-rule-rulesym.svg)]
+
+```scala
+type Rule[A]    = [F[_]] =>  `RuleSym[F]`              ?=> F[A]
+type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+```
+
+---
+
+## Syntactic sugar
+
+.center[![JSON](img/rulesym-rule-fa.svg)]
+
+```scala
+type Rule[A]    = [F[_]] =>  RuleSym[F]              ?=> `F[A]`
+type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+```
+
+---
+
+## Syntactic sugar
+
+.center[![JSON](img/rulesym-rule.svg)]
+
+```scala
+*type Rule[A]    = [F[_]] =>  RuleSym[F]              ?=> F[A]
+type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+```
+---
+
+## Syntactic sugar
+
+.center[![JSON](img/rulesym-rule.svg)]
+
+```scala
+type Rule[A]    = [F[_]] =>  RuleSym[F]              ?=> F[A]
+type ExtRule[A] = [F[_]] => (RuleSym[F], `BoolSym[F]`) ?=> F[A]
+```
+
+
+---
+
+## Syntactic sugar
+
+.center[![JSON](img/rulesym-extrule-boolsym.svg)]
+
+```scala
+type Rule[A]    = [F[_]] =>  RuleSym[F]              ?=> F[A]
+type ExtRule[A] = [F[_]] => (RuleSym[F], `BoolSym[F]`) ?=> F[A]
+```
+
+---
+
+## Syntactic sugar
+
+.center[![JSON](img/rulesym-extrule-rule.svg)]
+
+```scala
+type `Rule[A]`    = [F[_]] =>  RuleSym[F]              ?=> F[A]
+type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+```
+
+---
+
+## Syntactic sugar
+
+.center[![JSON](img/rulesym-extrule-extrule.svg)]
+
+```scala
+type Rule[A]    = [F[_]] =>  RuleSym[F]              ?=> F[A]
+type `ExtRule[A]` = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+```
+
+---
+
+## Syntactic sugar
+
+.center[![JSON](img/rulesym-extrule.svg)]
+
+```scala
+type Rule[A]    = [F[_]] =>  RuleSym[F]              ?=> F[A]
+*type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+given `RuleSym[Rule]` with
+  def num(value: Int) =
+    [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.num(value)
+  def variable(name: String) =
+    [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.variable(name)
+
+  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
+    [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.equal(lhs[F], rhs[F])
+  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
+    [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.and(lhs[F], rhs[F])
+```
+
+---
+
+## Syntactic sugar
+
+.diff-rm[
+```scala
+*given RuleSym[`Rule]` with
+  def num(value: Int) =
+    [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.num(value)
+  def variable(name: String) =
+    [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.variable(name)
+
+* def equal(lhs: `Rule`[Int], rhs: `Rule`[Int]) =
+    [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.equal(lhs[F], rhs[F])
+* def and(lhs: `Rule`[Boolean], rhs: `Rule`[Boolean]) =
+    [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.and(lhs[F], rhs[F])
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+*given RuleSym[`ExtRule]` with
+  def num(value: Int) =
+    [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.num(value)
+  def variable(name: String) =
+    [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.variable(name)
+
+  def equal(lhs: `ExtRule[Int]`, rhs: `ExtRule`[Int]) =
+    [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.equal(lhs[F], rhs[F])
+* def and(lhs: `ExtRule`[Boolean], rhs: `ExtRule`[Boolean]) =
+    [F[_]] => (rs: RuleSym[F]) ?=>
+      rs.and(lhs[F], rhs[F])
+```
+]
+
+---
+
+## Syntactic sugar
+
+.diff-add[
+```scala
+given RuleSym[ExtRule] with
+  def num(value: Int) =
+*   [F[_]] => (rs: RuleSym[F]`, _: BoolSym[F]`) ?=>
+      rs.num(value)
+  def variable(name: String) =
+*   [F[_]] => (rs: RuleSym[F]`, _: BoolSym[F]`) ?=>
+      rs.variable(name)
+
+  def equal(lhs: ExtRule[Int], rhs: ExtRule[Int]) =
+*   [F[_]] => (rs: RuleSym[F]`, _: BoolSym[F]`) ?=>
+      rs.equal(lhs[F], rhs[F])
+  def and(lhs: ExtRule[Boolean], rhs: ExtRule[Boolean]) =
+*   [F[_]] => (rs: RuleSym[F]`, _: BoolSym[F]`) ?=>
+      rs.and(lhs[F], rhs[F])
+```
+]
+
+---
+
+## Syntactic sugar
+
+```scala
+given RuleSym[ExtRule] with
+  def num(value: Int) =
+    [F[_]] => (rs: RuleSym[F], _: BoolSym[F]) ?=>
+      rs.num(value)
+  def variable(name: String) =
+    [F[_]] => (rs: RuleSym[F], _: BoolSym[F]) ?=>
+      rs.variable(name)
+
+  def equal(lhs: ExtRule[Int], rhs: ExtRule[Int]) =
+    [F[_]] => (rs: RuleSym[F], _: BoolSym[F]) ?=>
+      rs.equal(lhs[F], rhs[F])
+  def and(lhs: ExtRule[Boolean], rhs: ExtRule[Boolean]) =
+    [F[_]] => (rs: RuleSym[F], _: BoolSym[F]) ?=>
+      rs.and(lhs[F], rhs[F])
+
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+given `BoolSym[ExtRule]` with
+  def bool(value: Boolean) =
+    [F[_]] => (_: RuleSym[F], bs: BoolSym[F]) ?=>
+      bs.bool(value)
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+given BoolSym[ExtRule] with
+  def bool(value: Boolean) =
+    `[F[_]] => (`_: RuleSym[F], `bs: BoolSym[F]) ?=>`
+      `bs.bool(value)`
+```
+
+---
+
+## Syntactic sugar
+
+```scala
+given BoolSym[ExtRule] with
+  def bool(value: Boolean) =
+    [F[_]] => (`_: RuleSym[F], `bs: BoolSym[F]) ?=>
+      bs.bool(value)
+```
+
+
+
+---
+
+## Syntactic sugar
+
+```scala
+given BoolSym[ExtRule] with
+  def bool(value: Boolean) =
+    [F[_]] => (_: RuleSym[F], bs: BoolSym[F]) ?=>
+      bs.bool(value)
+
+```
+
+---
+
+## Pretty printer
+
+```scala
+complexRule`[Pretty]`
+```
+
+---
+
+## Pretty printer
+
+```scala
+complexRule[Pretty]
+// complexRule[Pretty]
+//                    ^
+// ⛔ no implicit argument of type BoolSym[Pretty] was found for parameter _$3 of method apply
+```
+
+---
+
+## Pretty printer
+
+```scala
+given `BoolSym[Pretty]` with
+  def bool(value: Boolean) = ???
+```
+
+---
+
+## Pretty printer
+
+.center[![JSON](img/complex-tf-true-ok.svg)]
+
+```scala
+($categoryId EQUALS 10) AND `true`
+```
+
+---
+
+## Pretty printer
+
+.diff-rm[
+```scala
+given BoolSym[Pretty] with
+* def bool(value: Boolean) = `???`
+```
+]
+
+---
+
+## Pretty printer
+
+.diff-add[
+```scala
+given BoolSym[Pretty] with
+* def bool(value: Boolean) = `value.toString`
+```
+]
+
+---
+
+## Pretty printer
+
+```scala
+given BoolSym[Pretty] with
+  def bool(value: Boolean) = value.toString
+
+```
+
+---
+
+## Pretty printer
+
+```scala
+complexRule[Pretty]
+```
+
+---
+
+## Pretty printer
+
+```scala
+complexRule[Pretty]
+// val res8: Pretty[Boolean] = ($categoryId EQUALS 10) AND true
+```
+
+---
+
+## Compilation
+
+```scala
+complexRule`[Doc => _]`
+```
+
+---
+
+## Compilation
+
+```scala
+complexRule[Doc => _]
+// complexRule[Doc => _]
+//                      ^
+// ⛔ no implicit argument of type BoolSym[[_] =>> Doc => _] was found for parameter _$3 of method apply
+```
+
+---
+
+## Compilation
+
+```scala
+given `BoolSym[Doc => _]` with
+  def bool(value: Boolean) = ???
+```
+
+---
+
+## Compilation
+
+.center[![JSON](img/complex-tf-true-ok.svg)]
+
+```scala
+doc => (doc("categoryId") == 10) && `true`
+```
+
+---
+
+## Compilation
+
+.diff-rm[
+```scala
+given BoolSym[Doc => _] with
+* def bool(value: Boolean) = `???`
+```
+]
+
+---
+
+## Compilation
+
+.diff-add[
+```scala
+given BoolSym[Doc => _] with
+* def bool(value: Boolean) = `_ => value`
+```
+]
+
+---
+
+## Compilation
+
+```scala
+given BoolSym[Doc => _] with
+  def bool(value: Boolean) = _ => value
+
+```
+
+---
+
+## Evaluation
+
+```scala
+val compiled = complexRule[Doc => _]
+
+```
+
+--
+
+```scala
+compiled(Map(
+  "categoryId" -> 10
+))
+```
+
+---
+
+## Evaluation
+
+```scala
+val compiled = complexRule[Doc => _]
+```
+
+```scala
+compiled(Map(
+  "categoryId" -> 10
+))
+// val res9: Boolean = true
+```
+
+---
+
+## Evaluation
+
+```scala
+val compiled = complexRule[Doc => _]
+```
+
+.diff-rm[
+```scala
+compiled(Map(
+* "categoryId" -> `10`
+))
+```
+]
+
+---
+
+## Evaluation
+
+```scala
+val compiled = complexRule[Doc => _]
+```
+
+.diff-add[
+```scala
+compiled(Map(
+* "categoryId" -> `11`
+))
+```
+]
+
+---
+
+## Evaluation
+
+```scala
+val compiled = complexRule[Doc => _]
+```
+
+```scala
+compiled(Map(
+  "categoryId" -> 11
+))
+// val res10: Boolean = false
+```
+
+---
+
+## JSON Encoding
+
+```scala
+complexRule`[JsonRule]`
+```
+
+---
+
+## JSON Encoding
+
+```scala
+complexRule[JsonRule]
+// complexRule[JsonRule]
+//                      ^
+// ⛔ no implicit argument of type BoolSym[JsonRule] was found for parameter _$3 of method apply
+```
+
+---
+
+## JSON Encoding
+
+```scala
+given `BoolSym[JsonRule]` with
+  def bool(value: Boolean) = ???
+```
+
+---
+
+## JSON Encoding
+
+.center[![JSON](img/complex-tf-true-ok.svg)]
+
+```json
+{ "AND": [
+  { "EQUALS": ["categoryId", 10] },
+  `true`
+]}
+```
+
+---
+
+## JSON Encoding
+
+.diff-rm[
+```scala
+given BoolSym[JsonRule] with
+* def bool(value: Boolean) = `???`
+```
+]
+
+---
+
+## JSON Encoding
+
+.diff-add[
+```scala
+given BoolSym[JsonRule] with
+* def bool(value: Boolean) = `Json.Bool(value)`
+```
+]
+
+---
+
+## JSON Encoding
+
+```scala
+given BoolSym[JsonRule] with
+  def bool(value: Boolean) = Json.Bool(value)
+
+```
+
+---
+
+## JSON Encoding
+
+```scala
+given [A]: `Encoder[ExtRule[A]]` =
+  rule => rule[JsonRule]
+```
+
+---
+
+## JSON Encoding
+
+```scala
+given [A]: Encoder[ExtRule[A]] =
+  `rule => rule[JsonRule]`
+```
+
+---
+
+## JSON Encoding
+
+```scala
+given [A]: Encoder[ExtRule[A]] =
+  rule => rule[JsonRule]
+
+```
+
+---
+
+## JSON Encoding
+
+```scala
+complexRule.asJson
+```
+
+---
+
+## JSON Encoding
+
+```scala
+complexRule.asJson
+// val res11: json.Json = {
+//   "AND": [{
+//       "EQUALS": ["categoryId", 10]
+//     }, true]
+// }
+```
+
+---
+
+## JSON Decoding: integers
+
+```scala
+given fullIntDecoder: `Decoder[ExtRule[Int]]` = ???
+```
+
+---
+
+## JSON Decoding: integers
+
+.center[![JSON](img/complex-tf-ints.svg)]
+
+```scala
+{ "AND": [
+  { "EQUALS": [`"categoryId"`, `10`] },
+  true
+]}
+```
+
+---
+
+## JSON Decoding: integers
+
+.diff-rm[
+```scala
+*given fullIntDecoder: Decoder[ExtRule[Int]] = `???`
+```
+]
+
+---
+
+## JSON Decoding: integers
+
+.diff-add[
+```scala
+given fullIntDecoder: Decoder[ExtRule[Int]] =
+* `json => json`
+*   `.as[Rule[Int]]`
+*   `.map(rule => rule[ExtRule])`
+```
+]
+
+---
+
+## JSON Decoding: integers
+
+```scala
+given fullIntDecoder: Decoder[ExtRule[Int]] =
+  json => `json`
+    .as[Rule[Int]]
+    .map(rule => rule[ExtRule])
+```
+
+
+---
+
+## JSON Decoding: integers
+
+```scala
+given fullIntDecoder: Decoder[ExtRule[Int]] =
+  json => json
+    `.as[Rule[Int]]`
+    .map(rule => rule[ExtRule])
+```
+
+---
+
+## JSON Decoding: integers
+
+```scala
+given fullIntDecoder: Decoder[ExtRule[Int]] =
+  json => json
+    .as[Rule[Int]]
+    .map(`rule => rule[ExtRule]`)
+```
+
+---
+
+## JSON Decoding: integers
+
+```scala
+given fullIntDecoder: Decoder[ExtRule[Int]] =
+  json => json
+    .as[Rule[Int]]
+    .map(rule => rule[ExtRule])
+
+```
+
+---
+
+## JSON Decoding: booleans
+
+```scala
+given fullBoolDecoder: `Decoder[ExtRule[Boolean]]` = ???
+```
+
+
+---
+
+## JSON Decoding: booleans
+
+.center[![JSON](img/complex-tf-operators.svg)]
+
+```scala
+{ `"AND"`: [
+  { `"EQUALS"`: ["categoryId", 10] },
+  true
+]}
+```
+
+---
+
+## JSON Decoding: booleans
+
+.center[![JSON](img/complex-tf-true-ok.svg)]
+
+```scala
+{ "AND": [
+  { "EQUALS": ["categoryId", 10] },
+  `true`
+]}
+```
+
+---
+
+## JSON Decoding: booleans
+
+.diff-rm[
+```scala
+*given fullBoolDecoder: Decoder[ExtRule[Boolean]] = `???`
+```
+]
+
+---
+
+## JSON Decoding: booleans
+
+.diff-add[
+```scala
+given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+* `case Json.Bool(value) =>`
+*   `Right(BOOL(value))`
+```
+]
+
+---
+
+## JSON Decoding: booleans
+
+```scala
+given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+  case Json.Bool(value) =>
+    Right(`BOOL(value)`)
+```
+
+---
+
+## JSON Decoding: booleans
+
+.center[![JSON](img/complex-tf-operators.svg)]
+
+```scala
+{ `"AND"`: [
+  { `"EQUALS"`: ["categoryId", 10] },
+  true
+]}
+```
+
+---
+
+## JSON Decoding: booleans
+
+.diff-add[
+```scala
+given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+  case Json.Bool(value) =>
+    Right(BOOL(value))
+*
+* `case other => other`
+*   `.as[Rule[Boolean]]`
+*   `.map(rule => rule[ExtRule])`
+```
+]
+
+---
+
+## JSON Decoding: booleans
+
+```scala
+given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+  case Json.Bool(value) =>
+    Right(BOOL(value))
+
+  case other => `other`
+    .as[Rule[Boolean]]
+    .map(rule => rule[ExtRule])
+```
+
+---
+
+## JSON Decoding: booleans
+
+```scala
+given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+  case Json.Bool(value) =>
+    Right(BOOL(value))
+
+  case other => other
+    `.as[Rule[Boolean]]`
+    .map(rule => rule[ExtRule])
+```
+
+---
+
+## JSON Decoding: booleans
+
+```scala
+given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+  case Json.Bool(value) =>
+    Right(BOOL(value))
+
+  case other => other
+    .as[Rule[Boolean]]
+    .map(`rule => rule[ExtRule]`)
+```
+
+---
+
+## JSON Decoding: booleans
+
+```scala
+given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+  case Json.Bool(value) =>
+    Right(BOOL(value))
+
+  case other => other
+    .as[Rule[Boolean]]
+    .map(rule => rule[ExtRule])
+
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json.svg)]
+
+```scala
+complexRule
+  .asJson
+  .as[ExtRule[Boolean]]
+  .map(rule => rule[Pretty])
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json-roundtrip-1.svg)]
+
+```scala
+&#x200B;`complexRule`
+  .asJson
+  .as[ExtRule[Boolean]]
+  .map(rule => rule[Pretty])
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json-roundtrip-2.svg)]
+
+```scala
+complexRule
+  `.asJson`
+  .as[ExtRule[Boolean]]
+  .map(rule => rule[Pretty])
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json-roundtrip-3.svg)]
+
+```scala
+complexRule
+  .asJson
+  `.as[ExtRule[Boolean]]`
+  .map(rule => rule[Pretty])
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json-roundtrip-3.svg)]
+
+```scala
+complexRule
+  .asJson
+  .as[ExtRule[Boolean]]
+  .map(rule => rule[Pretty])
+// val res12: Either[String, Pretty[Boolean]] = Left(Invalid boolean: true)
+```
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/complex-tf-complete.svg)]
+
+```scala
+complexRule
+  .asJson
+  .as[ExtRule[Boolean]]
+  .map(rule => rule[Pretty])
+```
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/complex-tf-and.svg)]
+
+```scala
+complexRule
+  .asJson
+  `.as[ExtRule[Boolean]]`
+  .map(rule => rule[Pretty])
+```
+
+---
+
+## Roundtrip: debug
+
+```scala
+given fullBoolDecoder: `Decoder[ExtRule[Boolean]]` =
+  case Json.Bool(value) =>
+    Right(BOOL(value))
+
+  case other =>
+    other
+    .as[Rule[Boolean]]
+    .map(rule => rule[ExtRule])
+```
+
+---
+
+## Roundtrip: debug
+
+```scala
+given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+  case `Json.Bool`(value) =>
+    Right(BOOL(value))
+
+  case `other` =>
+    other
+    .as[Rule[Boolean]]
+    .map(rule => rule[ExtRule])
+```
+
+---
+
+## Roundtrip: debug
+
+```scala
+given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+  case Json.Bool(value) =>
+    Right(BOOL(value))
+
+  case other =>
+    other
+    `.as[Rule[Boolean]]`
+    .map(rule => rule[ExtRule])
+```
+
+---
+
+## Roundtrip: debug
+
+```scala
+given boolDecoder: `Decoder[Rule[Boolean]]` =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+
+---
+
+## Roundtrip: debug
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj(`"EQUALS"` -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield left EQUALS right
+
+  case Json.Obj(`"AND"` -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield left AND right
+
+  case `other` =>
+    Left(s"Invalid boolean: $other")
+```
+
+---
+
+## Roundtrip: debug
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- `rhs.as[Rule[Boolean]]`
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/complex-tf-true-ok.svg)]
+
+---
+
+## Roundtrip: debug
+
+```scala
+given boolDecoder: `Decoder[Rule[Boolean]]` =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+
+---
+
+## Roundtrip: debug
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj(`"EQUALS"` -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield left EQUALS right
+
+  case Json.Obj(`"AND"` -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield left AND right
+
+  case `other` =>
+    Left(s"Invalid boolean: $other")
+```
+
+---
+
+## Roundtrip: debug
+
+```scala
+given boolDecoder: Decoder[Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(`s"Invalid boolean: $other"`)
+```
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/deserialise-bug-extrule.svg)]
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/deserialise-bug-bool.svg)]
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/deserialise-bug-rulebool.svg)]
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/deserialise-bug-equals.svg)]
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/deserialise-bug-ruleint.svg)]
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/deserialise-bug-and.svg)]
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/deserialise-bug.svg)]
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/deserialise-bug-sink.svg)]
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/deserialise-bug-rulebool-focus.svg)]
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/deserialise-bug-wat.svg)]
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/deserialise-bug-wat-2.svg)]
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/deserialise-bug-wat-3.svg)]
+
+---
+
+## Roundtrip: debug
+
+.center[![JSON](img/deserialise-bug-fix.svg)]
+
+---
+
+## Extensible JSON decoding
+
+.diff-rm[
+```scala
+*&#x200B;`given boolDecoder: Decoder[Rule[Boolean]]` =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+]
+
+---
+
+## Extensible JSON decoding
+
+.diff-add[
+```scala
+*&#x200B;`def decodeBool: Json => Either[String, Rule[Boolean]]` =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+]
+
+---
+
+## Extensible JSON decoding
+
+```scala
+def decodeBool: Json => Either[String, `Rule`[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+
+---
+
+## Extensible JSON decoding
+
+.diff-add[
+```scala
+*def decodeBool[`F[_]`]: Json => Either[String, Rule[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Int]]
+      right <- rhs.as[Rule[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[Rule[Boolean]]
+      right <- rhs.as[Rule[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+]
+
+---
+
+## Extensible JSON decoding
+
+.diff-rm[
+```scala
+*def decodeBool[F[_]]: Json => Either[String, `Rule`[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+*     left  <- lhs.as[`Rule`[Int]]
+*     right <- rhs.as[`Rule`[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+*     left  <- lhs.as[`Rule`[Boolean]]
+*     right <- rhs.as[`Rule`[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+]
+
+---
+
+## Extensible JSON decoding
+
+.diff-add[
+```scala
+*def decodeBool[F[_]]: Json => Either[String, `F`[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+*     left  <- lhs.as[`F`[Int]]
+*     right <- rhs.as[`F`[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+*     left  <- lhs.as[`F`[Boolean]]
+*     right <- rhs.as[`F`[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+]
+
+---
+
+## Extensible JSON decoding
+
+```scala
+def decodeBool[F[_]]: Json => Either[String, F[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[F[Int]]
+      right <- rhs.as[F[Int]]
+    yield `left EQUALS right`
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[F[Boolean]]
+      right <- rhs.as[F[Boolean]]
+    yield `left AND right`
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+
+---
+
+## Extensible JSON decoding
+
+.diff-add[
+```scala
+*def decodeBool[F[_]`: RuleSym`]: Json => Either[String, F[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[F[Int]]
+      right <- rhs.as[F[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[F[Boolean]]
+      right <- rhs.as[F[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+]
+
+---
+
+## Extensible JSON decoding
+
+```scala
+def decodeBool[F[_]: RuleSym]: Json => Either[String, F[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- `lhs.as[F[Int]]`
+      right <- rhs.as[F[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[F[Boolean]]
+      right <- rhs.as[F[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+
+---
+
+## Extensible JSON decoding
+
+.diff-add[
+```scala
+*def decodeBool[F[_]: RuleSym]`(`
+* `using Decoder[F[Int]]`
+*&#x200B;`)`: Json => Either[String, F[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[F[Int]]
+      right <- rhs.as[F[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[F[Boolean]]
+      right <- rhs.as[F[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+]
+
+---
+
+## Extensible JSON decoding
+
+```scala
+def decodeBool[F[_]: RuleSym](
+  using Decoder[F[Int]]
+): Json => Either[String, F[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[F[Int]]
+      right <- rhs.as[F[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- `lhs.as[F[Boolean]]`
+      right <- rhs.as[F[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+
+---
+
+## Extensible JSON decoding
+
+.diff-add[
+```scala
+def decodeBool[F[_]: RuleSym](
+* using Decoder[F[Int]]`, Decoder[F[Boolean]]`
+): Json => Either[String, F[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[F[Int]]
+      right <- rhs.as[F[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[F[Boolean]]
+      right <- rhs.as[F[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+```
+]
+
+---
+
+## Extensible JSON decoding
+
+```scala
+def decodeBool[F[_]: RuleSym](
+  using Decoder[F[Int]], Decoder[F[Boolean]]
+): Json => Either[String, F[Boolean]] =
+  case Json.Obj("EQUALS" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[F[Int]]
+      right <- rhs.as[F[Int]]
+    yield left EQUALS right
+
+  case Json.Obj("AND" -> Json.Arr(lhs, rhs)) =>
+    for
+      left  <- lhs.as[F[Boolean]]
+      right <- rhs.as[F[Boolean]]
+    yield left AND right
+
+  case other =>
+    Left(s"Invalid boolean: $other")
+
+```
+
+---
+
+## Extensible JSON decoding
+
+```scala
+given fullBoolDecoder: `Decoder[ExtRule[Boolean]]` =
+  case Json.Bool(value) =>
+    Right(BOOL(value))
+
+  case other =>
+    other
+    .as[Rule[Boolean]]
+    .map(rule => rule[ExtRule])
+```
+
+---
+
+## Extensible JSON decoding
+
+.diff-rm[
+```scala
+given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+  case Json.Bool(value) =>
+    Right(BOOL(value))
+
+  case other =>
+*   `other`
+*   `.as[Rule[Boolean]]`
+*   `.map(rule => rule[ExtRule])`
+```
+]
+
+---
+
+## Extensible JSON decoding
+
+.diff-add[
+```scala
+given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+  case Json.Bool(value) =>
+    Right(BOOL(value))
+
+  case other =>
+*   `decodeBool[ExtRule](other)`
+```
+]
+
+---
+
+## Extensible JSON decoding
+
+```scala
+given fullBoolDecoder: `Decoder[ExtRule[Boolean]]` =
+  case Json.Bool(value) =>
+    Right(BOOL(value))
+
+  case other =>
+    decodeBool[ExtRule](other)
+```
+
+---
+
+## Extensible JSON decoding
+
+```scala
+given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+  case Json.Bool(value) =>
+    Right(BOOL(value))
+
+  case other =>
+    decodeBool[ExtRule](other)
+
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json.svg)]
+
+```scala
+complexRule
+  .asJson
+  .as[ExtRule[Boolean]]
+  .map(rule => rule[Pretty])
+```
+
+---
+
+## Roundtrip
+
+.center[![JSON](img/json.svg)]
+
+```scala
+complexRule
+  .asJson
+  .as[ExtRule[Boolean]]
+  .map(rule => rule[Pretty])
+// val res13: Either[String, Pretty[Boolean]] = Right(($categoryId EQUALS 10) AND true)
+```
+
+---
+
+## Key takeaways
+
+--
+
+* Extending the language is done by adding layers of symantics.
+
+--
+
+* This solves the *Expression problem*.
+
+--
+
+* Deserialisation in this encoding is its own special hell.
+
+---
+
+class: center, middle
+
+# Rule simplification
+
+---
+
+## Keeping track of context
+
+.center[![JSON](img/complex-tf-focus.svg)]
+
+---
+
+## Keeping track of context
+
+.center[![JSON](img/complex-tf-true-ok.svg)]
+
+---
+
+## Keeping track of context
+
+```scala
+def simplify[A](rule: Rule[A]): Rule[A] = rule match
+  case Rule.And(lhs, rhs) =>
+    Rule.And(simplify(lhs), simplify(rhs))
+
+  case `Rule.Eq`(Rule.Num(lhs), Rule.Num(rhs)) =>
+    Rule.Bool(lhs == rhs)
+
+  case other => other
+```
+
+---
+
+## Keeping track of context
+
+```scala
+def simplify[A](rule: Rule[A]): Rule[A] = rule match
+  case Rule.And(lhs, rhs) =>
+    Rule.And(simplify(lhs), simplify(rhs))
+
+  case Rule.Eq(`Rule.Num(lhs)`, `Rule.Num(rhs)`) =>
+    Rule.Bool(lhs == rhs)
+
+  case other => other
+```
+
+---
+
+## Keeping track of context
+
+```scala
+enum Context:
+```
+
+---
+
+## Keeping track of context
+
+.center[![JSON](img/complex-tf-struct-nums.svg)]
+
+---
+
+## Keeping track of context
+
+.diff-add[
+```scala
+enum Context:
+* `case Num(i: Int)`
+```
+]
+
+---
+
+## Keeping track of context
+
+.center[![JSON](img/complex-tf-struct-other.svg)]
+
+---
+
+## Keeping track of context
+
+.diff-add[
+```scala
+enum Context:
+  case Num(i: Int)
+* `case Other`
+```
+]
+
+---
+
+## Keeping track of context
+
+```scala
+enum Context:
+  case Num(i: Int)
+  case Other
+
+```
+
+---
+
+## Simplifying statements
+
+.center[![JSON](img/simplify-1.svg)]
+
+---
+
+## Simplifying statements
+
+.center[![JSON](img/simplify-1-1.svg)]
+
+---
+
+## Simplifying statements
+
+.center[![JSON](img/simplify-1-2.svg)]
+
+---
+
+## Simplifying statements
+
+.center[![JSON](img/simplify-2.svg)]
+
+---
+
+## Simplifying statements
+
+.center[![JSON](img/simplify-3.svg)]
+
+---
+
+## Simplifying statements
+
+.center[![JSON](img/simplify-4.svg)]
+
+---
+
+## Simplifying statements
+
+.center[![JSON](img/simplify-4-1.svg)]
+
+---
+
+## Keeping track of context
+
+```scala
+case class `Simplify[A]`(
+  context: Context,
+  value  : ExtRule[A]
+)
+```
+
+---
+
+## Keeping track of context
+
+```scala
+case class Simplify[A](
+  `context: Context`,
+  value  : ExtRule[A]
+)
+```
+
+---
+
+## Keeping track of context
+
+```scala
+case class Simplify[A](
+  context: Context,
+  `value  : ExtRule[A]`
+)
+```
+
+---
+
+## Keeping track of context
+
+```scala
+case class Simplify[A](
+  context: Context,
+  value  : ExtRule[A]
+)
+
+```
+
+---
+
+## Rule simplification
+
+```scala
+given `RuleSym[Simplify]` with
+  def num(value: Int) =
+    ???
+
+  def variable(name: String) =
+    ???
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    ???
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    ???
+```
+
+---
+
+## Rule simplification
+
+.center[![JSON](img/complex-tf-10.svg)]
+
+---
+
+## Rule simplification
+
+.diff-rm[
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+*   `???`
+
+  def variable(name: String) =
+    ???
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    ???
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    ???
+```
+]
+
+---
+
+## Rule simplification
+
+.diff-add[
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+*   `Simplify(Context.Num(value), NUM(value))`
+
+  def variable(name: String) =
+    ???
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    ???
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    ???
+```
+]
+
+---
+
+## Rule simplification
+
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(`Context.Num(value)`, NUM(value))
+
+  def variable(name: String) =
+    ???
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    ???
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    ???
+```
+
+---
+
+## Rule simplification
+
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(Context.Num(value), `NUM(value)`)
+
+  def variable(name: String) =
+    ???
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    ???
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    ???
+```
+
+---
+
+## Rule simplification
+
+.center[![JSON](img/complex-tf-categoryId.svg)]
+
+---
+
+## Rule simplification
+
+.diff-rm[
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(Context.Num(value), NUM(value))
+
+  def variable(name: String) =
+*   `???`
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    ???
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    ???
+```
+]
+
+
+---
+
+## Rule simplification
+
+.diff-add[
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(Context.Num(value), NUM(value))
+
+  def variable(name: String) =
+*   `Simplify(Context.Other, VAR(name))`
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    ???
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    ???
+```
+]
+
+---
+
+## Rule simplification
+
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(Context.Num(value), NUM(value))
+
+  def variable(name: String) =
+    Simplify(`Context.Other`, VAR(name))
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    ???
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    ???
+```
+
+---
+
+## Rule simplification
+
+.center[![JSON](img/complex-tf-and-2.svg)]
+
+---
+
+## Rule simplification
+
+.diff-rm[
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(Context.Num(value), NUM(value))
+
+  def variable(name: String) =
+    Simplify(Context.Other, VAR(name))
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+*   `???`
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    ???
+```
+]
+
+---
+
+## Rule simplification
+
+.diff-add[
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(Context.Num(value), NUM(value))
+
+  def variable(name: String) =
+    Simplify(Context.Other, VAR(name))
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+*   `Simplify(Context.Other, lhs.value AND rhs.value)`
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    ???
+```
+]
+
+---
+
+## Rule simplification
+
+.center[![JSON](img/complex-tf-equal.svg)]
+
+---
+
+## Rule simplification
+
+.diff-rm[
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(Context.Num(value), NUM(value))
+
+  def variable(name: String) =
+    Simplify(Context.Other, VAR(name))
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    Simplify(Context.Other, lhs.value AND rhs.value)
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+*   `???`
+```
+]
+
+---
+
+## Rule simplification
+
+.diff-add[
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(Context.Num(value), NUM(value))
+
+  def variable(name: String) =
+    Simplify(Context.Other, VAR(name))
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    Simplify(Context.Other, lhs.value AND rhs.value)
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+*   `(lhs.context, rhs.context) match`
+```
+]
+
+---
+
+## Rule simplification
+
+.center[![JSON](img/complex-tf-focus.svg)]
+
+---
+
+## Rule simplification
+
+.center[![JSON](img/complex-tf-true-ok.svg)]
+
+---
+
+## Rule simplification
+
+.diff-add[
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(Context.Num(value), NUM(value))
+
+  def variable(name: String) =
+    Simplify(Context.Other, VAR(name))
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    Simplify(Context.Other, lhs.value AND rhs.value)
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    (lhs.context, rhs.context) match
+*     `case (Context.Num(l), Context.Num(r)) =>`
+*       `Simplify(Context.Other, BOOL(l == r))`
+```
+]
+
+---
+
+## Rule simplification
+
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(Context.Num(value), NUM(value))
+
+  def variable(name: String) =
+    Simplify(Context.Other, VAR(name))
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    Simplify(Context.Other, lhs.value AND rhs.value)
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    (lhs.context, rhs.context) match
+      case (`Context.Num(l)`, `Context.Num(r)`) =>
+        Simplify(Context.Other, BOOL(l == r))
+```
+
+---
+
+## Rule simplification
+
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(Context.Num(value), NUM(value))
+
+  def variable(name: String) =
+    Simplify(Context.Other, VAR(name))
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    Simplify(Context.Other, lhs.value AND rhs.value)
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    (lhs.context, rhs.context) match
+      case (Context.Num(l), Context.Num(r)) =>
+        Simplify(`Context.Other`, BOOL(l == r))
+```
+
+---
+
+## Rule simplification
+
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(Context.Num(value), NUM(value))
+
+  def variable(name: String) =
+    Simplify(Context.Other, VAR(name))
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    Simplify(Context.Other, lhs.value AND rhs.value)
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    (lhs.context, rhs.context) match
+      case (Context.Num(l), Context.Num(r)) =>
+        Simplify(Context.Other, `BOOL(l == r)`)
+```
+
+---
+
+## Rule simplification
+
+.center[![JSON](img/complex-tf-left-equal.svg)]
+
+---
+
+## Rule simplification
+
+.diff-add[
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(Context.Num(value), NUM(value))
+
+  def variable(name: String) =
+    Simplify(Context.Other, VAR(name))
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    Simplify(Context.Other, lhs.value AND rhs.value)
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    (lhs.context, rhs.context) match
+      case (Context.Num(l), Context.Num(r)) =>
+        Simplify(Context.Other, BOOL(l == r))
+*     `case _ =>`
+*       `Simplify(Context.Other, lhs.value EQUALS rhs.value)`
+```
+]
+
+---
+
+## Rule simplification
+
+```scala
+given RuleSym[Simplify] with
+  def num(value: Int) =
+    Simplify(Context.Num(value), NUM(value))
+
+  def variable(name: String) =
+    Simplify(Context.Other, VAR(name))
+
+  def and(lhs: Simplify[Boolean], rhs: Simplify[Boolean]) =
+    Simplify(Context.Other, lhs.value AND rhs.value)
+
+  def equal(lhs: Simplify[Int], rhs: Simplify[Int]) =
+    (lhs.context, rhs.context) match
+      case (Context.Num(l), Context.Num(r)) =>
+        Simplify(Context.Other, BOOL(l == r))
+      case _ =>
+        Simplify(Context.Other, lhs.value EQUALS rhs.value)
+
+```
+
+---
+
+## Rule simplification
+
+.center[![JSON](img/complex-tf.svg)]
+
+```scala
+val `complexRule` = [F[_]] => (_: RuleSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  (NUM(1) EQUALS NUM(1))
+```
+
+---
+
+## Rule simplification
+
+.center[![JSON](img/complex-tf-focus.svg)]
+
+```scala
+val complexRule = [F[_]] => (_: RuleSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  `(NUM(1) EQUALS NUM(1))`
+```
+
+---
+
+## Rule simplification
+
+.center[![JSON](img/complex-tf-focus.svg)]
+
+```scala
+val complexRule = [F[_]] => (_: RuleSym[F]) ?=>
+  (VAR("categoryId") EQUALS NUM(10)) AND
+  (NUM(1) EQUALS NUM(1))
+
+```
+
+---
+
+## Simplified rule
+
+```scala
+val simplified = `complexRule[Simplify].value`
+```
+
+---
+
+## Simplified rule
+
+```scala
+val simplified = complexRule[Simplify].value
+
+```
+
+```scala
+simplified`[Pretty]`
+```
+
+---
+
+## Simplified rule
+
+```scala
+val simplified = complexRule[Simplify].value
+```
+
+```scala
+simplified[Pretty]
+// val res14: Pretty[Boolean] = ($categoryId EQUALS 10) AND true
+```
+
+---
+
+## Key takeaways
+
+--
+
+* Tagless Final can do something *like* pattern matching.
+
+--
+
+* This is achieved by manually tracking the context we're interested in.
+
+--
+
+* It's *doable*, but nowhere near as pleasant as actual pattern matching.
+
+---
+
+## Tagless Final recap
+
+Tagless Final:
+
+--
+
+* can do everything GADTs can (but make it a little bit harder).
+
+--
+
+* solves the Expression Problem.
+
+--
+
+* allows you to compose DSLs!
+
+---
+
+class: center, middle
+name: closing
+
+# In closing
+
+---
+
+## If you only remember 1 slide...
+
+--
+
+* GADTs are data: easy to work with, but hard to extend.
+
+--
+
+* Tagless Final is functions: harder to work with, but easier to extend.
+
+--
+
+* Both have solution to common DSL problems: evaluation, pretty printing, rewriting and serialisation.
+
+---
+
+class: center, middle
+name: questions
+
+# Questions?
+
+Nicolas Rinaudo • [@NicolasRinaudo] • [Besedo]
+
+[@NicolasRinaudo]:https://twitter.com/NicolasRinaudo
+[Besedo]:https://twitter.com/besedo_official
+    </textarea>
+    <script src="js/remark.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+        var slideshow = remark.create({
+          highlightStyle: 'github',
+          highlightSpans: true,
+          highlightLines: true
+      });
+    </script>
+  </body>
+</html>
