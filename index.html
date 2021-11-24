@@ -1,7 +1,7 @@
 <!Doctype html>
 <html>
     <head>
-        <title>Building DSLs</title>
+        <title>Extensible DSLs with Tagless Final</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <link rel="stylesheet" type="text/css" href="css/style.css"/>
     </head>
@@ -9,7 +9,7 @@
         <textarea id="source">
 class: center, middle
 
-# Building DSLs
+# Extensible DSLs with Tagless Final
 
 Nicolas Rinaudo • [@NicolasRinaudo] • [Besedo]
 
@@ -1050,6 +1050,15 @@ def pretty(r: Rule): String = r match
     s"${pretty(lhs)} AND ${pretty(rhs)}"
 
 ```
+
+---
+
+## Pretty printer
+
+```scala
+pretty(rule)
+```
+
 
 ---
 
