@@ -15,10 +15,10 @@
 <text text-anchor="middle" x="46" y="-122.3" font-family="Inter,Arial" font-size="14.00" fill="#d0dce3">F[_]</text>
 </g>
 <!-- Rule -->
-<g id="node4" class="node choice">
+<g id="node4" class="node choice,rm">
 <title>Rule</title>
-<polygon fill="#586e75" stroke="#586e75" points="187.75,-90 127.75,-72 187.75,-54 247.74,-72 187.75,-90"/>
-<text text-anchor="middle" x="187.75" y="-68.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">Rule[A]</text>
+<polygon fill="#923a41" stroke="#923a41" points="187.75,-90 127.75,-72 187.75,-54 247.74,-72 187.75,-90"/>
+<text text-anchor="middle" x="187.75" y="-68.3" font-family="Inter,Arial" font-size="14.00" fill="#fdb8c0">Rule[A]</text>
 </g>
 <!-- F&#45;&gt;Rule -->
 <g id="edge1" class="edge disabled">

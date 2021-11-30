@@ -39,10 +39,10 @@
 <polygon fill="#d0dce3" stroke="#d0dce3" points="349.74,-117.75 354.13,-108.1 344.69,-112.91 349.74,-117.75"/>
 </g>
 <!-- categoryId -->
-<g id="node4" class="node value">
+<g id="node4" class="node value,add">
 <title>categoryId</title>
-<path fill="#ffffff" stroke="#586e75" d="M153,-36C153,-36 12,-36 12,-36 6,-36 0,-30 0,-24 0,-24 0,-12 0,-12 0,-6 6,0 12,0 12,0 153,0 153,0 159,0 165,-6 165,-12 165,-12 165,-24 165,-24 165,-30 159,-36 153,-36"/>
-<text text-anchor="middle" x="82.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">Rule.Var(&quot;categoryId&quot;)</text>
+<path fill="#acf2bd" stroke="#24a808" d="M153,-36C153,-36 12,-36 12,-36 6,-36 0,-30 0,-24 0,-24 0,-12 0,-12 0,-6 6,0 12,0 12,0 153,0 153,0 159,0 165,-6 165,-12 165,-12 165,-24 165,-24 165,-30 159,-36 153,-36"/>
+<text text-anchor="middle" x="82.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#24a808">Rule.Var(&quot;categoryId&quot;)</text>
 </g>
 <!-- eq1&#45;&gt;categoryId -->
 <g id="edge3" class="edge disabled">
@@ -63,10 +63,10 @@
 <polygon fill="#d0dce3" stroke="#d0dce3" points="240,-46.1 236.5,-36.1 233,-46.1 240,-46.1"/>
 </g>
 <!-- price -->
-<g id="node5" class="node value">
+<g id="node5" class="node value,add">
 <title>price</title>
-<path fill="#ffffff" stroke="#586e75" d="M421.5,-36C421.5,-36 319.5,-36 319.5,-36 313.5,-36 307.5,-30 307.5,-24 307.5,-24 307.5,-12 307.5,-12 307.5,-6 313.5,0 319.5,0 319.5,0 421.5,0 421.5,0 427.5,0 433.5,-6 433.5,-12 433.5,-12 433.5,-24 433.5,-24 433.5,-30 427.5,-36 421.5,-36"/>
-<text text-anchor="middle" x="370.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">Rule.Var(&quot;price&quot;)</text>
+<path fill="#acf2bd" stroke="#24a808" d="M421.5,-36C421.5,-36 319.5,-36 319.5,-36 313.5,-36 307.5,-30 307.5,-24 307.5,-24 307.5,-12 307.5,-12 307.5,-6 313.5,0 319.5,0 319.5,0 421.5,0 421.5,0 427.5,0 433.5,-6 433.5,-12 433.5,-12 433.5,-24 433.5,-24 433.5,-30 427.5,-36 421.5,-36"/>
+<text text-anchor="middle" x="370.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#24a808">Rule.Var(&quot;price&quot;)</text>
 </g>
 <!-- eq2&#45;&gt;price -->
 <g id="edge5" class="edge disabled">

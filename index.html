@@ -244,7 +244,7 @@ enum Rule:
 
 ## Naive encoding
 
-.center[![Rule](img/rule-value.svg)]
+.center[![Rule](img/ast-creation-value-rm.svg)]
 
 ---
 
@@ -256,7 +256,7 @@ enum Rule:
 
 ## Naive encoding
 
-.center[![Rule](img/ast-creation-variable-1.svg)]
+.center[![Rule](img/ast-creation-variable-focus.svg)]
 
 ---
 
@@ -286,7 +286,7 @@ enum Rule:
 
 ## Naive encoding
 
-.center[![Rule](img/ast-creation-equals-1.svg)]
+.center[![Rule](img/ast-creation-equals-focus.svg)]
 
 ---
 
@@ -330,7 +330,7 @@ enum Rule:
 
 ## Naive encoding
 
-.center[![Rule](img/ast-creation-and-1.svg)]
+.center[![Rule](img/ast-creation-and-focus.svg)]
 
 ---
 
@@ -2920,7 +2920,7 @@ class: center, middle
 
 ## Complex rule
 
-.center[![Rule ADT](img/complex-ast-focus.svg)]
+.center[![Rule ADT](img/complex-ast-rm.svg)]
 
 .diff-rm[
 ```scala
@@ -2939,19 +2939,6 @@ class: center, middle
 *($categoryId EQUALS 10) AND `true`
 ```
 ]
-
----
-
-## Complex rule
-
-.center[![Rule ADT](img/complex-ast-true-ok.svg)]
-
-.diff-add[
-```scala
-*($categoryId EQUALS 10) AND `true`
-```
-]
-
 
 ---
 
@@ -3235,7 +3222,13 @@ def simplify[A](rule: Rule[A]): `Rule[A]` = ???
 
 ## Simplification
 
-.center[![Rule ADT](img/complex-ast-true-ok.svg)]
+.center[![Rule ADT](img/complex-ast-rm.svg)]
+
+---
+
+## Simplification
+
+.center[![Rule ADT](img/complex-ast-true.svg)]
 
 
 ---
@@ -3518,7 +3511,7 @@ def num(value: Int): String = `value.toString`
 
 ## Rules as functions
 
-.center[![Rule ADT](img/rule-value.svg)]
+.center[![Rule ADT](img/tf-creation-value-rm.svg)]
 
 ```scala
 ($categoryId EQUALS `10`) AND ($price EQUALS `3`)
@@ -3538,7 +3531,7 @@ def num(value: Int): String = `value.toString`
 
 ## Rules as functions
 
-.center[![Rule ADT](img/tf-creation-variable-1.svg)]
+.center[![Rule ADT](img/tf-creation-variable-focus.svg)]
 
 ```scala
 (`$categoryId` EQUALS 10) AND (`$price` EQUALS 3)
@@ -3606,7 +3599,7 @@ def variable(name: String): String = `s"$$$name"`
 
 ## Rules as functions
 
-.center[![Rule ADT](img/tf-creation-equals-1.svg)]
+.center[![Rule ADT](img/tf-creation-equals-focus.svg)]
 
 ```scala
 ($categoryId `EQUALS` 10) AND ($price `EQUALS` 3)
@@ -3686,7 +3679,7 @@ def equal(lhs: String, rhs: String): String =
 
 ## Rules as functions
 
-.center[![Rule ADT](img/tf-creation-and-1.svg)]
+.center[![Rule ADT](img/tf-creation-and-focus.svg)]
 
 ```scala
 ($categoryId EQUALS 10) `AND` ($price EQUALS 3)
@@ -3764,6 +3757,27 @@ def and(lhs: String, rhs: String): String =
   s"$lhs AND $rhs"
 
 ```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf-creation-and-1.svg)]
+
+```scala
+($categoryId EQUALS 10) `AND` ($price EQUALS 3)
+```
+
+---
+
+## Rules as functions
+
+.center[![Rule ADT](img/tf-creation-and-2.svg)]
+
+```scala
+($categoryId EQUALS 10) `AND` ($price EQUALS 3)
+```
+
 
 ---
 
@@ -6773,9 +6787,9 @@ given RuleSym[Rule] with
 *   `???`
 
   def equal(lhs: Rule[Int], rhs: Rule[Int]) =
-    ???
+*   `???`
   def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
-    ???
+*   `???`
 ```
 ]
 
@@ -6792,83 +6806,7 @@ given RuleSym[Rule] with
 *   `[F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name)`
 
   def equal(lhs: Rule[Int], rhs: Rule[Int]) =
-    ???
-  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
-    ???
-```
-]
-
----
-
-## Syntactic sugar
-
-.diff-rm[
-```scala
-given RuleSym[Rule] with
-  def num(value: Int) =
-    [F[_]] => (rs: RuleSym[F]) ?=> rs.num(value)
-  def variable(name: String) =
-    [F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name)
-
-  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
-*   `???`
-  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
-    ???
-```
-]
-
----
-
-## Syntactic sugar
-
-.diff-add[
-```scala
-given RuleSym[Rule] with
-  def num(value: Int) =
-    [F[_]] => (rs: RuleSym[F]) ?=> rs.num(value)
-  def variable(name: String) =
-    [F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name)
-
-  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
 *   `[F[_]] => (rs: RuleSym[F]) ?=> rs.equal(lhs[F], rhs[F])`
-  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
-    ???
-```
-]
-
----
-
-## Syntactic sugar
-
-.diff-rm[
-```scala
-given RuleSym[Rule] with
-  def num(value: Int) =
-    [F[_]] => (rs: RuleSym[F]) ?=> rs.num(value)
-  def variable(name: String) =
-    [F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name)
-
-  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
-    [F[_]] => (rs: RuleSym[F]) ?=> rs.equal(lhs[F], rhs[F])
-  def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
-*   `???`
-```
-]
-
----
-
-## Syntactic sugar
-
-.diff-add[
-```scala
-given RuleSym[Rule] with
-  def num(value: Int) =
-    [F[_]] => (rs: RuleSym[F]) ?=> rs.num(value)
-  def variable(name: String) =
-    [F[_]] => (rs: RuleSym[F]) ?=> rs.variable(name)
-
-  def equal(lhs: Rule[Int], rhs: Rule[Int]) =
-    [F[_]] => (rs: RuleSym[F]) ?=> rs.equal(lhs[F], rhs[F])
   def and(lhs: Rule[Boolean], rhs: Rule[Boolean]) =
 *   `[F[_]] => (rs: RuleSym[F]) ?=> rs.and(lhs[F], rhs[F])`
 ```
@@ -7057,7 +6995,7 @@ val complexRule = [F[_]] => (_: RuleSym[F]) ?=>
 
 ## Complex query
 
-.center[![JSON](img/complex-tf-focus.svg)]
+.center[![JSON](img/complex-tf-rm.svg)]
 
 .diff-rm[
 ```scala
@@ -7071,7 +7009,7 @@ val complexRule = [F[_]] => (_: RuleSym[F]) ?=>
 
 ## Complex query
 
-.center[![JSON](img/complex-tf-true-ok.svg)]
+.center[![JSON](img/complex-tf-add.svg)]
 
 .diff-add[
 ```scala
@@ -7176,7 +7114,7 @@ trait BoolSym[F[_]]:
 trait BoolSym[F[_]]:
   def bool(value: Boolean): F[Boolean]
 *
-*&#x200B;`def BOOL[F[_]](value: Boolean)(using bs: BoolSym[F[_]]) =`
+*&#x200B;`def BOOL[F[_]](value: Boolean)(using bs: BoolSym[F]) =`
 * `bs.bool(value)`
 ```
 ]
@@ -7189,7 +7127,7 @@ trait BoolSym[F[_]]:
 trait BoolSym[F[_]]:
   def bool(value: Boolean): F[Boolean]
 
-def `BOOL`[F[_]](value: Boolean)(using bs: BoolSym[F[_]]) =
+def `BOOL`[F[_]](value: Boolean)(using bs: BoolSym[F]) =
   bs.bool(value)
 ```
 
@@ -7201,7 +7139,7 @@ def `BOOL`[F[_]](value: Boolean)(using bs: BoolSym[F[_]]) =
 trait BoolSym[F[_]]:
   def bool(value: Boolean): F[Boolean]
 
-def BOOL[F[_]](`value: Boolean`)(using `bs: BoolSym[F[_]]`) =
+def BOOL[F[_]](`value: Boolean`)(using `bs: BoolSym[F`]) =
   bs.bool(value)
 ```
 
@@ -7213,7 +7151,7 @@ def BOOL[F[_]](`value: Boolean`)(using `bs: BoolSym[F[_]]`) =
 trait BoolSym[F[_]]:
   def bool(value: Boolean): F[Boolean]
 
-def BOOL[F[_]](value: Boolean)(using bs: BoolSym[F[_]]) =
+def BOOL[F[_]](value: Boolean)(using bs: BoolSym[F]) =
   `bs.bool(value)`
 ```
 
@@ -7225,7 +7163,7 @@ def BOOL[F[_]](value: Boolean)(using bs: BoolSym[F[_]]) =
 trait BoolSym[F[_]]:
   def bool(value: Boolean): F[Boolean]
 
-def BOOL[F[_]](value: Boolean)(using bs: BoolSym[F[_]]) =
+def BOOL[F[_]](value: Boolean)(using bs: BoolSym[F]) =
   bs.bool(value)
 
 ```
@@ -7687,40 +7625,17 @@ complexRule[Pretty]
 
 ```scala
 given `BoolSym[Pretty]` with
-  def bool(value: Boolean) = ???
+  def bool(value: Boolean) = value.toString
 ```
 
 ---
 
 ## Pretty printer
 
-.center[![JSON](img/complex-tf-true-ok.svg)]
-
-```scala
-($categoryId EQUALS 10) AND `true`
-```
-
----
-
-## Pretty printer
-
-.diff-rm[
 ```scala
 given BoolSym[Pretty] with
-* def bool(value: Boolean) = `???`
+  def bool(value: Boolean) = `value.toString`
 ```
-]
-
----
-
-## Pretty printer
-
-.diff-add[
-```scala
-given BoolSym[Pretty] with
-* def bool(value: Boolean) = `value.toString`
-```
-]
 
 ---
 
@@ -7774,40 +7689,17 @@ complexRule[Doc => _]
 
 ```scala
 given `BoolSym[Doc => _]` with
-  def bool(value: Boolean) = ???
+  def bool(value: Boolean) = _ => value
 ```
 
 ---
 
 ## Compilation
 
-.center[![JSON](img/complex-tf-true-ok.svg)]
-
-```scala
-doc => (doc("categoryId") == 10) && `true`
-```
-
----
-
-## Compilation
-
-.diff-rm[
 ```scala
 given BoolSym[Doc => _] with
-* def bool(value: Boolean) = `???`
+  def bool(value: Boolean) = `_ => value`
 ```
-]
-
----
-
-## Compilation
-
-.diff-add[
-```scala
-given BoolSym[Doc => _] with
-* def bool(value: Boolean) = `_ => value`
-```
-]
 
 ---
 
@@ -7923,43 +7815,17 @@ complexRule[JsonRule]
 
 ```scala
 given `BoolSym[JsonRule]` with
-  def bool(value: Boolean) = ???
+  def bool(value: Boolean) = Json.Bool(value)
 ```
 
 ---
 
 ## JSON Encoding
 
-.center[![JSON](img/complex-tf-true-ok.svg)]
-
-```json
-{ "AND": [
-  { "EQUALS": ["categoryId", 10] },
-  `true`
-]}
-```
-
----
-
-## JSON Encoding
-
-.diff-rm[
 ```scala
 given BoolSym[JsonRule] with
-* def bool(value: Boolean) = `???`
+  def bool(value: Boolean) = `Json.Bool(value)`
 ```
-]
-
----
-
-## JSON Encoding
-
-.diff-add[
-```scala
-given BoolSym[JsonRule] with
-* def bool(value: Boolean) = `Json.Bool(value)`
-```
-]
 
 ---
 
@@ -8596,6 +8462,12 @@ given boolDecoder: Decoder[Rule[Boolean]] =
 
 ## Roundtrip: debug
 
+.center[![JSON](img/deserialise-bug-wat-rm.svg)]
+
+---
+
+## Roundtrip: debug
+
 .center[![JSON](img/deserialise-bug-wat-2.svg)]
 
 ---
@@ -9048,13 +8920,13 @@ class: center, middle
 
 ## Keeping track of context
 
-.center[![JSON](img/complex-tf-focus.svg)]
+.center[![JSON](img/complex-tf-rm.svg)]
 
 ---
 
 ## Keeping track of context
 
-.center[![JSON](img/complex-tf-true-ok.svg)]
+.center[![JSON](img/complex-tf-add.svg)]
 
 ---
 
@@ -9506,7 +9378,13 @@ given RuleSym[Simplify] with
 
 ## Rule simplification
 
-.center[![JSON](img/complex-tf-true-ok.svg)]
+.center[![JSON](img/complex-tf-rm.svg)]
+
+---
+
+## Rule simplification
+
+.center[![JSON](img/complex-tf-add.svg)]
 
 ---
 

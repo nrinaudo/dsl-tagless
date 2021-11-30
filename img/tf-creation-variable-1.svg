@@ -39,10 +39,10 @@
 <polygon fill="#d0dce3" stroke="#d0dce3" points="225.69,-118.38 228.26,-108.1 219.84,-114.54 225.69,-118.38"/>
 </g>
 <!-- categoryId -->
-<g id="node4" class="node value">
+<g id="node4" class="node value,rm">
 <title>categoryId</title>
-<path fill="#ffffff" stroke="#586e75" d="M85,-36C85,-36 12,-36 12,-36 6,-36 0,-30 0,-24 0,-24 0,-12 0,-12 0,-6 6,0 12,0 12,0 85,0 85,0 91,0 97,-6 97,-12 97,-12 97,-24 97,-24 97,-30 91,-36 85,-36"/>
-<text text-anchor="middle" x="48.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">$categoryId</text>
+<path fill="#fdb8c0" stroke="#923a41" d="M85,-36C85,-36 12,-36 12,-36 6,-36 0,-30 0,-24 0,-24 0,-12 0,-12 0,-6 6,0 12,0 12,0 85,0 85,0 91,0 97,-6 97,-12 97,-12 97,-24 97,-24 97,-30 91,-36 85,-36"/>
+<text text-anchor="middle" x="48.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#923a41">$categoryId</text>
 </g>
 <!-- eq1&#45;&gt;categoryId -->
 <g id="edge3" class="edge disabled">
@@ -63,10 +63,10 @@
 <polygon fill="#d0dce3" stroke="#d0dce3" points="153.22,-46.2 150.01,-36.1 146.23,-46 153.22,-46.2"/>
 </g>
 <!-- price -->
-<g id="node5" class="node value">
+<g id="node5" class="node value,rm">
 <title>price</title>
-<path fill="#ffffff" stroke="#586e75" d="M254.5,-36C254.5,-36 220.5,-36 220.5,-36 214.5,-36 208.5,-30 208.5,-24 208.5,-24 208.5,-12 208.5,-12 208.5,-6 214.5,0 220.5,0 220.5,0 254.5,0 254.5,0 260.5,0 266.5,-6 266.5,-12 266.5,-12 266.5,-24 266.5,-24 266.5,-30 260.5,-36 254.5,-36"/>
-<text text-anchor="middle" x="237.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">$price</text>
+<path fill="#fdb8c0" stroke="#923a41" d="M254.5,-36C254.5,-36 220.5,-36 220.5,-36 214.5,-36 208.5,-30 208.5,-24 208.5,-24 208.5,-12 208.5,-12 208.5,-6 214.5,0 220.5,0 220.5,0 254.5,0 254.5,0 260.5,0 266.5,-6 266.5,-12 266.5,-12 266.5,-24 266.5,-24 266.5,-30 260.5,-36 254.5,-36"/>
+<text text-anchor="middle" x="237.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#923a41">$price</text>
 </g>
 <!-- eq2&#45;&gt;price -->
 <g id="edge5" class="edge disabled">

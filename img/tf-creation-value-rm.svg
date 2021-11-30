@@ -51,10 +51,10 @@
 <polygon fill="#d0dce3" stroke="#d0dce3" points="83.26,-39.06 73.06,-36.19 79.24,-44.79 83.26,-39.06"/>
 </g>
 <!-- categoryValue -->
-<g id="node6" class="node value,add">
+<g id="node6" class="node value,rm">
 <title>categoryValue</title>
-<path fill="#acf2bd" stroke="#24a808" d="M174,-36C174,-36 127,-36 127,-36 121,-36 115,-30 115,-24 115,-24 115,-12 115,-12 115,-6 121,0 127,0 127,0 174,0 174,0 180,0 186,-6 186,-12 186,-12 186,-24 186,-24 186,-30 180,-36 174,-36"/>
-<text text-anchor="middle" x="150.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#24a808">num(10)</text>
+<path fill="#fdb8c0" stroke="#923a41" d="M174,-36C174,-36 127,-36 127,-36 121,-36 115,-30 115,-24 115,-24 115,-12 115,-12 115,-6 121,0 127,0 127,0 174,0 174,0 180,0 186,-6 186,-12 186,-12 186,-24 186,-24 186,-30 180,-36 174,-36"/>
+<text text-anchor="middle" x="150.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#923a41">num(10)</text>
 </g>
 <!-- eq1&#45;&gt;categoryValue -->
 <g id="edge4" class="edge disabled">
@@ -75,10 +75,10 @@
 <polygon fill="#d0dce3" stroke="#d0dce3" points="241.77,-46 237.99,-36.1 234.78,-46.2 241.77,-46"/>
 </g>
 <!-- priceValue -->
-<g id="node7" class="node value,add">
+<g id="node7" class="node value,rm">
 <title>priceValue</title>
-<path fill="#acf2bd" stroke="#24a808" d="M338,-36C338,-36 297,-36 297,-36 291,-36 285,-30 285,-24 285,-24 285,-12 285,-12 285,-6 291,0 297,0 297,0 338,0 338,0 344,0 350,-6 350,-12 350,-12 350,-24 350,-24 350,-30 344,-36 338,-36"/>
-<text text-anchor="middle" x="317.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#24a808">num(9)</text>
+<path fill="#fdb8c0" stroke="#923a41" d="M338,-36C338,-36 297,-36 297,-36 291,-36 285,-30 285,-24 285,-24 285,-12 285,-12 285,-6 291,0 297,0 297,0 338,0 338,0 344,0 350,-6 350,-12 350,-12 350,-24 350,-24 350,-30 344,-36 338,-36"/>
+<text text-anchor="middle" x="317.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#923a41">num(9)</text>
 </g>
 <!-- eq2&#45;&gt;priceValue -->
 <g id="edge6" class="edge disabled">

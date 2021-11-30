@@ -9,10 +9,10 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 184)">
 <title>%3</title>
 <!-- AND -->
-<g id="node1" class="node operator">
+<g id="node1" class="node operator,rm">
 <title>AND</title>
-<path fill="#586e75" stroke="#586e75" d="M318.5,-180C318.5,-180 288.5,-180 288.5,-180 282.5,-180 276.5,-174 276.5,-168 276.5,-168 276.5,-156 276.5,-156 276.5,-150 282.5,-144 288.5,-144 288.5,-144 318.5,-144 318.5,-144 324.5,-144 330.5,-150 330.5,-156 330.5,-156 330.5,-168 330.5,-168 330.5,-174 324.5,-180 318.5,-180"/>
-<text text-anchor="middle" x="303.5" y="-158.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">AND</text>
+<path fill="#923a41" stroke="#923a41" d="M318.5,-180C318.5,-180 288.5,-180 288.5,-180 282.5,-180 276.5,-174 276.5,-168 276.5,-168 276.5,-156 276.5,-156 276.5,-150 282.5,-144 288.5,-144 288.5,-144 318.5,-144 318.5,-144 324.5,-144 330.5,-150 330.5,-156 330.5,-156 330.5,-168 330.5,-168 330.5,-174 324.5,-180 318.5,-180"/>
+<text text-anchor="middle" x="303.5" y="-158.3" font-family="Inter,Arial" font-size="14.00" fill="#fdb8c0">AND</text>
 </g>
 <!-- eq1 -->
 <g id="node2" class="node operator,disabled">

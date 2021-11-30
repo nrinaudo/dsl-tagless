@@ -9,15 +9,15 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 256)">
 <title>%3</title>
 <!-- ExtRuleBool -->
-<g id="node1" class="node operator">
+<g id="node1" class="node operator,disabled">
 <title>ExtRuleBool</title>
-<path fill="#586e75" stroke="#586e75" d="M226.5,-252C226.5,-252 120.5,-252 120.5,-252 114.5,-252 108.5,-246 108.5,-240 108.5,-240 108.5,-228 108.5,-228 108.5,-222 114.5,-216 120.5,-216 120.5,-216 226.5,-216 226.5,-216 232.5,-216 238.5,-222 238.5,-228 238.5,-228 238.5,-240 238.5,-240 238.5,-246 232.5,-252 226.5,-252"/>
+<path fill="#d0dce3" stroke="#d0dce3" d="M226.5,-252C226.5,-252 120.5,-252 120.5,-252 114.5,-252 108.5,-246 108.5,-240 108.5,-240 108.5,-228 108.5,-228 108.5,-222 114.5,-216 120.5,-216 120.5,-216 226.5,-216 226.5,-216 232.5,-216 238.5,-222 238.5,-228 238.5,-228 238.5,-240 238.5,-240 238.5,-246 232.5,-252 226.5,-252"/>
 <text text-anchor="middle" x="173.5" y="-230.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">ExtRule[Boolean]</text>
 </g>
 <!-- RuleBool -->
-<g id="node2" class="node operator,disabled">
+<g id="node2" class="node operator">
 <title>RuleBool</title>
-<path fill="#d0dce3" stroke="#d0dce3" d="M116,-180C116,-180 31,-180 31,-180 25,-180 19,-174 19,-168 19,-168 19,-156 19,-156 19,-150 25,-144 31,-144 31,-144 116,-144 116,-144 122,-144 128,-150 128,-156 128,-156 128,-168 128,-168 128,-174 122,-180 116,-180"/>
+<path fill="#586e75" stroke="#586e75" d="M116,-180C116,-180 31,-180 31,-180 25,-180 19,-174 19,-168 19,-168 19,-156 19,-156 19,-150 25,-144 31,-144 31,-144 116,-144 116,-144 122,-144 128,-150 128,-156 128,-156 128,-168 128,-168 128,-174 122,-180 116,-180"/>
 <text text-anchor="middle" x="73.5" y="-158.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">Rule[Boolean]</text>
 </g>
 <!-- ExtRuleBool&#45;&gt;RuleBool -->
@@ -69,12 +69,12 @@
 <text text-anchor="middle" x="36.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">Rule[Int]</text>
 </g>
 <!-- And&#45;&gt;ExtRuleBool -->
-<g id="edge7" class="edge relies,add">
-<title>And&#45;&gt;ExtRuleBool</title>
-<path fill="none" stroke="#24a808" stroke-dasharray="5,2" d="M138.51,-97.35C161.88,-104.43 194.25,-118.41 209.5,-144 221.64,-164.36 209.18,-189.57 195.71,-207.95"/>
-<polygon fill="#24a808" stroke="#24a808" points="189.53,-215.88 192.13,-205.22 192.6,-211.93 195.68,-207.99 195.68,-207.99 195.68,-207.99 192.6,-211.93 199.23,-210.75 189.53,-215.88 189.53,-215.88"/>
-</g>
 <!-- And&#45;&gt;RuleBool -->
+<g id="edge6" class="edge relies,rm">
+<title>And&#45;&gt;RuleBool</title>
+<path fill="none" stroke="#923a41" stroke-dasharray="5,2" d="M108.11,-108.1C104.56,-116.21 99.42,-126.08 94.12,-135.08"/>
+<polygon fill="#923a41" stroke="#923a41" points="88.81,-143.7 90.22,-132.82 91.43,-139.44 94.05,-135.18 94.05,-135.18 94.05,-135.18 91.43,-139.44 97.88,-137.54 88.81,-143.7 88.81,-143.7"/>
+</g>
 <!-- Equals&#45;&gt;RuleInt -->
 <g id="edge3" class="edge relies,disabled">
 <title>Equals&#45;&gt;RuleInt</title>

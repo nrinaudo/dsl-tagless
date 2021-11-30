@@ -9,16 +9,16 @@
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 184)">
 <title>%3</title>
 <!-- AND -->
-<g id="node1" class="node operator,rm">
+<g id="node1" class="node operator,disabled">
 <title>AND</title>
-<path fill="#923a41" stroke="#923a41" d="M289.5,-180C289.5,-180 259.5,-180 259.5,-180 253.5,-180 247.5,-174 247.5,-168 247.5,-168 247.5,-156 247.5,-156 247.5,-150 253.5,-144 259.5,-144 259.5,-144 289.5,-144 289.5,-144 295.5,-144 301.5,-150 301.5,-156 301.5,-156 301.5,-168 301.5,-168 301.5,-174 295.5,-180 289.5,-180"/>
-<text text-anchor="middle" x="274.5" y="-158.3" font-family="Inter,Arial" font-size="14.00" fill="#fdb8c0">AND</text>
+<path fill="#d0dce3" stroke="#d0dce3" d="M289.5,-180C289.5,-180 259.5,-180 259.5,-180 253.5,-180 247.5,-174 247.5,-168 247.5,-168 247.5,-156 247.5,-156 247.5,-150 253.5,-144 259.5,-144 259.5,-144 289.5,-144 289.5,-144 295.5,-144 301.5,-150 301.5,-156 301.5,-156 301.5,-168 301.5,-168 301.5,-174 295.5,-180 289.5,-180"/>
+<text text-anchor="middle" x="274.5" y="-158.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">AND</text>
 </g>
 <!-- eq1 -->
-<g id="node2" class="node operator,disabled">
+<g id="node2" class="node operator">
 <title>eq1</title>
-<path fill="#d0dce3" stroke="#d0dce3" d="M231.5,-108C231.5,-108 201.5,-108 201.5,-108 195.5,-108 189.5,-102 189.5,-96 189.5,-96 189.5,-84 189.5,-84 189.5,-78 195.5,-72 201.5,-72 201.5,-72 231.5,-72 231.5,-72 237.5,-72 243.5,-78 243.5,-84 243.5,-84 243.5,-96 243.5,-96 243.5,-102 237.5,-108 231.5,-108"/>
-<text text-anchor="middle" x="216.5" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">equal</text>
+<path fill="#586e75" stroke="#586e75" d="M241,-108C241,-108 192,-108 192,-108 186,-108 180,-102 180,-96 180,-96 180,-84 180,-84 180,-78 186,-72 192,-72 192,-72 241,-72 241,-72 247,-72 253,-78 253,-84 253,-84 253,-96 253,-96 253,-102 247,-108 241,-108"/>
+<text text-anchor="middle" x="216.5" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">EQUALS</text>
 </g>
 <!-- AND&#45;&gt;eq1 -->
 <g id="edge1" class="edge disabled">
@@ -27,10 +27,10 @@
 <polygon fill="#d0dce3" stroke="#d0dce3" points="239.75,-113.57 230.67,-108.1 234.36,-118.04 239.75,-113.57"/>
 </g>
 <!-- eq2 -->
-<g id="node3" class="node operator,disabled">
+<g id="node3" class="node operator">
 <title>eq2</title>
-<path fill="#d0dce3" stroke="#d0dce3" d="M347.5,-108C347.5,-108 317.5,-108 317.5,-108 311.5,-108 305.5,-102 305.5,-96 305.5,-96 305.5,-84 305.5,-84 305.5,-78 311.5,-72 317.5,-72 317.5,-72 347.5,-72 347.5,-72 353.5,-72 359.5,-78 359.5,-84 359.5,-84 359.5,-96 359.5,-96 359.5,-102 353.5,-108 347.5,-108"/>
-<text text-anchor="middle" x="332.5" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">equal</text>
+<path fill="#586e75" stroke="#586e75" d="M357,-108C357,-108 308,-108 308,-108 302,-108 296,-102 296,-96 296,-96 296,-84 296,-84 296,-78 302,-72 308,-72 308,-72 357,-72 357,-72 363,-72 369,-78 369,-84 369,-84 369,-96 369,-96 369,-102 363,-108 357,-108"/>
+<text text-anchor="middle" x="332.5" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">EQUALS</text>
 </g>
 <!-- AND&#45;&gt;eq2 -->
 <g id="edge2" class="edge disabled">
@@ -47,8 +47,8 @@
 <!-- eq1&#45;&gt;categoryId -->
 <g id="edge3" class="edge disabled">
 <title>eq1&#45;&gt;categoryId</title>
-<path fill="none" stroke="#d0dce3" d="M189.18,-74.83C170.3,-65.05 144.84,-51.84 123.41,-40.73"/>
-<polygon fill="#d0dce3" stroke="#d0dce3" points="124.99,-37.61 114.5,-36.11 121.77,-43.82 124.99,-37.61"/>
+<path fill="none" stroke="#d0dce3" d="M183.48,-71.88C165.42,-62.51 142.85,-50.81 123.55,-40.8"/>
+<polygon fill="#d0dce3" stroke="#d0dce3" points="125.14,-37.69 114.65,-36.19 121.92,-43.9 125.14,-37.69"/>
 </g>
 <!-- categoryValue -->
 <g id="node6" class="node value,disabled">
@@ -83,8 +83,8 @@
 <!-- eq2&#45;&gt;priceValue -->
 <g id="edge6" class="edge disabled">
 <title>eq2&#45;&gt;priceValue</title>
-<path fill="none" stroke="#d0dce3" d="M359.57,-72.23C374.44,-63.02 393.09,-51.47 409.21,-41.48"/>
-<polygon fill="#d0dce3" stroke="#d0dce3" points="411.21,-44.36 417.87,-36.12 407.53,-38.41 411.21,-44.36"/>
+<path fill="none" stroke="#d0dce3" d="M360.14,-71.88C374.92,-62.72 393.29,-51.34 409.2,-41.48"/>
+<polygon fill="#d0dce3" stroke="#d0dce3" points="411.09,-44.43 417.75,-36.19 407.41,-38.48 411.09,-44.43"/>
 </g>
 </g>
 </svg>

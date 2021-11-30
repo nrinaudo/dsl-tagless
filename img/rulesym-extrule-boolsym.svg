@@ -27,16 +27,16 @@
 <polygon fill="#d0dce3" stroke="#d0dce3" points="152.51,-88.98 160.58,-82.11 149.99,-82.45 152.51,-88.98"/>
 </g>
 <!-- BoolSym -->
-<g id="node2" class="node">
+<g id="node2" class="node add">
 <title>BoolSym</title>
-<path fill="#ffffff" stroke="#586e75" d="M80,-90C80,-90 12,-90 12,-90 6,-90 0,-84 0,-78 0,-78 0,-66 0,-66 0,-60 6,-54 12,-54 12,-54 80,-54 80,-54 86,-54 92,-60 92,-66 92,-66 92,-78 92,-78 92,-84 86,-90 80,-90"/>
-<text text-anchor="middle" x="46" y="-68.3" font-family="Inter,Arial" font-size="14.00" fill="#586e75">BoolSym[F]</text>
+<path fill="#acf2bd" stroke="#24a808" d="M80,-90C80,-90 12,-90 12,-90 6,-90 0,-84 0,-78 0,-78 0,-66 0,-66 0,-60 6,-54 12,-54 12,-54 80,-54 80,-54 86,-54 92,-60 92,-66 92,-66 92,-78 92,-78 92,-84 86,-90 80,-90"/>
+<text text-anchor="middle" x="46" y="-68.3" font-family="Inter,Arial" font-size="14.00" fill="#24a808">BoolSym[F]</text>
 </g>
 <!-- BoolSym&#45;&gt;Rule -->
-<g id="edge2" class="edge">
+<g id="edge2" class="edge add">
 <title>BoolSym&#45;&gt;Rule</title>
-<path fill="none" stroke="#586e75" d="M92.37,-72C100.51,-72 109.15,-72 117.77,-72"/>
-<polygon fill="#586e75" stroke="#586e75" points="117.85,-75.5 127.85,-72 117.85,-68.5 117.85,-75.5"/>
+<path fill="none" stroke="#24a808" d="M92.37,-72C100.51,-72 109.15,-72 117.77,-72"/>
+<polygon fill="#24a808" stroke="#24a808" points="117.85,-75.5 127.85,-72 117.85,-68.5 117.85,-75.5"/>
 </g>
 <!-- RuleSym -->
 <g id="node3" class="node disabled">

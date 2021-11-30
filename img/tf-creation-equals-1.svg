@@ -15,10 +15,10 @@
 <text text-anchor="middle" x="274.5" y="-158.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">AND</text>
 </g>
 <!-- eq1 -->
-<g id="node2" class="node operator">
+<g id="node2" class="node operator,rm">
 <title>eq1</title>
-<path fill="#586e75" stroke="#586e75" d="M241,-108C241,-108 192,-108 192,-108 186,-108 180,-102 180,-96 180,-96 180,-84 180,-84 180,-78 186,-72 192,-72 192,-72 241,-72 241,-72 247,-72 253,-78 253,-84 253,-84 253,-96 253,-96 253,-102 247,-108 241,-108"/>
-<text text-anchor="middle" x="216.5" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">EQUALS</text>
+<path fill="#923a41" stroke="#923a41" d="M241,-108C241,-108 192,-108 192,-108 186,-108 180,-102 180,-96 180,-96 180,-84 180,-84 180,-78 186,-72 192,-72 192,-72 241,-72 241,-72 247,-72 253,-78 253,-84 253,-84 253,-96 253,-96 253,-102 247,-108 241,-108"/>
+<text text-anchor="middle" x="216.5" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#fdb8c0">EQUALS</text>
 </g>
 <!-- AND&#45;&gt;eq1 -->
 <g id="edge1" class="edge disabled">
@@ -27,10 +27,10 @@
 <polygon fill="#d0dce3" stroke="#d0dce3" points="239.75,-113.57 230.67,-108.1 234.36,-118.04 239.75,-113.57"/>
 </g>
 <!-- eq2 -->
-<g id="node3" class="node operator">
+<g id="node3" class="node operator,rm">
 <title>eq2</title>
-<path fill="#586e75" stroke="#586e75" d="M357,-108C357,-108 308,-108 308,-108 302,-108 296,-102 296,-96 296,-96 296,-84 296,-84 296,-78 302,-72 308,-72 308,-72 357,-72 357,-72 363,-72 369,-78 369,-84 369,-84 369,-96 369,-96 369,-102 363,-108 357,-108"/>
-<text text-anchor="middle" x="332.5" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">EQUALS</text>
+<path fill="#923a41" stroke="#923a41" d="M357,-108C357,-108 308,-108 308,-108 302,-108 296,-102 296,-96 296,-96 296,-84 296,-84 296,-78 302,-72 308,-72 308,-72 357,-72 357,-72 363,-72 369,-78 369,-84 369,-84 369,-96 369,-96 369,-102 363,-108 357,-108"/>
+<text text-anchor="middle" x="332.5" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#fdb8c0">EQUALS</text>
 </g>
 <!-- AND&#45;&gt;eq2 -->
 <g id="edge2" class="edge disabled">

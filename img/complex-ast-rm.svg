@@ -27,10 +27,10 @@
 <polygon fill="#d0dce3" stroke="#d0dce3" points="260.33,-113.42 251.16,-108.1 255.01,-117.97 260.33,-113.42"/>
 </g>
 <!-- eq2 -->
-<g id="node3" class="node value,add">
+<g id="node3" class="node operator,rm">
 <title>eq2</title>
-<path fill="#acf2bd" stroke="#24a808" d="M402,-108C402,-108 311,-108 311,-108 305,-108 299,-102 299,-96 299,-96 299,-84 299,-84 299,-78 305,-72 311,-72 311,-72 402,-72 402,-72 408,-72 414,-78 414,-84 414,-84 414,-96 414,-96 414,-102 408,-108 402,-108"/>
-<text text-anchor="middle" x="356.5" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#24a808">Rule.Bool(true)</text>
+<path fill="#923a41" stroke="#923a41" d="M377,-108C377,-108 336,-108 336,-108 330,-108 324,-102 324,-96 324,-96 324,-84 324,-84 324,-78 330,-72 336,-72 336,-72 377,-72 377,-72 383,-72 389,-78 389,-84 389,-84 389,-96 389,-96 389,-102 383,-108 377,-108"/>
+<text text-anchor="middle" x="356.5" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#fdb8c0">Rule.Eq</text>
 </g>
 <!-- and&#45;&gt;eq2 -->
 <g id="edge2" class="edge disabled">
@@ -63,8 +63,28 @@
 <polygon fill="#d0dce3" stroke="#d0dce3" points="240,-46.1 236.5,-36.1 233,-46.1 240,-46.1"/>
 </g>
 <!-- one1 -->
+<g id="node5" class="node value,rm">
+<title>one1</title>
+<path fill="#fdb8c0" stroke="#923a41" d="M393,-36C393,-36 320,-36 320,-36 314,-36 308,-30 308,-24 308,-24 308,-12 308,-12 308,-6 314,0 320,0 320,0 393,0 393,0 399,0 405,-6 405,-12 405,-12 405,-24 405,-24 405,-30 399,-36 393,-36"/>
+<text text-anchor="middle" x="356.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#923a41">Rule.Num(1)</text>
+</g>
 <!-- eq2&#45;&gt;one1 -->
+<g id="edge5" class="edge rm">
+<title>eq2&#45;&gt;one1</title>
+<path fill="none" stroke="#923a41" d="M356.5,-71.7C356.5,-63.98 356.5,-54.71 356.5,-46.11"/>
+<polygon fill="#923a41" stroke="#923a41" points="360,-46.1 356.5,-36.1 353,-46.1 360,-46.1"/>
+</g>
 <!-- one2 -->
+<g id="node7" class="node value,rm">
+<title>one2</title>
+<path fill="#fdb8c0" stroke="#923a41" d="M508,-36C508,-36 435,-36 435,-36 429,-36 423,-30 423,-24 423,-24 423,-12 423,-12 423,-6 429,0 435,0 435,0 508,0 508,0 514,0 520,-6 520,-12 520,-12 520,-24 520,-24 520,-30 514,-36 508,-36"/>
+<text text-anchor="middle" x="471.5" y="-14.3" font-family="Inter,Arial" font-size="14.00" fill="#923a41">Rule.Num(1)</text>
+</g>
 <!-- eq2&#45;&gt;one2 -->
+<g id="edge6" class="edge rm">
+<title>eq2&#45;&gt;one2</title>
+<path fill="none" stroke="#923a41" d="M384.63,-71.88C399.67,-62.72 418.37,-51.34 434.56,-41.48"/>
+<polygon fill="#923a41" stroke="#923a41" points="436.54,-44.38 443.26,-36.19 432.9,-38.4 436.54,-44.38"/>
+</g>
 </g>
 </svg>
