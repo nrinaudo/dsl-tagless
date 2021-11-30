@@ -8934,11 +8934,14 @@ class: center, middle
 
 ```scala
 def simplify[A](rule: Rule[A]): Rule[A] = rule match
-  case Rule.And(lhs, rhs) =>
-    Rule.And(simplify(lhs), simplify(rhs))
-
   case `Rule.Eq`(Rule.Num(lhs), Rule.Num(rhs)) =>
     Rule.Bool(lhs == rhs)
+
+  case Rule.Eq(lhs, rhs) =>
+    Rule.Eq(simplify(lhs), simplify(rhs))
+
+  case Rule.And(lhs, rhs) =>
+    Rule.And(simplify(lhs), simplify(rhs))
 
   case other => other
 ```
@@ -8949,11 +8952,14 @@ def simplify[A](rule: Rule[A]): Rule[A] = rule match
 
 ```scala
 def simplify[A](rule: Rule[A]): Rule[A] = rule match
-  case Rule.And(lhs, rhs) =>
-    Rule.And(simplify(lhs), simplify(rhs))
-
   case Rule.Eq(`Rule.Num(lhs)`, `Rule.Num(rhs)`) =>
     Rule.Bool(lhs == rhs)
+
+  case Rule.Eq(lhs, rhs) =>
+    Rule.Eq(simplify(lhs), simplify(rhs))
+
+  case Rule.And(lhs, rhs) =>
+    Rule.And(simplify(lhs), simplify(rhs))
 
   case other => other
 ```
