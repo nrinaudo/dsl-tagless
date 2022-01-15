@@ -1047,6 +1047,21 @@ def pretty(r: Rule): String = r match
   case Rule.Eq(lhs, rhs) =>
     s"(${pretty(lhs)} EQUALS ${pretty(rhs)})"
   case Rule.And(lhs, rhs) =>
+    s"${pretty(lhs)} `AND` ${pretty(rhs)}"
+```
+
+---
+
+## Pretty printer
+
+```scala
+def pretty(r: Rule): String = r match
+  case Rule.Num(value) => value.toString
+  case Rule.Var(name)  => s"$$$name"
+
+  case Rule.Eq(lhs, rhs) =>
+    s"(${pretty(lhs)} EQUALS ${pretty(rhs)})"
+  case Rule.And(lhs, rhs) =>
     s"${pretty(lhs)} AND ${pretty(rhs)}"
 
 ```
@@ -5435,6 +5450,21 @@ given `RuleSym[Doc => _]` with
 
 ## Compilation
 
+```scala
+given RuleSym[Doc => `_`] with
+  def num(value: Int)        = ???
+  def variable(name: String) = ???
+
+  def equal(lhs: Doc => Int, rhs: Doc => Int) =
+    ???
+  def and(lhs: Doc => Boolean, rhs: Doc => Boolean) =
+    ???
+```
+
+---
+
+## Compilation
+
 .center[![Rule ADT](img/tf-10.svg)]
 
 ```scala
@@ -7468,7 +7498,7 @@ given `RuleSym[Rule]` with
 
 .diff-rm[
 ```scala
-*given RuleSym[`Rule]` with
+*given RuleSym[`Rule`] with
   def num(value: Int) =
     [F[_]] => (rs: RuleSym[F]) ?=>
       rs.num(value)
@@ -7724,7 +7754,8 @@ val compiled = complexRule[Doc => _]
 
 ```scala
 compiled(Map(
-  "categoryId" -> 10
+  "categoryId" -> 10,
+  "price"      -> 3
 ))
 ```
 
@@ -7738,7 +7769,8 @@ val compiled = complexRule[Doc => _]
 
 ```scala
 compiled(Map(
-  "categoryId" -> 10
+  "categoryId" -> 10,
+  "price"      -> 3
 ))
 // val res9: Boolean = true
 ```
@@ -7754,7 +7786,8 @@ val compiled = complexRule[Doc => _]
 .diff-rm[
 ```scala
 compiled(Map(
-* "categoryId" -> `10`
+* "categoryId" -> `10`,
+  "price"      -> 3
 ))
 ```
 ]
@@ -7770,7 +7803,8 @@ val compiled = complexRule[Doc => _]
 .diff-add[
 ```scala
 compiled(Map(
-* "categoryId" -> `11`
+* "categoryId" -> `11`,
+  "price"      -> 3
 ))
 ```
 ]
@@ -7785,7 +7819,8 @@ val compiled = complexRule[Doc => _]
 
 ```scala
 compiled(Map(
-  "categoryId" -> 11
+  "categoryId" -> 11,
+  "price"      -> 3
 ))
 // val res10: Boolean = false
 ```
@@ -7842,6 +7877,27 @@ given BoolSym[JsonRule] with
 ## JSON Encoding
 
 ```scala
+complexRule[JsonRule]
+```
+
+---
+
+## JSON Encoding
+
+```scala
+complexRule[JsonRule]
+// val res11: JsonRule[Boolean] = {
+//   "AND": [{
+//       "EQUALS": ["categoryId", 10]
+//     }, true]
+// }
+```
+
+---
+
+## JSON Encoding
+
+```scala
 given [A]: `Encoder[ExtRule[A]]` =
   rule => rule[JsonRule]
 ```
@@ -7879,7 +7935,7 @@ complexRule.asJson
 
 ```scala
 complexRule.asJson
-// val res11: json.Json = {
+// val res12: json.Json = {
 //   "AND": [{
 //       "EQUALS": ["categoryId", 10]
 //     }, true]
@@ -8192,7 +8248,7 @@ complexRule
   .asJson
   .as[ExtRule[Boolean]]
   .map(rule => rule[Pretty])
-// val res12: Either[String, Pretty[Boolean]] = Left(Invalid boolean: true)
+// val res13: Either[String, Pretty[Boolean]] = Left(Invalid boolean: true)
 ```
 
 ---
@@ -8891,7 +8947,7 @@ complexRule
   .asJson
   .as[ExtRule[Boolean]]
   .map(rule => rule[Pretty])
-// val res13: Either[String, Pretty[Boolean]] = Right(($categoryId EQUALS 10) AND true)
+// val res14: Either[String, Pretty[Boolean]] = Right(($categoryId EQUALS 10) AND true)
 ```
 
 ---
@@ -9601,7 +9657,7 @@ val simplified = complexRule[Simplify].value
 
 ```scala
 simplified[Pretty]
-// val res14: Pretty[Boolean] = ($categoryId EQUALS 10) AND true
+// val res15: Pretty[Boolean] = ($categoryId EQUALS 10) AND true
 ```
 
 ---
