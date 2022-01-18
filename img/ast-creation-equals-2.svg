@@ -17,8 +17,8 @@
 <!-- eq1 -->
 <g id="node2" class="node operator,add">
 <title>eq1</title>
-<path fill="#24a808" stroke="#24a808" d="M257,-108C257,-108 216,-108 216,-108 210,-108 204,-102 204,-96 204,-96 204,-84 204,-84 204,-78 210,-72 216,-72 216,-72 257,-72 257,-72 263,-72 269,-78 269,-84 269,-84 269,-96 269,-96 269,-102 263,-108 257,-108"/>
-<text text-anchor="middle" x="236.5" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#acf2bd">Rule.Eq</text>
+<path fill="#acf2bd" stroke="#24a808" d="M257,-108C257,-108 216,-108 216,-108 210,-108 204,-102 204,-96 204,-96 204,-84 204,-84 204,-78 210,-72 216,-72 216,-72 257,-72 257,-72 263,-72 269,-78 269,-84 269,-84 269,-96 269,-96 269,-102 263,-108 257,-108"/>
+<text text-anchor="middle" x="236.5" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#24a808">Rule.Eq</text>
 </g>
 <!-- AND&#45;&gt;eq1 -->
 <g id="edge1" class="edge disabled">
@@ -29,8 +29,8 @@
 <!-- eq2 -->
 <g id="node3" class="node operator,add">
 <title>eq2</title>
-<path fill="#24a808" stroke="#24a808" d="M391,-108C391,-108 350,-108 350,-108 344,-108 338,-102 338,-96 338,-96 338,-84 338,-84 338,-78 344,-72 350,-72 350,-72 391,-72 391,-72 397,-72 403,-78 403,-84 403,-84 403,-96 403,-96 403,-102 397,-108 391,-108"/>
-<text text-anchor="middle" x="370.5" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#acf2bd">Rule.Eq</text>
+<path fill="#acf2bd" stroke="#24a808" d="M391,-108C391,-108 350,-108 350,-108 344,-108 338,-102 338,-96 338,-96 338,-84 338,-84 338,-78 344,-72 350,-72 350,-72 391,-72 391,-72 397,-72 403,-78 403,-84 403,-84 403,-96 403,-96 403,-102 397,-108 391,-108"/>
+<text text-anchor="middle" x="370.5" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#24a808">Rule.Eq</text>
 </g>
 <!-- AND&#45;&gt;eq2 -->
 <g id="edge2" class="edge disabled">
