@@ -1,0 +1,8 @@
+digraph {
+    rankdir=LR
+
+    RuleSym[class="choice,disabled"]
+    Context[class="disabled"]
+
+    Rule -> RuleSym -> Context [class="disabled"]
+}

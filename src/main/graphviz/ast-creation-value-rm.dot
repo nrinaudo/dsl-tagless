@@ -1,0 +1,18 @@
+digraph {
+    AND[label="AND" class="operator,disabled"]
+    eq1[label="EQUALS" class="operator,disabled"]
+    eq2[label="EQUALS" class="operator,disabled"]
+    categoryId[label="$categoryId" class="value,disabled"]
+    price[label="$price" class="value,disabled"]
+    categoryValue[label=10 class="value,rm"]
+    priceValue[label=3 class="value,rm"]
+
+    AND -> eq1[class="disabled"]
+    AND -> eq2[class="disabled"]
+
+    eq1 -> categoryId[class="disabled"]
+    eq1 -> categoryValue[class="disabled"]
+
+    eq2 -> price[class="disabled"]
+    eq2 -> priceValue[class="disabled"]
+}

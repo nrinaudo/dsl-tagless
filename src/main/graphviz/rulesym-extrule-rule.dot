@@ -1,0 +1,13 @@
+digraph {
+    rankdir=LR
+    F[label="F[_]" class="disabled"]
+    BoolSym[label="BoolSym[F]" class="disabled"]
+    RuleSym[label="RuleSym[F]" class="disabled"]
+    Rule[label="Rule[A]" class="choice,rm"]
+    FA[label="F[A]" class="disabled"]
+
+    F -> Rule[class="disabled"]
+    BoolSym -> Rule[class="disabled"]
+    RuleSym -> Rule[class="disabled"]
+    Rule -> FA[class="disabled"]
+}

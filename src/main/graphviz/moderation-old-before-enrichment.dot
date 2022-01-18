@@ -1,0 +1,14 @@
+digraph {
+    rankdir=LR
+    splines=true
+
+    input[label="Submission"]
+
+    agent[label="Agent" class="disabled"]
+    accept[label="Accept" class="disabled"]
+    reject[label="Reject" class="disabled"]
+
+    input -> agent[label="enqueue"]
+    agent -> accept[class="choice" class="disabled"]
+    agent -> reject[class="choice" class="disabled"]
+}

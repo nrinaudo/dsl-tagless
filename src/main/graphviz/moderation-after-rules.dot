@@ -1,0 +1,22 @@
+digraph {
+    rankdir=LR
+    splines=true
+
+    input[label="Submission" class="disabled"]
+    doc[label="Document" class="disabled"]
+
+    agent[label="Agent" class="disabled"]
+    accept[label="Accept" class="disabled"]
+    reject[label="Reject" class="disabled"]
+    orchestration[label="Orchestrator"]
+
+    doc -> orchestration[label="rules"]
+
+    input -> doc[label="enrich" class="disabled"]
+
+    orchestration -> accept[class="choice" style="invis"]
+    orchestration -> reject[class="choice" style="invis"]
+    orchestration -> agent[label="enqueue" class="disabled"]
+    agent -> accept[class="choice,disabled"]
+    agent -> reject[class="choice,disabled"]
+}
