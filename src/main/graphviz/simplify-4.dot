@@ -2,7 +2,7 @@ digraph {
     rankdir=LR
 
     RuleSym[class="choice,disabled"]
-    out[shape="record" label="Context | ExtRule"]
+    out[shape="record" label="Context | BoolRule"]
     Rule[class="disabled"]
 
     Rule -> RuleSym -> out[class="disabled"]

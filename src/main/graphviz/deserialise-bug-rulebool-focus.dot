@@ -1,5 +1,5 @@
 digraph {
-    ExtRuleBool[label="ExtRule[Boolean]" class="operator,disabled"]
+    BoolRuleBool[label="BoolRule[Boolean]" class="operator,disabled"]
 
     RuleInt[label="Rule[Int]" class="operator,disabled"]
     RuleBool[label="Rule[Boolean]" class="operator"]
@@ -10,8 +10,8 @@ digraph {
         Bool[class="disabled"]
     }
 
-    ExtRuleBool -> RuleBool[class="relies,disabled"]
-    ExtRuleBool -> Bool[class="disabled"]
+    BoolRuleBool -> RuleBool[class="relies,disabled"]
+    BoolRuleBool -> Bool[class="disabled"]
     Equals -> RuleInt[class="relies,disabled"]
     RuleBool -> And[class="disabled"]
     RuleBool -> Equals[class="disabled"]

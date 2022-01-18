@@ -3,7 +3,7 @@ digraph {
     F[label="F[_]"]
     BoolSym[label="BoolSym[F]"]
     RuleSym[label="RuleSym[F]"]
-    Rule[label="ExtRule[A]" class="choice"]
+    Rule[label="BoolRule[A]" class="choice"]
     FA[label="F[A]"]
 
     F -> Rule

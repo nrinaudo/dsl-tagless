@@ -4,5 +4,5 @@ digraph {
     RuleSym[class="choice,disabled"]
     Rule[class="disabled"]
 
-    Rule -> RuleSym -> {Context, ExtRule} [class="disabled"]
+    Rule -> RuleSym -> {Context, BoolRule} [class="disabled"]
 }

@@ -1,7 +1,7 @@
 digraph {
     splines=true
 
-    ExtRuleBool[label="ExtRule[Boolean]" class="operator"]
+    BoolRuleBool[label="BoolRule[Boolean]" class="operator"]
     RuleBool[label="Rule[Boolean]" class="operator"]
     RuleInt[label="Rule[Int]" class="operator"]
 
@@ -10,11 +10,11 @@ digraph {
     Bool
 
 
-    ExtRuleBool -> RuleBool[class="relies"]
-    ExtRuleBool -> Bool
+    BoolRuleBool -> RuleBool[class="relies"]
+    BoolRuleBool -> Bool
     Equals -> RuleInt[class="relies"]
     RuleBool -> And[style="invis"]
     RuleBool -> Equals
     And -> RuleBool[class="relies" style="invis"]
-    And -> ExtRuleBool[class="relies" style="invis"]
+    And -> BoolRuleBool[class="relies" style="invis"]
 }

@@ -36,17 +36,17 @@ node.operator {
 }
 
 node.choice.rm, node.operator.rm {
-    fillcolor: "#923A41";
+    fontcolor: "#923A41";
     color: "#923A41";
-    fontcolor: "#fdb8c0";
+    fillcolor: "#fdb8c0";
+
 }
 
 node.choice.add, node.operator.add {
+    fontcolor: "#24a808";
     color: "#24a808";
-    fillcolor: "#24a808";
-    fontcolor: "#acf2bd";
+    fillcolor: "#acf2bd";
 }
-
 
 node.operator.disabled {
     fillcolor: "#D0DCE3";
