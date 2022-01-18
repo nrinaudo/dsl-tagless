@@ -7310,7 +7310,7 @@ val complexRule = [F[_]] => (_: RuleSym[F], _: BoolSym[F]) ?=>
 ## Boolean literals
 
 ```scala
-type `ExtRule[A]` = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+type `BoolRule[A]` = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 ```
 
 ---
@@ -7318,7 +7318,7 @@ type `ExtRule[A]` = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 ## Boolean literals
 
 ```scala
-type ExtRule[A] = `[F[_]]` => (RuleSym[F], BoolSym[F]) ?=> F[A]
+type BoolRule[A] = `[F[_]]` => (RuleSym[F], BoolSym[F]) ?=> F[A]
 ```
 
 ---
@@ -7326,7 +7326,7 @@ type ExtRule[A] = `[F[_]]` => (RuleSym[F], BoolSym[F]) ?=> F[A]
 ## Boolean literals
 
 ```scala
-type ExtRule[A] = [F[_]] => (`RuleSym[F]`, `BoolSym[F]`) ?=> F[A]
+type BoolRule[A] = [F[_]] => (`RuleSym[F]`, `BoolSym[F]`) ?=> F[A]
 ```
 
 ---
@@ -7334,7 +7334,7 @@ type ExtRule[A] = [F[_]] => (`RuleSym[F]`, `BoolSym[F]`) ?=> F[A]
 ## Boolean literals
 
 ```scala
-type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> `F[A]`
+type BoolRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> `F[A]`
 ```
 
 ---
@@ -7342,7 +7342,7 @@ type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> `F[A]`
 ## Boolean literals
 
 ```scala
-type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+type BoolRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 
 ```
 
@@ -7351,13 +7351,13 @@ type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 ## Syntactic sugar
 
 ```scala
-given `RuleSym[ExtRule]` with
+given `RuleSym[BoolRule]` with
   def num(i: Int) = ???
   def variable(name: String) = ???
 
-  def equal(lhs: `ExtRule[Int]`, rhs: `ExtRule[Int]`) =
+  def equal(lhs: `BoolRule[Int]`, rhs: `BoolRule[Int]`) =
     ???
-  def and(lhs: `ExtRule[Boolean]`, rhs: `ExtRule[Boolean]`) =
+  def and(lhs: `BoolRule[Boolean]`, rhs: `BoolRule[Boolean]`) =
     ???
 ```
 
@@ -7368,8 +7368,8 @@ given `RuleSym[ExtRule]` with
 .center[![JSON](img/rulesym-rule-rule.svg)]
 
 ```scala
-type `Rule[A]`    = [F[_]] =>  RuleSym[F]              ?=> F[A]
-type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+type `Rule[A]`     = [F[_]] =>  RuleSym[F]              ?=> F[A]
+type BoolRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 ```
 
 ---
@@ -7379,8 +7379,8 @@ type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 .center[![JSON](img/rulesym-rule-f.svg)]
 
 ```scala
-type Rule[A]    = `[F[_]]` =>  RuleSym[F]              ?=> F[A]
-type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+type Rule[A]     = `[F[_]]` =>  RuleSym[F]              ?=> F[A]
+type BoolRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 ```
 
 ---
@@ -7390,8 +7390,8 @@ type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 .center[![JSON](img/rulesym-rule-rulesym.svg)]
 
 ```scala
-type Rule[A]    = [F[_]] =>  `RuleSym[F]`              ?=> F[A]
-type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+type Rule[A]     = [F[_]] =>  `RuleSym[F]`              ?=> F[A]
+type BoolRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 ```
 
 ---
@@ -7401,8 +7401,8 @@ type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 .center[![JSON](img/rulesym-rule-fa.svg)]
 
 ```scala
-type Rule[A]    = [F[_]] =>  RuleSym[F]              ?=> `F[A]`
-type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+type Rule[A]     = [F[_]] =>  RuleSym[F]              ?=> `F[A]`
+type BoolRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 ```
 
 ---
@@ -7412,8 +7412,8 @@ type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 .center[![JSON](img/rulesym-rule.svg)]
 
 ```scala
-*type Rule[A]    = [F[_]] =>  RuleSym[F]              ?=> F[A]
-type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+*type Rule[A]     = [F[_]] =>  RuleSym[F]              ?=> F[A]
+type BoolRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 ```
 ---
 
@@ -7422,8 +7422,8 @@ type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 .center[![JSON](img/rulesym-rule.svg)]
 
 ```scala
-type Rule[A]    = [F[_]] =>  RuleSym[F]              ?=> F[A]
-type ExtRule[A] = [F[_]] => (RuleSym[F], `BoolSym[F]`) ?=> F[A]
+type Rule[A]     = [F[_]] =>  RuleSym[F]              ?=> F[A]
+type BoolRule[A] = [F[_]] => (RuleSym[F], `BoolSym[F]`) ?=> F[A]
 ```
 
 
@@ -7434,8 +7434,8 @@ type ExtRule[A] = [F[_]] => (RuleSym[F], `BoolSym[F]`) ?=> F[A]
 .center[![JSON](img/rulesym-extrule-boolsym.svg)]
 
 ```scala
-type Rule[A]    = [F[_]] =>  RuleSym[F]              ?=> F[A]
-type ExtRule[A] = [F[_]] => (RuleSym[F], `BoolSym[F]`) ?=> F[A]
+type Rule[A]     = [F[_]] =>  RuleSym[F]              ?=> F[A]
+type BoolRule[A] = [F[_]] => (RuleSym[F], `BoolSym[F]`) ?=> F[A]
 ```
 
 ---
@@ -7445,8 +7445,8 @@ type ExtRule[A] = [F[_]] => (RuleSym[F], `BoolSym[F]`) ?=> F[A]
 .center[![JSON](img/rulesym-extrule-rule.svg)]
 
 ```scala
-type `Rule[A]`    = [F[_]] =>  RuleSym[F]              ?=> F[A]
-type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+type `Rule[A]`     = [F[_]] =>  RuleSym[F]              ?=> F[A]
+type BoolRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 ```
 
 ---
@@ -7456,8 +7456,8 @@ type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 .center[![JSON](img/rulesym-extrule-extrule.svg)]
 
 ```scala
-type Rule[A]    = [F[_]] =>  RuleSym[F]              ?=> F[A]
-type `ExtRule[A]` = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+type Rule[A]     = [F[_]] =>  RuleSym[F]              ?=> F[A]
+type `BoolRule[A]` = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 ```
 
 ---
@@ -7467,8 +7467,8 @@ type `ExtRule[A]` = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 .center[![JSON](img/rulesym-extrule.svg)]
 
 ```scala
-type Rule[A]    = [F[_]] =>  RuleSym[F]              ?=> F[A]
-*type ExtRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
+type Rule[A]     = [F[_]] =>  RuleSym[F]              ?=> F[A]
+*type BoolRule[A] = [F[_]] => (RuleSym[F], BoolSym[F]) ?=> F[A]
 ```
 
 ---
@@ -7521,7 +7521,7 @@ given `RuleSym[Rule]` with
 
 .diff-add[
 ```scala
-*given RuleSym[`ExtRule]` with
+*given RuleSym[`BoolRule]` with
   def num(value: Int) =
     [F[_]] => (rs: RuleSym[F]) ?=>
       rs.num(value)
@@ -7529,10 +7529,10 @@ given `RuleSym[Rule]` with
     [F[_]] => (rs: RuleSym[F]) ?=>
       rs.variable(name)
 
-  def equal(lhs: `ExtRule[Int]`, rhs: `ExtRule`[Int]) =
+  def equal(lhs: `BoolRule[Int]`, rhs: `BoolRule`[Int]) =
     [F[_]] => (rs: RuleSym[F]) ?=>
       rs.equal(lhs[F], rhs[F])
-* def and(lhs: `ExtRule`[Boolean], rhs: `ExtRule`[Boolean]) =
+* def and(lhs: `BoolRule`[Boolean], rhs: `BoolRule`[Boolean]) =
     [F[_]] => (rs: RuleSym[F]) ?=>
       rs.and(lhs[F], rhs[F])
 ```
@@ -7544,7 +7544,7 @@ given `RuleSym[Rule]` with
 
 .diff-add[
 ```scala
-given RuleSym[ExtRule] with
+given RuleSym[BoolRule] with
   def num(value: Int) =
 *   [F[_]] => (rs: RuleSym[F]`, _: BoolSym[F]`) ?=>
       rs.num(value)
@@ -7552,10 +7552,10 @@ given RuleSym[ExtRule] with
 *   [F[_]] => (rs: RuleSym[F]`, _: BoolSym[F]`) ?=>
       rs.variable(name)
 
-  def equal(lhs: ExtRule[Int], rhs: ExtRule[Int]) =
+  def equal(lhs: BoolRule[Int], rhs: BoolRule[Int]) =
 *   [F[_]] => (rs: RuleSym[F]`, _: BoolSym[F]`) ?=>
       rs.equal(lhs[F], rhs[F])
-  def and(lhs: ExtRule[Boolean], rhs: ExtRule[Boolean]) =
+  def and(lhs: BoolRule[Boolean], rhs: BoolRule[Boolean]) =
 *   [F[_]] => (rs: RuleSym[F]`, _: BoolSym[F]`) ?=>
       rs.and(lhs[F], rhs[F])
 ```
@@ -7566,7 +7566,7 @@ given RuleSym[ExtRule] with
 ## Syntactic sugar
 
 ```scala
-given RuleSym[ExtRule] with
+given RuleSym[BoolRule] with
   def num(value: Int) =
     [F[_]] => (rs: RuleSym[F], _: BoolSym[F]) ?=>
       rs.num(value)
@@ -7574,10 +7574,10 @@ given RuleSym[ExtRule] with
     [F[_]] => (rs: RuleSym[F], _: BoolSym[F]) ?=>
       rs.variable(name)
 
-  def equal(lhs: ExtRule[Int], rhs: ExtRule[Int]) =
+  def equal(lhs: BoolRule[Int], rhs: BoolRule[Int]) =
     [F[_]] => (rs: RuleSym[F], _: BoolSym[F]) ?=>
       rs.equal(lhs[F], rhs[F])
-  def and(lhs: ExtRule[Boolean], rhs: ExtRule[Boolean]) =
+  def and(lhs: BoolRule[Boolean], rhs: BoolRule[Boolean]) =
     [F[_]] => (rs: RuleSym[F], _: BoolSym[F]) ?=>
       rs.and(lhs[F], rhs[F])
 
@@ -7588,7 +7588,7 @@ given RuleSym[ExtRule] with
 ## Syntactic sugar
 
 ```scala
-given `BoolSym[ExtRule]` with
+given `BoolSym[BoolRule]` with
   def bool(value: Boolean) =
     [F[_]] => (_: RuleSym[F], bs: BoolSym[F]) ?=>
       bs.bool(value)
@@ -7599,7 +7599,7 @@ given `BoolSym[ExtRule]` with
 ## Syntactic sugar
 
 ```scala
-given BoolSym[ExtRule] with
+given BoolSym[BoolRule] with
   def bool(value: Boolean) =
     `[F[_]] => (`_: RuleSym[F], `bs: BoolSym[F]) ?=>`
       `bs.bool(value)`
@@ -7610,7 +7610,7 @@ given BoolSym[ExtRule] with
 ## Syntactic sugar
 
 ```scala
-given BoolSym[ExtRule] with
+given BoolSym[BoolRule] with
   def bool(value: Boolean) =
     [F[_]] => (`_: RuleSym[F], `bs: BoolSym[F]) ?=>
       bs.bool(value)
@@ -7623,7 +7623,7 @@ given BoolSym[ExtRule] with
 ## Syntactic sugar
 
 ```scala
-given BoolSym[ExtRule] with
+given BoolSym[BoolRule] with
   def bool(value: Boolean) =
     [F[_]] => (_: RuleSym[F], bs: BoolSym[F]) ?=>
       bs.bool(value)
@@ -7898,7 +7898,7 @@ complexRule[JsonRule]
 ## JSON Encoding
 
 ```scala
-given [A]: `Encoder[ExtRule[A]]` =
+given [A]: `Encoder[BoolRule[A]]` =
   rule => rule[JsonRule]
 ```
 
@@ -7907,7 +7907,7 @@ given [A]: `Encoder[ExtRule[A]]` =
 ## JSON Encoding
 
 ```scala
-given [A]: Encoder[ExtRule[A]] =
+given [A]: Encoder[BoolRule[A]] =
   `rule => rule[JsonRule]`
 ```
 
@@ -7916,7 +7916,7 @@ given [A]: Encoder[ExtRule[A]] =
 ## JSON Encoding
 
 ```scala
-given [A]: Encoder[ExtRule[A]] =
+given [A]: Encoder[BoolRule[A]] =
   rule => rule[JsonRule]
 
 ```
@@ -7947,7 +7947,7 @@ complexRule.asJson
 ## JSON Decoding: integers
 
 ```scala
-given fullIntDecoder: `Decoder[ExtRule[Int]]` = ???
+given fullIntDecoder: `Decoder[BoolRule[Int]]` = ???
 ```
 
 ---
@@ -7969,7 +7969,7 @@ given fullIntDecoder: `Decoder[ExtRule[Int]]` = ???
 
 .diff-rm[
 ```scala
-*given fullIntDecoder: Decoder[ExtRule[Int]] = `???`
+*given fullIntDecoder: Decoder[BoolRule[Int]] = `???`
 ```
 ]
 
@@ -7979,10 +7979,10 @@ given fullIntDecoder: `Decoder[ExtRule[Int]]` = ???
 
 .diff-add[
 ```scala
-given fullIntDecoder: Decoder[ExtRule[Int]] =
+given fullIntDecoder: Decoder[BoolRule[Int]] =
 * `json => json`
 *   `.as[Rule[Int]]`
-*   `.map(rule => rule[ExtRule])`
+*   `.map(rule => rule[BoolRule])`
 ```
 ]
 
@@ -7991,10 +7991,10 @@ given fullIntDecoder: Decoder[ExtRule[Int]] =
 ## JSON Decoding: integers
 
 ```scala
-given fullIntDecoder: Decoder[ExtRule[Int]] =
+given fullIntDecoder: Decoder[BoolRule[Int]] =
   json => `json`
     .as[Rule[Int]]
-    .map(rule => rule[ExtRule])
+    .map(rule => rule[BoolRule])
 ```
 
 
@@ -8003,10 +8003,10 @@ given fullIntDecoder: Decoder[ExtRule[Int]] =
 ## JSON Decoding: integers
 
 ```scala
-given fullIntDecoder: Decoder[ExtRule[Int]] =
+given fullIntDecoder: Decoder[BoolRule[Int]] =
   json => json
     `.as[Rule[Int]]`
-    .map(rule => rule[ExtRule])
+    .map(rule => rule[BoolRule])
 ```
 
 ---
@@ -8014,10 +8014,10 @@ given fullIntDecoder: Decoder[ExtRule[Int]] =
 ## JSON Decoding: integers
 
 ```scala
-given fullIntDecoder: Decoder[ExtRule[Int]] =
+given fullIntDecoder: Decoder[BoolRule[Int]] =
   json => json
     .as[Rule[Int]]
-    .map(`rule => rule[ExtRule]`)
+    .map(`rule => rule[BoolRule]`)
 ```
 
 ---
@@ -8025,10 +8025,10 @@ given fullIntDecoder: Decoder[ExtRule[Int]] =
 ## JSON Decoding: integers
 
 ```scala
-given fullIntDecoder: Decoder[ExtRule[Int]] =
+given fullIntDecoder: Decoder[BoolRule[Int]] =
   json => json
     .as[Rule[Int]]
-    .map(rule => rule[ExtRule])
+    .map(rule => rule[BoolRule])
 
 ```
 
@@ -8037,7 +8037,7 @@ given fullIntDecoder: Decoder[ExtRule[Int]] =
 ## JSON Decoding: booleans
 
 ```scala
-given fullBoolDecoder: `Decoder[ExtRule[Boolean]]` = ???
+given fullBoolDecoder: `Decoder[BoolRule[Boolean]]` = ???
 ```
 
 
@@ -8073,7 +8073,7 @@ given fullBoolDecoder: `Decoder[ExtRule[Boolean]]` = ???
 
 .diff-rm[
 ```scala
-*given fullBoolDecoder: Decoder[ExtRule[Boolean]] = `???`
+*given fullBoolDecoder: Decoder[BoolRule[Boolean]] = `???`
 ```
 ]
 
@@ -8083,7 +8083,7 @@ given fullBoolDecoder: `Decoder[ExtRule[Boolean]]` = ???
 
 .diff-add[
 ```scala
-given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+given fullBoolDecoder: Decoder[BoolRule[Boolean]] =
 * `case Json.Bool(value) =>`
 *   `Right(BOOL(value))`
 ```
@@ -8094,7 +8094,7 @@ given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
 ## JSON Decoding: booleans
 
 ```scala
-given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+given fullBoolDecoder: Decoder[BoolRule[Boolean]] =
   case Json.Bool(value) =>
     Right(`BOOL(value)`)
 ```
@@ -8118,13 +8118,13 @@ given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
 
 .diff-add[
 ```scala
-given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+given fullBoolDecoder: Decoder[BoolRule[Boolean]] =
   case Json.Bool(value) =>
     Right(BOOL(value))
 *
 * `case other => other`
 *   `.as[Rule[Boolean]]`
-*   `.map(rule => rule[ExtRule])`
+*   `.map(rule => rule[BoolRule])`
 ```
 ]
 
@@ -8133,13 +8133,13 @@ given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
 ## JSON Decoding: booleans
 
 ```scala
-given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+given fullBoolDecoder: Decoder[BoolRule[Boolean]] =
   case Json.Bool(value) =>
     Right(BOOL(value))
 
   case other => `other`
     .as[Rule[Boolean]]
-    .map(rule => rule[ExtRule])
+    .map(rule => rule[BoolRule])
 ```
 
 ---
@@ -8147,13 +8147,13 @@ given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
 ## JSON Decoding: booleans
 
 ```scala
-given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+given fullBoolDecoder: Decoder[BoolRule[Boolean]] =
   case Json.Bool(value) =>
     Right(BOOL(value))
 
   case other => other
     `.as[Rule[Boolean]]`
-    .map(rule => rule[ExtRule])
+    .map(rule => rule[BoolRule])
 ```
 
 ---
@@ -8161,13 +8161,13 @@ given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
 ## JSON Decoding: booleans
 
 ```scala
-given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+given fullBoolDecoder: Decoder[BoolRule[Boolean]] =
   case Json.Bool(value) =>
     Right(BOOL(value))
 
   case other => other
     .as[Rule[Boolean]]
-    .map(`rule => rule[ExtRule]`)
+    .map(`rule => rule[BoolRule]`)
 ```
 
 ---
@@ -8175,13 +8175,13 @@ given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
 ## JSON Decoding: booleans
 
 ```scala
-given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+given fullBoolDecoder: Decoder[BoolRule[Boolean]] =
   case Json.Bool(value) =>
     Right(BOOL(value))
 
   case other => other
     .as[Rule[Boolean]]
-    .map(rule => rule[ExtRule])
+    .map(rule => rule[BoolRule])
 
 ```
 
@@ -8194,7 +8194,7 @@ given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
 ```scala
 complexRule
   .asJson
-  .as[ExtRule[Boolean]]
+  .as[BoolRule[Boolean]]
   .map(rule => rule[Pretty])
 ```
 
@@ -8207,7 +8207,7 @@ complexRule
 ```scala
 &#x200B;`complexRule`
   .asJson
-  .as[ExtRule[Boolean]]
+  .as[BoolRule[Boolean]]
   .map(rule => rule[Pretty])
 ```
 
@@ -8220,7 +8220,7 @@ complexRule
 ```scala
 complexRule
   `.asJson`
-  .as[ExtRule[Boolean]]
+  .as[BoolRule[Boolean]]
   .map(rule => rule[Pretty])
 ```
 
@@ -8233,7 +8233,7 @@ complexRule
 ```scala
 complexRule
   .asJson
-  `.as[ExtRule[Boolean]]`
+  `.as[BoolRule[Boolean]]`
   .map(rule => rule[Pretty])
 ```
 
@@ -8246,7 +8246,7 @@ complexRule
 ```scala
 complexRule
   .asJson
-  .as[ExtRule[Boolean]]
+  .as[BoolRule[Boolean]]
   .map(rule => rule[Pretty])
 // val res13: Either[String, Pretty[Boolean]] = Left(Invalid boolean: true)
 ```
@@ -8260,7 +8260,7 @@ complexRule
 ```scala
 complexRule
   .asJson
-  .as[ExtRule[Boolean]]
+  .as[BoolRule[Boolean]]
   .map(rule => rule[Pretty])
 ```
 
@@ -8273,7 +8273,7 @@ complexRule
 ```scala
 complexRule
   .asJson
-  `.as[ExtRule[Boolean]]`
+  `.as[BoolRule[Boolean]]`
   .map(rule => rule[Pretty])
 ```
 
@@ -8282,14 +8282,14 @@ complexRule
 ## Roundtrip: debug
 
 ```scala
-given fullBoolDecoder: `Decoder[ExtRule[Boolean]]` =
+given fullBoolDecoder: `Decoder[BoolRule[Boolean]]` =
   case Json.Bool(value) =>
     Right(BOOL(value))
 
   case other =>
     other
     .as[Rule[Boolean]]
-    .map(rule => rule[ExtRule])
+    .map(rule => rule[BoolRule])
 ```
 
 ---
@@ -8297,14 +8297,14 @@ given fullBoolDecoder: `Decoder[ExtRule[Boolean]]` =
 ## Roundtrip: debug
 
 ```scala
-given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+given fullBoolDecoder: Decoder[BoolRule[Boolean]] =
   case `Json.Bool`(value) =>
     Right(BOOL(value))
 
   case `other` =>
     other
     .as[Rule[Boolean]]
-    .map(rule => rule[ExtRule])
+    .map(rule => rule[BoolRule])
 ```
 
 ---
@@ -8312,14 +8312,14 @@ given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
 ## Roundtrip: debug
 
 ```scala
-given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+given fullBoolDecoder: Decoder[BoolRule[Boolean]] =
   case Json.Bool(value) =>
     Right(BOOL(value))
 
   case other =>
     other
     `.as[Rule[Boolean]]`
-    .map(rule => rule[ExtRule])
+    .map(rule => rule[BoolRule])
 ```
 
 ---
@@ -8854,14 +8854,14 @@ def decodeBool[F[_]: RuleSym](
 ## Extensible JSON decoding
 
 ```scala
-given fullBoolDecoder: `Decoder[ExtRule[Boolean]]` =
+given fullBoolDecoder: `Decoder[BoolRule[Boolean]]` =
   case Json.Bool(value) =>
     Right(BOOL(value))
 
   case other =>
     other
     .as[Rule[Boolean]]
-    .map(rule => rule[ExtRule])
+    .map(rule => rule[BoolRule])
 ```
 
 ---
@@ -8870,14 +8870,14 @@ given fullBoolDecoder: `Decoder[ExtRule[Boolean]]` =
 
 .diff-rm[
 ```scala
-given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+given fullBoolDecoder: Decoder[BoolRule[Boolean]] =
   case Json.Bool(value) =>
     Right(BOOL(value))
 
   case other =>
 *   `other`
 *   `.as[Rule[Boolean]]`
-*   `.map(rule => rule[ExtRule])`
+*   `.map(rule => rule[BoolRule])`
 ```
 ]
 
@@ -8887,12 +8887,12 @@ given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
 
 .diff-add[
 ```scala
-given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+given fullBoolDecoder: Decoder[BoolRule[Boolean]] =
   case Json.Bool(value) =>
     Right(BOOL(value))
 
   case other =>
-*   `decodeBool[ExtRule](other)`
+*   `decodeBool[BoolRule](other)`
 ```
 ]
 
@@ -8901,12 +8901,12 @@ given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
 ## Extensible JSON decoding
 
 ```scala
-given fullBoolDecoder: `Decoder[ExtRule[Boolean]]` =
+given fullBoolDecoder: `Decoder[BoolRule[Boolean]]` =
   case Json.Bool(value) =>
     Right(BOOL(value))
 
   case other =>
-    decodeBool[ExtRule](other)
+    decodeBool[BoolRule](other)
 ```
 
 ---
@@ -8914,12 +8914,12 @@ given fullBoolDecoder: `Decoder[ExtRule[Boolean]]` =
 ## Extensible JSON decoding
 
 ```scala
-given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
+given fullBoolDecoder: Decoder[BoolRule[Boolean]] =
   case Json.Bool(value) =>
     Right(BOOL(value))
 
   case other =>
-    decodeBool[ExtRule](other)
+    decodeBool[BoolRule](other)
 
 ```
 
@@ -8932,7 +8932,7 @@ given fullBoolDecoder: Decoder[ExtRule[Boolean]] =
 ```scala
 complexRule
   .asJson
-  .as[ExtRule[Boolean]]
+  .as[BoolRule[Boolean]]
   .map(rule => rule[Pretty])
 ```
 
@@ -8945,7 +8945,7 @@ complexRule
 ```scala
 complexRule
   .asJson
-  .as[ExtRule[Boolean]]
+  .as[BoolRule[Boolean]]
   .map(rule => rule[Pretty])
 // val res14: Either[String, Pretty[Boolean]] = Right(($categoryId EQUALS 10) AND true)
 ```
@@ -9123,7 +9123,7 @@ enum Context:
 ```scala
 case class `Simplify[A]`(
   context: Context,
-  value  : ExtRule[A]
+  value  : BoolRule[A]
 )
 ```
 
@@ -9134,7 +9134,7 @@ case class `Simplify[A]`(
 ```scala
 case class Simplify[A](
   `context: Context`,
-  value  : ExtRule[A]
+  value  : BoolRule[A]
 )
 ```
 
@@ -9145,7 +9145,7 @@ case class Simplify[A](
 ```scala
 case class Simplify[A](
   context: Context,
-  `value  : ExtRule[A]`
+  `value  : BoolRule[A]`
 )
 ```
 
@@ -9156,7 +9156,7 @@ case class Simplify[A](
 ```scala
 case class Simplify[A](
   context: Context,
-  value  : ExtRule[A]
+  value  : BoolRule[A]
 )
 
 ```

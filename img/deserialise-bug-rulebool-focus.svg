@@ -12,11 +12,11 @@
 <title>cluster_foo</title>
 <polygon fill="transparent" stroke="transparent" points="8,-64 8,-116 228,-116 228,-64 8,-64"/>
 </g>
-<!-- ExtRuleBool -->
+<!-- BoolRuleBool -->
 <g id="node1" class="node operator,disabled">
-<title>ExtRuleBool</title>
-<path fill="#d0dce3" stroke="#d0dce3" d="M209,-252C209,-252 103,-252 103,-252 97,-252 91,-246 91,-240 91,-240 91,-228 91,-228 91,-222 97,-216 103,-216 103,-216 209,-216 209,-216 215,-216 221,-222 221,-228 221,-228 221,-240 221,-240 221,-246 215,-252 209,-252"/>
-<text text-anchor="middle" x="156" y="-230.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">ExtRule[Boolean]</text>
+<title>BoolRuleBool</title>
+<path fill="#d0dce3" stroke="#d0dce3" d="M212.5,-252C212.5,-252 99.5,-252 99.5,-252 93.5,-252 87.5,-246 87.5,-240 87.5,-240 87.5,-228 87.5,-228 87.5,-222 93.5,-216 99.5,-216 99.5,-216 212.5,-216 212.5,-216 218.5,-216 224.5,-222 224.5,-228 224.5,-228 224.5,-240 224.5,-240 224.5,-246 218.5,-252 212.5,-252"/>
+<text text-anchor="middle" x="156" y="-230.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">BoolRule[Boolean]</text>
 </g>
 <!-- RuleBool -->
 <g id="node3" class="node operator">
@@ -24,9 +24,9 @@
 <path fill="#586e75" stroke="#586e75" d="M157.5,-180C157.5,-180 72.5,-180 72.5,-180 66.5,-180 60.5,-174 60.5,-168 60.5,-168 60.5,-156 60.5,-156 60.5,-150 66.5,-144 72.5,-144 72.5,-144 157.5,-144 157.5,-144 163.5,-144 169.5,-150 169.5,-156 169.5,-156 169.5,-168 169.5,-168 169.5,-174 163.5,-180 157.5,-180"/>
 <text text-anchor="middle" x="115" y="-158.3" font-family="Inter,Arial" font-size="14.00" fill="#ffffff">Rule[Boolean]</text>
 </g>
-<!-- ExtRuleBool&#45;&gt;RuleBool -->
+<!-- BoolRuleBool&#45;&gt;RuleBool -->
 <g id="edge1" class="edge relies,disabled">
-<title>ExtRuleBool&#45;&gt;RuleBool</title>
+<title>BoolRuleBool&#45;&gt;RuleBool</title>
 <path fill="none" stroke="#d0dce3" stroke-dasharray="5,2" d="M145.87,-215.7C141.15,-207.64 135.44,-197.89 130.22,-188.98"/>
 <polygon fill="#d0dce3" stroke="#d0dce3" points="125.02,-180.1 133.96,-186.46 127.55,-184.42 130.07,-188.73 130.07,-188.73 130.07,-188.73 127.55,-184.42 126.19,-191.01 125.02,-180.1 125.02,-180.1"/>
 </g>
@@ -36,9 +36,9 @@
 <path fill="#ffffff" stroke="#d0dce3" d="M208,-108C208,-108 178,-108 178,-108 172,-108 166,-102 166,-96 166,-96 166,-84 166,-84 166,-78 172,-72 178,-72 178,-72 208,-72 208,-72 214,-72 220,-78 220,-84 220,-84 220,-96 220,-96 220,-102 214,-108 208,-108"/>
 <text text-anchor="middle" x="193" y="-86.3" font-family="Inter,Arial" font-size="14.00" fill="#d0dce3">Bool</text>
 </g>
-<!-- ExtRuleBool&#45;&gt;Bool -->
+<!-- BoolRuleBool&#45;&gt;Bool -->
 <g id="edge2" class="edge disabled">
-<title>ExtRuleBool&#45;&gt;Bool</title>
+<title>BoolRuleBool&#45;&gt;Bool</title>
 <path fill="none" stroke="#d0dce3" d="M160.69,-215.76C167.02,-191.09 178.39,-146.86 185.81,-117.97"/>
 <polygon fill="#d0dce3" stroke="#d0dce3" points="189.25,-118.65 188.35,-108.09 182.47,-116.9 189.25,-118.65"/>
 </g>
